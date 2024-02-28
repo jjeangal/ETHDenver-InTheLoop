@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Box, Button, Input, Select } from "@chakra-ui/react";
 import CoalNFT from "../../../generated/deployedContracts";
 import { SongFormProps } from "../../services/interfaces";
 import { useAccount, useReadContract, useSimulateContract, useWriteContract } from "wagmi";
@@ -80,38 +81,31 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, copyright }) => {
   }, [metadata, data]);
 
   return (
-    <div>
-      <input type="text" name="name" onChange={e => setName(e.target.value)} placeholder="Name" />
-      <select name="genre" onChange={e => setGenre(e.target.value)}>
-        <option value="">Select genre</option>
+    <Box>
+      <Input placeholder="Name" onChange={(e) => setName(e.target.value)} />
+      <Select placeholder="Select genre" onChange={(e) => setGenre(e.target.value)}>
         <option value="pop">Pop</option>
         <option value="rap">Rap</option>
         <option value="rock">Rock</option>
         <option value="jazz">Jazz</option>
         <option value="blues">Blues</option>
         <option value="country">Country</option>
-      </select>
-      <input type="text" name="author" onChange={e => setAuthor(e.target.value)} placeholder="Author" />
-      <input
-        type="text"
-        name="artists"
-        onChange={e => setArtists(e.target.value.split(","))}
+      </Select>
+      <Input placeholder="Author" onChange={(e) => setAuthor(e.target.value)} />
+      <Input
         placeholder="Artists (comma separated)"
+        onChange={(e) => setArtists(e.target.value.split(","))}
       />
-      <input type="text" name="contactInfo" onChange={e => setContactInfo(e.target.value)} placeholder="Contact Info" />
-      <select name="nature" onChange={e => setNature(e.target.value)} className="border p-2">
-        <option value="">Select nature</option>
+      <Input placeholder="Contact Info" onChange={(e) => setContactInfo(e.target.value)} />
+      <Select placeholder="Select nature" onChange={(e) => setNature(e.target.value)}>
         <option value="song">Song</option>
         <option value="lyrics">Lyrics</option>
         <option value="both">Both</option>
-      </select>
-      <button
-        //disabled={!sendTransaction}
-        onClick={handleSubmit}
-      >
+      </Select>
+      <Button onClick={handleSubmit} mt={4}>
         Upload
-      </button>
-    </div>
+      </Button>
+    </Box>
   );
 };
 
