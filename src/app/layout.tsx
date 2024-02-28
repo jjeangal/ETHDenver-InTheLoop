@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Web3Provider } from '../utils/Web3Provider';
-import { ChakraProvider } from '@chakra-ui/react'
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
+import { ChakraProvider } from "@chakra-ui/react";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -20,7 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <ChakraProvider>
         <Web3Provider>
-          <div className={inter.className}>{children}</div>
+          <body>{children}</body>
         </Web3Provider>
       </ChakraProvider>
     </html>
