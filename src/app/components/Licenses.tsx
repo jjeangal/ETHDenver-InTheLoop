@@ -1,47 +1,73 @@
 'use client';
 
-import { useState } from "react";
-import { Box, Button } from "@chakra-ui/react";
-import { SongNft } from "../services/interfaces";
-import RegisterIPA from "./RegisterIPA";
+import { Box, Flex, Button, Text } from "@chakra-ui/react";
+import { useState, useEffect } from "react";
+import { License } from "../services/interfaces";
 
 export default function Licenses() {
-    const [isOpen1, setIsOpen1] = useState(false);
-    const [isOpen2, setIsOpen2] = useState(false);
-    const [unlicensedSongs, setUnlicensedSongs] = useState<SongNft[]>([]);
-    const [licensedSongs, setLicensedSongs] = useState<SongNft[]>([]);
+
+    const [isOpenBought, setIsOpenBought] = useState(false);
+    const [isOpenSold, setIsOpenSold] = useState(false);
+    const [boughtLicenses, setBoughtLicenses] = useState<License[]>([]);
+    const [soldLicenses, setSoldLicenses] = useState<License[]>([]);
+
+    useEffect(() => {
+        setBoughtLicenses([
+            {
+                ipId: BigInt(0),
+                policyId: BigInt(0),
+            }
+        ]);
+        setSoldLicenses([
+            {
+                ipId: BigInt(1),
+                policyId: BigInt(0),
+            }
+        ]);
+    }, []);
 
     return (
-        <Box display="flex" flexDirection="column" alignItems="center" height="100vh">
-            <Box width="50%" marginBottom="8" marginTop="8">
-                <Button
-                    width="full"
-                    paddingX="4"
-                    paddingY="2"
-                    textAlign="left"
-                    backgroundColor="gray.200"
-                    borderRadius="md"
-                    onClick={() => setIsOpen1(!isOpen1)}
-                    color="#293655"
-                >
-                    Unlicensed Songs
-                </Button>
-                <RegisterIPA />
-            </Box>
-            <Box width="50%">
-                <Button
-                    width="full"
-                    paddingX="4"
-                    paddingY="2"
-                    textAlign="left"
-                    backgroundColor="gray.200"
-                    borderRadius="md"
-                    onClick={() => setIsOpen2(!isOpen2)}
-                    color="#293655"
-                >
-                    Licensed Songs
-                </Button>
-            </Box>
-        </Box>
+        <Flex flexDirection="column" alignItems="center">
+            <Button
+                width="full"
+                paddingX="4"
+                paddingY="2"
+                textAlign="left"
+                backgroundColor="gray.200"
+                borderRadius="md"
+                onClick={() => setIsOpenBought(!isOpenBought)}
+                color="#293655"
+            >
+                Bought Licenses
+            </Button>
+            {isOpenBought && (
+                boughtLicenses.map((license) => (
+                    <Box key={license.ipId.toString()} padding="4" backgroundColor="gray.100" marginTop="2" borderRadius="md">
+                        <Text fontWeight="bold">License ID: {license.ipId.toString()}</Text>
+                        <Text>Policy ID: {license.policyId.toString()}</Text>
+                    </Box>
+                ))
+            )}
+            <Button
+                width="full"
+                paddingX="4"
+                paddingY="2"
+                textAlign="left"
+                backgroundColor="gray.200"
+                borderRadius="md"
+                onClick={() => setIsOpenSold(!isOpenSold)}
+                color="#293655"
+            >
+                Sold Licenses
+            </Button>
+            {isOpenSold && (
+                soldLicenses.map((license) => (
+                    <Box key={license.ipId.toString()} padding="4" backgroundColor="gray.100" marginTop="2" borderRadius="md">
+                        <Text fontWeight="bold">License ID: {license.ipId.toString()}</Text>
+                        <Text>Policy ID: {license.policyId.toString()}</Text>
+                    </Box>
+                ))
+            )}
+        </Flex >
     );
 };
