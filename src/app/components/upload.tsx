@@ -1,9 +1,10 @@
+'use client'
+
 import { useRef, useState } from "react";
 import { songTrad } from "../basicPitch/songenc";
 import { SongForm } from "./Upload/songForm";
 import { RegisterSteps } from "./Upload/steps";
 import { RegisterStepsProps } from "../services/interfaces";
-import { NextPage } from "next";
 import { ReviewSong } from "./Upload/reviewSong";
 import { Copyright } from "../services/interfaces";
 

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Web3Provider } from '../utils/Web3Provider';
-import { ChakraProvider } from "@chakra-ui/react";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,11 +14,11 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <ChakraProvider>
+      <body>
         <Web3Provider>
-          <body>{children}</body>
+          {children}
         </Web3Provider>
-      </ChakraProvider>
+      </body>
     </html>
   );
 }

@@ -1,5 +1,6 @@
 'use client';
 
+import { ChakraProvider } from '@chakra-ui/react';
 import { WagmiProvider, createConfig, http } from 'wagmi';
 import { sepolia } from 'wagmi/chains';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -17,7 +18,7 @@ const config = createConfig(
         },
         ssr: true,
         walletConnectProjectId: process.env.NEXT_PUBLIC_WC_PROJECT_ID!, // Required API Keys
-        appName: 'Your App Name',
+        appName: 'In The Loop',
     })
 );
 
@@ -25,10 +26,12 @@ const queryClient = new QueryClient();
 
 export const Web3Provider = ({ children }: { children: ReactNode }) => {
     return (
-        <WagmiProvider config={config}>
-            <QueryClientProvider client={queryClient}>
-                <ConnectKitProvider>{children}</ConnectKitProvider>
-            </QueryClientProvider>
-        </WagmiProvider>
+        <ChakraProvider>
+            <WagmiProvider config={config}>
+                <QueryClientProvider client={queryClient}>
+                    <ConnectKitProvider>{children}</ConnectKitProvider>
+                </QueryClientProvider>
+            </WagmiProvider>
+        </ChakraProvider>
     );
 };
