@@ -1,6 +1,6 @@
 export interface RegisterIPAProps {
-  tokenId: bigint;
-  policyId: bigint;
+  tokenId: BigInt | undefined;
+  policyId: BigInt | undefined;
 }
 
 export interface IPA {

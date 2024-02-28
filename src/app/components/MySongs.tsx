@@ -11,7 +11,8 @@ export default function MySongs() {
     const [IPAs, setIPAs] = useState<IPA[]>([]);
     const [notIPAs, setNotIPAs] = useState<IPA[]>([]);
 
-    const [policyId, setPolicyId] = useState<BigInteger | undefined>(undefined);
+    const [tokenId, setTokenId] = useState<BigInt | undefined>(BigInt(0));
+    const [policyId, setPolicyId] = useState<BigInt | undefined>(BigInt(0));
 
     useEffect(() => {
         setNotIPAs([
@@ -48,7 +49,7 @@ export default function MySongs() {
                         <Box key={notIPA.id} padding="4" backgroundColor="gray.100" marginTop="2" borderRadius="md">
                             <Box fontWeight="bold">Song ID: {notIPA.id.toString()}</Box>
                             <Box>Owner: {notIPA.owner}</Box>
-                            <RegisterIPA tokenId={BigInt(0)} policyId={BigInt(0)} />
+                            <RegisterIPA tokenId={tokenId} policyId={policyId} />
                         </Box>
                     ))
                 )}
