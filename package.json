@@ -13,6 +13,7 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
     "@openzeppelin/contracts": "^5.0.1",
+    "@pinata/sdk": "^2.1.0",
     "@rainbow-me/rainbowkit": "^2.0.1",
     "@spotify/basic-pitch": "^1.0.1",
     "@story-protocol/react": "0.0.1-beta.9",
