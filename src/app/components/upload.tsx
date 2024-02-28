@@ -7,7 +7,7 @@ import { NextPage } from "next";
 import { ReviewSong } from "./Upload/reviewSong";
 import { Copyright } from "../services/interfaces";
 
-const Upload: NextPage = () => {
+export default function Upload() {
     const [regState, setRegState] = useState<RegisterStepsProps>({ state: 0 }); // ["upload", "info", "compare", "deployed"]
     const [song, setSong] = useState<ArrayBuffer | undefined>();
     const [songName, setSongName] = useState<string>();
@@ -155,5 +155,3 @@ const Upload: NextPage = () => {
         </div>
     );
 };
-
-export default Upload;

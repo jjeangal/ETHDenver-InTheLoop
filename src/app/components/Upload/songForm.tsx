@@ -82,7 +82,7 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, copyright }) => {
   return (
     <div>
       <input type="text" name="name" onChange={e => setName(e.target.value)} placeholder="Name" />
-      <select name="genre" onChange={e => setGenre(e.target.value)} placeholder="Genre">
+      <select name="genre" onChange={e => setGenre(e.target.value)}>
         <option value="">Select genre</option>
         <option value="pop">Pop</option>
         <option value="rap">Rap</option>
