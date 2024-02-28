@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Web3Provider } from '../utils/Web3Provider';
+import Header from "./components/Header";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,10 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-
       </head>
       <body>
         <Web3Provider>
+          <Header />
           {children}
         </Web3Provider>
       </body>
