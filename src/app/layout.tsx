@@ -14,6 +14,9 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+
+      </head>
       <body>
         <Web3Provider>
           {children}

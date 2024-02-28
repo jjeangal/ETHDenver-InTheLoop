@@ -1,5 +1,6 @@
 'use client'
 
+import { Box, Text, Button, Progress, Input, VStack, HStack } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import { songTrad } from "../basicPitch/songenc";
 import { SongForm } from "./Upload/songForm";
@@ -84,75 +85,62 @@ export default function Upload() {
     };
 
     return (
-        <div className="flex items-center flex-col flex-grow pt-10 justify-center items-center">
-            <div className="flex fixed left-20">
+        <Box display="flex" alignItems="center" flexDirection="column" flexGrow={1} pt={10} justifyContent="center">
+            <Box display="flex" position="fixed" left="20">
                 <RegisterSteps state={regState.state} />
-            </div>
-            {regState.state === 0 ? (
-                <div>
-                    <div className="px-5">
-                        <h1 className="text-center mb-8">
-                            <span className="block text-4xl font-bold">Check for Copyright</span>
-                        </h1>
-                    </div>
-                    <div
-                        className="dropzone mb-4 border-black border-2 p-4 rounded"
+            </Box>
+            {regState.state === 0 && (
+                <VStack spacing={5}>
+                    <Text textAlign="center" mb={8} fontSize="4xl" fontWeight="bold">
+                        Check for Copyright
+                    </Text>
+                    <Box
+                        className="dropzone"
+                        mb={4}
+                        borderColor="black"
+                        borderWidth={2}
+                        p={4}
+                        borderRadius="md"
                         onDragOver={handleDragOver}
                         onDragEnter={handleDragEnter}
                         onDragLeave={handleDragLeave}
                         onDrop={handleDrop}
                     >
-                        <label className="block text-white-700 text-sm font-bold mb-2">Drop file here, or click below!</label>
-                        <input ref={fileInputRef} className="hidden" type="file" accept="audio/*" onChange={handleFileChange} />
-                        <button
-                            className="bg-blue-600 hover:border-white-700 text-white font-bold py-2 px-4 rounded"
-                            onClick={() => fileInputRef.current?.click()}
-                        >
+                        <Text fontWeight="bold" mb={2}>Drop file here, or click below!</Text>
+                        <Input ref={fileInputRef} display="none" type="file" accept="audio/*" onChange={handleFileChange} />
+                        <Button colorScheme="blue" onClick={() => fileInputRef.current?.click()}>
                             Upload
-                        </button>
-                        <label className="block text-white-700 text-sm mb-2 pt-2">Only audio files accepted.</label>
+                        </Button>
+                        <Text mt={2}>Only audio files accepted.</Text>
                         {song && (
-                            <div className="flex">
-                                <span>{songName?.substring(0, 30)}...</span>
-                                <button
-                                    className="hover:border-white ml-2 mt-2 mr-2 border-2 border-black rounded-full w-6 h-6 justify-center items-center flex"
-                                    onClick={removeFile}
-                                >
+                            <HStack>
+                                <Text>{songName?.substring(0, 30)}...</Text>
+                                <Button ml={2} mt={2} mr={2} borderColor="black" borderRadius="full" w={6} h={6} onClick={removeFile}>
                                     X
-                                </button>
-                            </div>
+                                </Button>
+                            </HStack>
                         )}
-                    </div>
-                    <div className="text-center">
-                        <div>
-                            <button
-                                className="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
-                                onClick={handleStart}
-                            >
-                                Start
-                            </button>
-                        </div>
-                        <br />
-                        <div>
-                            {0 < progress && progress < 1 && (
-                                <div>
-                                    <progress color="blue-700" value={progress} max="1" />
-                                    <span>{(progress * 100).toFixed(3)}%</span>
-                                </div>
-                            )}
-                            {compared.cp && (
-                                <div>
-                                    <span>{compared.text}</span>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            ) : (
-                <></>
+                    </Box>
+                    <Box textAlign="center">
+                        <Button colorScheme="blue" onClick={handleStart}>
+                            Start
+                        </Button>
+                        {0 < progress && progress < 1 && (
+                            <Box>
+                                <Progress colorScheme="blue" value={progress * 100} />
+                                <Text>{(progress * 100).toFixed(3)}%</Text>
+                            </Box>
+                        )}
+                        {compared.cp && (
+                            <Box>
+                                <Text>{compared.text}</Text>
+                            </Box>
+                        )}
+                    </Box>
+                </VStack>
             )}
-            {regState.state === 1 ? <SongForm setState={setRegState} copyright={copyright} /> : <></>}
-            {regState.state === 2 ? <ReviewSong /> : <></>}
-        </div>
+            {regState.state === 1 ? <SongForm setState={setRegState} copyright={copyright} /> : null}
+            {regState.state === 2 ? <ReviewSong /> : null}
+        </Box>
     );
 };
