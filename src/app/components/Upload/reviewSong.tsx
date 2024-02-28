@@ -35,8 +35,8 @@ export const ReviewSong = () => {
 
   const contractCallInfo = () => {
     return (
-      <div className="bg-gray-200 p-4 rounded text-gray-900 w-1/2 mx-auto overflow-auto">
-        <p className="font-bold"> Song info: </p>
+      <div >
+        <p> Song info: </p>
         <p> Id is: {contractCall?.id?.toString()} </p>
         <p> Author: {contractCall?.author} </p>
         <p>
@@ -54,8 +54,8 @@ export const ReviewSong = () => {
   };
 
   return (
-    <div className="font-sans">
-      <h1 className="text-center">Review Song</h1>
+    <div>
+      <h1>Review Song</h1>
       {contractCall ? contractCallInfo() : <p> Transaction Loading </p>}
     </div>
   );

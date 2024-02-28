@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Web3Provider } from '../utils/Web3Provider';
+import { ChakraProvider } from '@chakra-ui/react'
 import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -17,9 +18,11 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <Web3Provider>
-        <body className={inter.className}>{children}</body>
-      </Web3Provider>
+      <ChakraProvider>
+        <Web3Provider>
+          <div className={inter.className}>{children}</div>
+        </Web3Provider>
+      </ChakraProvider>
     </html>
   );
 }

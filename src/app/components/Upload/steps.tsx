@@ -1,24 +1,25 @@
+import { Box, Text, OrderedList, ListItem } from "@chakra-ui/react";
 import { RegisterStepsProps } from "../../services/interfaces";
 import { compareSvg, songInfoSvg, uploadSvg, validSvg } from "../Svgs";
 
 export const RegisterSteps: React.FC<RegisterStepsProps> = ({ state }) => {
   return (
-    <ol className="relative text-gray-500 border-s border-gray-200 dark:border-gray-700 dark:text-gray-400">
-      <li className="mb-10 ms-6">
+    <OrderedList position="relative" color="gray.500" borderColor="gray.200" borderStyle="solid" borderWidth="1px">
+      <ListItem mb="10" ml="6">
         {state > 0 ? validSvg : compareSvg}
-        <h3 className="font-medium leading-tight">Compare</h3>
-        <p className="text-sm">Choose song file</p>
-      </li>
-      <li className="mb-10 ms-6">
+        <Text as="h3" fontWeight="medium" lineHeight="tight">Compare</Text>
+        <Text fontSize="sm">Choose song file</Text>
+      </ListItem>
+      <ListItem mb="10" ml="6">
         {state > 1 ? validSvg : uploadSvg}
-        <h3 className="font-medium leading-tight">Upload</h3>
-        <p className="text-sm">Upload song information</p>
-      </li>
-      <li className="mb-10 ms-6">
+        <Text as="h3" fontWeight="medium" lineHeight="tight">Upload</Text>
+        <Text fontSize="sm">Upload song information</Text>
+      </ListItem>
+      <ListItem mb="10" ml="6">
         {state > 2 ? validSvg : songInfoSvg}
-        <h3 className="font-medium leading-tight">Review</h3>
-        <p className="text-sm">Review uploaded song</p>
-      </li>
-    </ol>
+        <Text as="h3" fontWeight="medium" lineHeight="tight">Review</Text>
+        <Text fontSize="sm">Review uploaded song</Text>
+      </ListItem>
+    </OrderedList>
   );
 };

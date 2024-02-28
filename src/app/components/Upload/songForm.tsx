@@ -80,7 +80,7 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, copyright }) => {
   }, [metadata, data]);
 
   return (
-    <div className="flex flex-col space-y-4 text-black">
+    <div>
       <input type="text" name="name" onChange={e => setName(e.target.value)} placeholder="Name" />
       <select name="genre" onChange={e => setGenre(e.target.value)} placeholder="Genre">
         <option value="">Select genre</option>
@@ -106,7 +106,6 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, copyright }) => {
         <option value="both">Both</option>
       </select>
       <button
-        className="bg-blue-600 hover:border-white-700 text-white font-bold py-2 px-4 rounded"
         //disabled={!sendTransaction}
         onClick={handleSubmit}
       >
