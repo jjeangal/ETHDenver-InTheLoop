@@ -10,7 +10,7 @@ import { ReviewSong } from "./Upload/reviewSong";
 import { Copyright } from "../services/interfaces";
 
 export default function Upload() {
-    const [regState, setRegState] = useState<RegisterStepsProps>({ state: 0 }); // ["upload", "info", "compare", "deployed"]
+    const [regState, setRegState] = useState<RegisterStepsProps>({ state: 1 }); // ["upload", "info", "compare", "deployed"]
     const [song, setSong] = useState<ArrayBuffer | undefined>();
     const [songName, setSongName] = useState<string>();
     const [progress, setProgress] = useState(0);
