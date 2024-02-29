@@ -1,3 +1,5 @@
+'use client';
+
 import { Flex, Box, Text } from "@chakra-ui/react";
 import { ConnectKitButton } from "connectkit";
 
