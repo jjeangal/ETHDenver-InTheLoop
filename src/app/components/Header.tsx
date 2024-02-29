@@ -1,7 +1,6 @@
 'use client';
-
 import Link from 'next/link'
-import { Flex, Box, Text, Button, Spacer } from "@chakra-ui/react";
+import { Text, Button, Spacer, VStack } from "@chakra-ui/react";
 import { ConnectKitButton } from "connectkit";
 
 export default function Header() {
@@ -17,13 +16,13 @@ export default function Header() {
     }
 
     return (
-        <Flex flexDirection="row" width="100vw" p="5">
-            <Text mr="4" size="xxl">
+        <VStack as="nav" position="fixed" left={0} top={0} bottom={0} width="200px" p="5" spacing={4}>
+            <Text size="xxl">
                 <Link href="/">
                     InTheLoop
                 </Link>
             </Text>
-            <Text mr="4">
+            <Text>
                 <Link href="/profile">
                     profile
                 </Link>
@@ -43,6 +42,6 @@ export default function Header() {
                     );
                 }}
             </ConnectKitButton.Custom>
-        </Flex >
+        </VStack>
     )
-}   
+}

@@ -38,7 +38,7 @@ export default function AddPolicy() {
 
     return (
         <Flex>
-            <Button onClick={onOpen}>Open</Button>
+            <Button onClick={onOpen}>New Policy</Button>
             <Drawer isOpen={isOpen} onClose={onClose} size="md">
                 <DrawerOverlay />
                 <DrawerContent>
