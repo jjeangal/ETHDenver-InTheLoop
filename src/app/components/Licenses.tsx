@@ -28,46 +28,52 @@ export default function Licenses() {
 
     return (
         <Flex flexDirection="column" alignItems="center">
-            <Button
-                width="full"
-                paddingX="4"
-                paddingY="2"
-                textAlign="left"
-                backgroundColor="gray.200"
-                borderRadius="md"
-                onClick={() => setIsOpenBought(!isOpenBought)}
-                color="#293655"
-            >
-                Bought Licenses
-            </Button>
-            {isOpenBought && (
-                boughtLicenses.map((license) => (
-                    <Box key={license.ipId.toString()} padding="4" backgroundColor="gray.100" marginTop="2" borderRadius="md">
-                        <Text fontWeight="bold">License ID: {license.ipId.toString()}</Text>
-                        <Text>Policy ID: {license.policyId.toString()}</Text>
-                    </Box>
-                ))
-            )}
-            <Button
-                width="full"
-                paddingX="4"
-                paddingY="2"
-                textAlign="left"
-                backgroundColor="gray.200"
-                borderRadius="md"
-                onClick={() => setIsOpenSold(!isOpenSold)}
-                color="#293655"
-            >
-                Sold Licenses
-            </Button>
-            {isOpenSold && (
-                soldLicenses.map((license) => (
-                    <Box key={license.ipId.toString()} padding="4" backgroundColor="gray.100" marginTop="2" borderRadius="md">
-                        <Text fontWeight="bold">License ID: {license.ipId.toString()}</Text>
-                        <Text>Policy ID: {license.policyId.toString()}</Text>
-                    </Box>
-                ))
-            )}
+            <Box width="50%" marginBottom="8" marginTop="8">
+                <Button
+                    width="full"
+                    paddingX="4"
+                    paddingY="2"
+                    textAlign="left"
+                    backgroundColor="gray.200"
+                    borderRadius="md"
+                    onClick={() => setIsOpenBought(!isOpenBought)}
+                    color="#293655"
+                >
+                    Bought Licenses
+                </Button>
+                {isOpenBought && (
+                    boughtLicenses.map((license) => (
+                        <Box key={license.ipId.toString()} padding="4" backgroundColor="gray.100" marginTop="2" borderRadius="md">
+                            <Text fontWeight="bold">License ID: {license.ipId.toString()}</Text>
+                            <Text>Policy ID: {license.policyId.toString()}</Text>
+                        </Box>
+                    ))
+                )}
+            </Box>
+            <Box width="50%" marginBottom="8" marginTop="8">
+                <Button
+                    width="full"
+                    paddingX="4"
+                    paddingY="2"
+                    textAlign="left"
+                    backgroundColor="gray.200"
+                    borderRadius="md"
+                    onClick={() => setIsOpenSold(!isOpenSold)}
+                    color="#293655"
+                >
+                    Sold Licenses
+                </Button>
+                {
+                    isOpenSold && (
+                        soldLicenses.map((license) => (
+                            <Box key={license.ipId.toString()} padding="4" backgroundColor="gray.100" marginTop="2" borderRadius="md">
+                                <Text fontWeight="bold">License ID: {license.ipId.toString()}</Text>
+                                <Text>Policy ID: {license.policyId.toString()}</Text>
+                            </Box>
+                        ))
+                    )
+                }
+            </Box>
         </Flex >
     );
 };

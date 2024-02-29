@@ -1,23 +1,24 @@
 'use client';
 
-import { Flex, Box, Text } from "@chakra-ui/react";
+import { Flex, Box, Text, Button, Spacer } from "@chakra-ui/react";
 import { ConnectKitButton } from "connectkit";
 
 export default function Header() {
     return (
-        <Flex flexDirection="row">
+        <Flex flexDirection="row" width="100vw">
             <Box>
                 <Text>In the loop</Text>
             </Box>
+            <Spacer />
             <ConnectKitButton.Custom>
                 {({ isConnected, isConnecting, show, hide, address, ensName, chain }) => {
                     return (
-                        <button onClick={show}>
+                        <Button onClick={show}>
                             {isConnected ? address : "Custom Connect"}
-                        </button>
+                        </Button>
                     );
                 }}
             </ConnectKitButton.Custom>
-        </Flex>
+        </Flex >
     )
 }   

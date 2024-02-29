@@ -13,6 +13,11 @@ export interface License {
   policyId: bigint;
 }
 
+export interface Derivatives {
+  ipId: bigint;
+  policyId: bigint;
+}
+
 export interface Copyright {
   songId: bigint;
   shares: bigint;
