@@ -20,5 +20,7 @@ export async function POST(request: NextApiRequest) {
 
     const response = await pinata.pinJSONToIPFS(songJson, { pinataMetadata: { name: "song" + id + ".json" } });
 
-    return Response.json(response)
+    console.log(response);
+
+    return Response.json(response);
 };

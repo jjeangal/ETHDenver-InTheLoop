@@ -64,6 +64,7 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, copyright }) => {
         nature: nature,
       }),
     });
+    console.log("response in songForm: " + response);
     const result = await response.json();
     return result;
   }
