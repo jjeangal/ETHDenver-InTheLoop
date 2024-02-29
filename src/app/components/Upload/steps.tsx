@@ -1,25 +1,45 @@
-import { Box, Text, OrderedList, ListItem } from "@chakra-ui/react";
 import { RegisterStepsProps } from "../../services/interfaces";
 import { compareSvg, songInfoSvg, uploadSvg, validSvg } from "../Svgs";
+import {
+  Box,
+  Step,
+  StepDescription,
+  StepIndicator,
+  StepSeparator,
+  StepStatus,
+  StepTitle,
+  Stepper,
+  useSteps,
+} from '@chakra-ui/react'
+
+const steps = [
+  { title: 'Compare', description: 'Choose song file', icon: compareSvg },
+  { title: 'Upload', description: 'Upload song information', icon: uploadSvg },
+  { title: 'Review', description: 'Review uploaded song', icon: songInfoSvg },
+];
 
 export const RegisterSteps: React.FC<RegisterStepsProps> = ({ state }) => {
+
   return (
-    <OrderedList position="relative" color="gray.500" borderColor="gray.200" borderStyle="solid" borderWidth="1px">
-      <ListItem mb="10" ml="6">
-        {state > 0 ? validSvg : compareSvg}
-        <Text as="h3" fontWeight="medium" lineHeight="tight">Compare</Text>
-        <Text fontSize="sm">Choose song file</Text>
-      </ListItem>
-      <ListItem mb="10" ml="6">
-        {state > 1 ? validSvg : uploadSvg}
-        <Text as="h3" fontWeight="medium" lineHeight="tight">Upload</Text>
-        <Text fontSize="sm">Upload song information</Text>
-      </ListItem>
-      <ListItem mb="10" ml="6">
-        {state > 2 ? validSvg : songInfoSvg}
-        <Text as="h3" fontWeight="medium" lineHeight="tight">Review</Text>
-        <Text fontSize="sm">Review uploaded song</Text>
-      </ListItem>
-    </OrderedList>
+    <Stepper size='md' index={state}>
+      {steps.map((step, index) => (
+        <Step key={index}>
+          <StepIndicator>
+            <StepStatus
+              complete={validSvg}
+              incomplete={step.icon}
+              active={step.icon}
+            />
+          </StepIndicator>
+
+          <Box flexShrink='0'>
+            <StepTitle>{step.title}</StepTitle>
+            <StepDescription>{step.description}</StepDescription>
+          </Box>
+
+          <StepSeparator />
+        </Step>
+      ))}
+    </Stepper>
   );
 };

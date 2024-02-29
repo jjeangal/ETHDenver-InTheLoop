@@ -41,6 +41,7 @@ export interface ReviewSongProps {
   id: bigint;
   txHash: string;
   metadata: string;
+  copyrights: Copyright[];
 }
 
 export interface GoResponse {

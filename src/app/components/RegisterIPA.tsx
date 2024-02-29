@@ -1,11 +1,11 @@
-import { Button } from '@chakra-ui/react';
+import { Flex, Button, Heading } from '@chakra-ui/react';
 import { useRegisterRootIp } from '@story-protocol/react';
 import { RegisterIPAProps } from '../services/interfaces';
 import CoalNFT from "../../generated/deployedContracts";
 import { stringToHex } from 'viem';
 
 const RegisterIPA: React.FC<RegisterIPAProps> = ({ tokenId, policyId }) => {
-    const contract = CoalNFT[31337][0].contracts.CoalNFT.address;
+    const contract = CoalNFT[11155111][0].contracts.CoalNFT;
 
     const {
         writeContractAsync
@@ -19,11 +19,15 @@ const RegisterIPA: React.FC<RegisterIPAProps> = ({ tokenId, policyId }) => {
 
     async function handleClick() {
         if (tokenId === undefined) {
+            console.log('Please update tokenId in RegisterRootIp.tsx');
             alert('Please update tokenId in RegisterRootIp.tsx');
+            return;
         }
 
         if (policyId === undefined) {
+            console.log('Please select a policy');
             alert('Please select a policy');
+            return;
         }
 
         await writeContractAsync({
@@ -33,13 +37,12 @@ const RegisterIPA: React.FC<RegisterIPAProps> = ({ tokenId, policyId }) => {
     }
 
     return (
-        <>
-            <Button
-                onClick={handleClick}
-            >
-                Register IPA
+        <Flex flexDirection="column">
+            <Heading size="md">Register your IP</Heading>
+            <Button onClick={handleClick}>
+                Register
             </Button>
-        </>
+        </Flex>
     );
 };
 

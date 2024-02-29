@@ -1,39 +1,41 @@
-import CoalNFT from "../../../generated/deployedContracts";
+import { Flex, Box, Text, Link, Heading } from "@chakra-ui/react";
 import { ReviewSongProps } from "../../services/interfaces";
+import RegisterIPA from "../RegisterIPA";
+import { useState } from "react";
+import AddPolicy from '../AddPolicy';
 
-export const ReviewSong: React.FC<ReviewSongProps> = ({ id, txHash, metadata }) => {
+export const ReviewSong: React.FC<ReviewSongProps> = ({ id, txHash, metadata, copyrights }) => {
   // Pinata
   const pinataGateway = "https://gateway.pinata.cloud/ipfs/";
-  // Contract 
-  const contract = CoalNFT[11155111][0].contracts.CoalNFT;
 
-  const showCopyrights = () => {
-    return "copyrights";
-  };
-
-  const contractCallInfo = () => {
-    return (
-      <div >
-        <p> Song info: </p>
-        <p> Id is: {String(id)} </p>
-        <p>
-          {" "}
-          Metadata link:{" "}
-          <a href={pinataGateway + metadata} target="_blank" rel="noopener noreferrer">
-            {pinataGateway + metadata}
-          </a>{" "}
-        </p>
-        <p> Transaction Hash: {txHash} </p>
-        <p> Uses copyrights from songs: </p>
-        {showCopyrights()}
-      </div>
-    );
-  };
+  const [policyId, setPolicyId] = useState<bigint>();
 
   return (
-    <div>
-      <h1>Review Song</h1>
-      {contractCallInfo()}
-    </div>
+    <Flex justifyContent="center" alignItems="center">
+      <Box textAlign="center">
+        <Heading>Review Song</Heading>
+        <Box>
+          <Text> Song info: </Text>
+          <Text> Id is: {String(id)} </Text>
+          <Text>
+            {" "}
+            Metadata link:{" "}
+            <Link href={pinataGateway + metadata} isExternal>
+              {pinataGateway + metadata}
+            </Link>{" "}
+          </Text>
+          <Text> Transaction Hash: {txHash} </Text>
+          <Text> Uses copyrights from songs: </Text>
+          {copyrights ? copyrights.map((copyright) => (
+            <Box key={copyright.songId}>
+              <Text> Song id: {String(copyright.songId)} </Text>
+              <Text> Shares: {String(copyright.shares)} </Text>
+            </Box>
+          )) : <Text> No copyrights </Text>}
+        </Box>
+        {RegisterIPA({ tokenId: id, policyId: policyId })}
+        <AddPolicy />
+      </Box>
+    </Flex>
   );
 };

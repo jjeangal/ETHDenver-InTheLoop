@@ -23,6 +23,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@wagmi/core": "^2.6.5",
     "axios": "^1.6.7",
+    "chakra-ui-stepper": "^3.3.1",
     "connectkit": "^1.7.2",
     "encoding": "^0.1.13",
     "framer-motion": "^11.0.6",

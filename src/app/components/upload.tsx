@@ -10,7 +10,7 @@ import { ReviewSong } from "./Upload/reviewSong";
 import { Copyright } from "../services/interfaces";
 
 export default function Upload() {
-    const [regState, setRegState] = useState<RegisterStepsProps>({ state: 1 }); // ["upload", "info", "compare", "deployed"]
+    const [regState, setRegState] = useState<RegisterStepsProps>({ state: 2 }); // ["upload", "info", "compare", "deployed"]
     const [songId, setSongId] = useState<bigint>(BigInt(0));
     const [song, setSong] = useState<ArrayBuffer | undefined>();
     const [songName, setSongName] = useState<string>();
@@ -89,7 +89,7 @@ export default function Upload() {
 
     return (
         <Box display="flex" alignItems="center" flexDirection="column" flexGrow={1} pt={10} justifyContent="center">
-            <Box display="flex" position="fixed" left="20">
+            <Box display="flex" alignItems="center" justifyContent="center" position="fixed" top={0} left={0} right={0} pt={10}>
                 <RegisterSteps state={regState.state} />
             </Box>
             {regState.state === 0 && (
@@ -151,7 +151,13 @@ export default function Upload() {
                     metadata={metadata}
                     copyrights={copyrights}
                 /> : null}
-            {regState.state === 2 ? <ReviewSong id={songId} txHash={txHash} metadata={metadata} /> : null}
+            {regState.state === 2 ?
+                <ReviewSong
+                    id={songId}
+                    copyrights={copyrights}
+                    txHash={txHash}
+                    metadata={metadata}
+                /> : null}
         </Box>
     );
 };

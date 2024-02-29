@@ -47,6 +47,9 @@ dependencies:
   axios:
     specifier: ^1.6.7
     version: 1.6.7
+  chakra-ui-stepper:
+    specifier: ^3.3.1
+    version: 3.3.1(@chakra-ui/react@2.8.2)(@emotion/react@11.11.4)(@emotion/styled@11.11.0)(framer-motion@11.0.6)(react@18.2.0)
   connectkit:
     specifier: ^1.7.2
     version: 1.7.2(@babel/core@7.24.0)(@tanstack/react-query@5.24.1)(react-dom@18.2.0)(react-is@18.2.0)(react@18.2.0)(viem@2.7.15)(wagmi@2.5.7)
@@ -5766,6 +5769,23 @@ packages:
     resolution: {integrity: sha512-PCzRMei/vXjJyL5mJtzNiUCKP59dm8Apqc3PH8gJkMnMXZGox93RbE76jHsmLwmIo6/3nsYIpJtx0O7u5PqFuQ==}
     dev: false
 
+  /chakra-ui-stepper@3.3.1(@chakra-ui/react@2.8.2)(@emotion/react@11.11.4)(@emotion/styled@11.11.0)(framer-motion@11.0.6)(react@18.2.0):
+    resolution: {integrity: sha512-ToADynIQrtVE1klQM1x8Tiw0yKJDEK23/7NxjOLvv26m3nZgQ0aDfZHGyI6gD95CfBqNKnl77PrYUEKynMDCpw==}
+    peerDependencies:
+      '@chakra-ui/react': ^2.5.5
+      '@emotion/react': ^11.10.6
+      '@emotion/styled': ^11.10.6
+      framer-motion: ^10.11.2
+      react: ^18.2.0
+    dependencies:
+      '@chakra-ui/react': 2.8.2(@emotion/react@11.11.4)(@emotion/styled@11.11.0)(@types/react@18.2.60)(framer-motion@11.0.6)(react-dom@18.2.0)(react@18.2.0)
+      '@emotion/react': 11.11.4(@types/react@18.2.60)(react@18.2.0)
+      '@emotion/styled': 11.11.0(@emotion/react@11.11.4)(@types/react@18.2.60)(react@18.2.0)
+      framer-motion: 11.0.6(react-dom@18.2.0)(react@18.2.0)
+      react: 18.2.0
+      react-icons: 4.12.0(react@18.2.0)
+    dev: false
+
   /chalk@2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
     engines: {node: '>=4'}
@@ -9794,6 +9814,14 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-native: 0.73.5(@babel/core@7.24.0)(@babel/preset-env@7.24.0)(encoding@0.1.13)(react@18.2.0)
+    dev: false
+
+  /react-icons@4.12.0(react@18.2.0):
+    resolution: {integrity: sha512-IBaDuHiShdZqmfc/TwHu6+d6k2ltNCf3AszxNmjJc1KUfXdEeRJOKyNvLmAHaarhzGmTSVygNdyu8/opXv2gaw==}
+    peerDependencies:
+      react: '*'
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /react-is@16.13.1:
