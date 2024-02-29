@@ -49,7 +49,7 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, copyright }) => {
   // }, [isSuccess, setState]);
 
   async function jsonToIpfs() {
-    const response = await fetch("./api/pinJsonToIpfs", {
+    const response = await fetch("./ipfs", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

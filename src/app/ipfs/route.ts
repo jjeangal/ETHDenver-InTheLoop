@@ -1,5 +1,5 @@
 import pinataSDK from "@pinata/sdk";
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest } from "next";
 
 const jwt = process.env.PINATA_API_JWT || "";
 
