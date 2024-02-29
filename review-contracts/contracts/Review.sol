@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@chainlink/contracts/src/v0.8/vrf/interfaces/VRFCoordinatorV2Interface.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2.sol";
 
 contract Review is VRFConsumerBaseV2 {
@@ -129,13 +129,13 @@ contract Review is VRFConsumerBaseV2 {
 
     // Find top 3 matching reviewers for a submission
     function selectReviewers(uint256 submissionId) public {
-        require(reviewers.length <= REQUIRED_REVIEWS, "Not enough reviewers to review the song");
+        require(REQUIRED_REVIEWS <= reviewers.length, "Not enough reviewers to review the song");
         require(submissionId < submissions.length, "Invalid submission ID");
         // The shuffleReviewers call is updated to shuffle and store reviewers in the Submission struct
         shuffleReviewers(submissionId); // This call now populates the shuffledReviewers field in the Submission struct
         address[] memory selectedReviewers = new address[](REQUIRED_REVIEWS);
         for(uint32 i = 0; i < REQUIRED_REVIEWS; i++) {
-            selectedReviewers[i] = submissions[submissionId].shuffledReviewers[i].address;
+            selectedReviewers[i] = submissions[submissionId].shuffledReviewers[i];
             submissions[submissionId].canReviewerVote[selectedReviewers[i]] = true;
         }
         submissions[submissionId].selectedReviewers = selectedReviewers;
@@ -144,12 +144,11 @@ contract Review is VRFConsumerBaseV2 {
     // Updated function to shuffle a copy of the reviewers and store it in the Submission struct
     function shuffleReviewers(uint256 submissionId) internal {
         require(submissionId < submissions.length, "Invalid submission ID");
-        Submission storage submission = submissions[submissionId];
         address[] memory shuffledReviewers = new address[](reviewers.length);
         for (uint256 i = 0; i < reviewers.length; i++) {
             shuffledReviewers[i] = reviewers[i].addr;
         }
-        uint256 seed = submission.seed;
+        uint256 seed = submissions[submissionId].seed;
         for (uint256 i = 0; i < shuffledReviewers.length; i++) {
             uint256 j = (uint256(keccak256(abi.encode(seed, i))) % (i + 1));
             (shuffledReviewers[i], shuffledReviewers[j]) = (
@@ -157,7 +156,7 @@ contract Review is VRFConsumerBaseV2 {
                 shuffledReviewers[i]
             );
         }
-        submission.shuffledReviewers = shuffledReviewers;
+        submissions[submissionId].shuffledReviewers = shuffledReviewers;
     }
 
 
@@ -180,7 +179,7 @@ contract Review is VRFConsumerBaseV2 {
         addToTally(submissionIndex, option, 1);
     }
 
-    function addToTally(uint256 submissionIndex, uint8 option, int32 amount) internal {
+    function addToTally(uint256 submissionIndex, uint8 option, uint32 amount) internal {
         submissions[submissionIndex].tally[option] = submissions[submissionIndex].tally[option] + amount;
     }
 
