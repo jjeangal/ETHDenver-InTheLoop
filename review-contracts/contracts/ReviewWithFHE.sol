@@ -21,12 +21,13 @@ contract Review is VRFConsumerBaseV2 {
         address author;
         string data;
         string[] options;
+        euint8[] encOptions;
         uint256 thresholdToPass;
         mapping(address => bytes32) commits;
-        mapping(address => uint8) votes;
-        mapping(uint8 => uint32) tally;
+        mapping(address => euint8) votes;
+        mapping(uint8 => euint32) tally;
         mapping(address => string) comments;
-        mapping(address => bool) canReviewerVote;
+        mapping(address => bool) isReviewerSelected;
         address[] selectedReviewers;
         address[] shuffledReviewers; // Updated field to store shuffled reviewers
         bool isApproved;
@@ -76,6 +77,10 @@ contract Review is VRFConsumerBaseV2 {
     function setOptions(uint256 submissionIndex, string[] memory options) public {
         require(msg.sender == owner, "Only the owner can set options.");
         submissions[submissionIndex].options = options;
+        for (uint8 i = 0; i < options.length; i++) {
+            submissions[submissionIndex].tally[i] = FHE.asEuint32(0);
+            submissions[submissionIndex].encOptions.push(FHE.asEuint8(i));
+        }
     }
 
     function setThresholdToPass(uint256 submissionIndex, uint256 threshold) public {
@@ -128,15 +133,14 @@ contract Review is VRFConsumerBaseV2 {
     }
 
     // Find top 3 matching reviewers for a submission
-    function selectReviewers(uint256 submissionId) public {
+    function findReviewers(uint256 submissionId) public {
         require(reviewers.length <= REQUIRED_REVIEWS, "Not enough reviewers to review the song");
         require(submissionId < submissions.length, "Invalid submission ID");
         // The shuffleReviewers call is updated to shuffle and store reviewers in the Submission struct
         shuffleReviewers(submissionId); // This call now populates the shuffledReviewers field in the Submission struct
         address[] memory selectedReviewers = new address[](REQUIRED_REVIEWS);
         for(uint32 i = 0; i < REQUIRED_REVIEWS; i++) {
-            selectedReviewers[i] = submissions[submissionId].shuffledReviewers[i].address;
-            submissions[submissionId].canReviewerVote[selectedReviewers[i]] = true;
+            selectedReviewers[i] = submissions[submissionId].reviewers[i].address;
         }
         submissions[submissionId].selectedReviewers = selectedReviewers;
     }
@@ -172,25 +176,40 @@ contract Review is VRFConsumerBaseV2 {
     }
 
     // https://docs.inco.org/getting-started/example-dapps/private-voting
-    function castVote(uint256 submissionIndex, uint8 option) public {
-        require(submissions[submissionIndex].canReviewerVote[msg.sender], "Only selected reviewers can cast votes");
-        require(option < submissions[submissionIndex].options.length, "Select a valid option");
+    function castVote(uint256 submissionIndex, inEuint8 memory option) public {
+        require(submissions[submissionIndex].isReviewerSelected[msg.sender], "Only selected reviewers can cast votes");
+        euint8 encOption = FHE.asEuint8(option);
 
-        submissions[submissionIndex].canReviewerVote[msg.sender] = false;
-        addToTally(submissionIndex, option, 1);
+        ebool isValid = FHE.or(FHE.eq(encOption, submissions[submissionIndex].encOptions[0]), FHE.eq(encOption, submissions[submissionIndex].encOptions[1]));
+        for (uint i = 1; i < submissions[submissionIndex].encOptions.length; i++) {
+            FHE.or(isValid, FHE.eq(encOption, submissions[submissionIndex].encOptions[i + 1]));
+        }
+        FHE.req(isValid);
+
+        // If already voted - first revert the old vote
+        if (FHE.isInitialized(submissions[submissionIndex].votes[msg.sender])) {
+            addToTally(submissionIndex, submissions[submissionIndex].votes[msg.sender], FHE.asEuint32(MAX_INT)); // Adding MAX_INT is effectively `.sub(1)`
+        }
+
+        submissions[submissionIndex].votes[msg.sender] = encOption;
+        addToTally(submissionIndex, encOption, FHE.asEuint32(1));
+
     }
 
-    function addToTally(uint256 submissionIndex, uint8 option, int32 amount) internal {
-        submissions[submissionIndex].tally[option] = submissions[submissionIndex].tally[option] + amount;
+    function addToTally(uint256 submissionIndex, euint8 encOption, euint32 amount) internal {
+        for (uint8 i = 0; i < submissions[submissionIndex].encOptions.length; i++) {
+            euint32 toAdd = FHE.select(FHE.eq(encOption, submissions[submissionIndex].encOptions[i]), amount, FHE.asEuint32(0));
+            submissions[submissionIndex].tally[i] = FHE.add(submissions[submissionIndex].tally[i], toAdd);
+        }
     }
 
     event ResultRevealed(uint256 submissionId, bool result);
 
     function revealResult(uint256 submissionIndex) public {
         uint256 overallResult = 0;
-        for (uint8 i = 0; i < submissions[submissionIndex].options.length; i++) {
-            uint256 optionTally = submissions[submissionIndex].tally[i];
-            overallResult += optionTally;
+        for (uint8 i = 0; i < submissions[submissionIndex].encOptions.length; i++) {
+            uint256 optionTally = FHE.decrypt(submissions[submissionIndex].tally[i]);
+            overallResult += optionTally * i;
         }
         //approve the submission
         submissions[submissionIndex].isApproved = submissions[submissionIndex].selectedReviewers.length * submissions[submissionIndex].thresholdToPass <= overallResult;
