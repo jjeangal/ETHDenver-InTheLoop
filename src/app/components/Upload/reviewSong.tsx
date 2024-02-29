@@ -14,7 +14,7 @@ export const ReviewSong = () => {
   const { address } = useAccount();
 
   // Contract
-  const contract = CoalNFT[31337][0].contracts.CoalNFT;
+  const contract = CoalNFT[11155111][0].contracts.CoalNFT;
 
   const unwatch = useWatchContractEvent({
     address: contract.address,

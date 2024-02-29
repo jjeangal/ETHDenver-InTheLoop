@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Input, Select } from "@chakra-ui/react";
+import { Box, Button, Input, Select, Text } from "@chakra-ui/react";
 import CoalNFT from "../../../generated/deployedContracts";
 import { SongFormProps } from "../../services/interfaces";
-import { useAccount, useReadContract, useSimulateContract, useWriteContract } from "wagmi";
-import type { Address } from "viem";
+import { useAccount, useReadContract, useSimulateContract, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+
+type Address = `0x${string}` | undefined
 
 export const SongForm: React.FC<SongFormProps> = ({ setState, copyright }) => {
   const { address } = useAccount();
@@ -17,8 +18,8 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, copyright }) => {
   const [artists, setArtists] = useState<string[]>([]);
   const [nature, setNature] = useState("");
 
-  const contract = CoalNFT[31337][0].contracts.CoalNFT;
-  const addr = address as Address;
+  const contract = CoalNFT[11155111][0].contracts.CoalNFT;
+  const addr = address as Address | undefined;
   const abi = contract.abi;
 
   const { data: currentSongId } = useReadContract({
@@ -27,26 +28,28 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, copyright }) => {
     functionName: "getCurrentSongId",
   });
 
-  const { data } = useSimulateContract({
-    address: contract.address,
-    abi: abi,
-    functionName: "addSong",
-    args: [`0x${addr}`, metadata, copyrights ? copyrights : []],
-  })
-
-  const { writeContract } = useWriteContract({})
-
   useEffect(() => {
     if (currentSongId) {
       setSongId(Number(currentSongId));
     }
   }, [currentSongId]);
 
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     setState({ state: 2 });
-  //   }
-  // }, [isSuccess, setState]);
+  const { error: estimateError } = useSimulateContract({
+    address: contract.address,
+    abi: abi,
+    functionName: "addSong",
+    args: [addr!, metadata, copyrights ? copyrights : []],
+  })
+
+  const { data, writeContract } = useWriteContract()
+
+  const {
+    isLoading,
+    error: txError,
+    isSuccess: txSuccess,
+  } = useWaitForTransactionReceipt({
+    hash: data,
+  })
 
   async function jsonToIpfs() {
     const response = await fetch("./ipfs", {
@@ -64,22 +67,32 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, copyright }) => {
         nature: nature,
       }),
     });
-    console.log("response in songForm: " + response);
     const result = await response.json();
     return result;
   }
 
-  const handleSubmit = async () => {
-    const res = await jsonToIpfs();
-    setMetadata(res.IpfsHash);
-  };
-
   useEffect(() => {
-    if (!metadata) {
+    if (txSuccess) {
+      console.log(txSuccess);
+      setState({ state: 2 });
+    } else if (txError) {
+      console.log(txError);
+    }
+  }, [txSuccess, txError])
+
+  async function handleSendTransation() {
+    if (estimateError) {
+      console.log(estimateError);
       return;
     }
-    writeContract(data!.request);
-  }, [metadata, data]);
+    const res = await jsonToIpfs();
+    writeContract({
+      address: contract.address,
+      abi: abi,
+      functionName: "addSong",
+      args: [addr!, res.data, copyrights ? copyrights : []],
+    })
+  }
 
   return (
     <Box>
@@ -103,8 +116,8 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, copyright }) => {
         <option value="lyrics">Lyrics</option>
         <option value="both">Both</option>
       </Select>
-      <Button onClick={handleSubmit} mt={4}>
-        Upload
+      <Button onClick={handleSendTransation} mt={4}>
+        {isLoading ? <Text>Loading</Text> : <Text>Upload</Text>}
       </Button>
     </Box>
   );
