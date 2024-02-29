@@ -1,14 +1,13 @@
 import pinataSDK from "@pinata/sdk";
-import type { NextApiRequest } from "next";
 
 const jwt = process.env.PINATA_API_JWT || "";
 
-export async function POST(request: NextApiRequest) {
-    const { id, name, genre, author, contactInfo, artists, nature } = request.body;
+export async function POST(request: Request) {
 
     const pinata = new pinataSDK({ pinataJWTKey: jwt });
+    const { id, name, genre, author, contactInfo, artists, nature } = await request.json();
 
-    const songJson = {
+    const body = {
         id: id,
         name: name,
         genre: genre,
@@ -18,9 +17,9 @@ export async function POST(request: NextApiRequest) {
         nature: nature,
     };
 
-    const response = await pinata.pinJSONToIPFS(songJson, { pinataMetadata: { name: "song" + id + ".json" } });
+    const response = await pinata.pinJSONToIPFS(body, { pinataMetadata: { name: "song" + id + ".json" } });
 
-    console.log(response);
+    const data = await response.IpfsHash;
 
-    return Response.json(response);
+    return Response.json({ data })
 };
