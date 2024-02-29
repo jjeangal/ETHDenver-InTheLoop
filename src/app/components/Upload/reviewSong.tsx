@@ -1,49 +1,26 @@
-import React, { useState } from "react";
 import CoalNFT from "../../../generated/deployedContracts";
-import { useAccount, useWatchContractEvent } from "wagmi";
-import { AddSongEventArgs } from "../../services/interfaces";
+import { ReviewSongProps } from "../../services/interfaces";
 
-export const ReviewSong = () => {
-  const [contractCall, setContractCall] = useState<AddSongEventArgs>();
-  const [txHash, setTxHash] = useState<string>();
-
+export const ReviewSong: React.FC<ReviewSongProps> = ({ id, txHash, metadata }) => {
   // Pinata
   const pinataGateway = "https://gateway.pinata.cloud/ipfs/";
-
-  // Wallet
-  const { address } = useAccount();
-
-  // Contract
+  // Contract 
   const contract = CoalNFT[11155111][0].contracts.CoalNFT;
 
-  const unwatch = useWatchContractEvent({
-    address: contract.address,
-    abi: contract.abi,
-    eventName: "SongAdded",
-    onLogs(logs) {
-      console.log('New logs!', logs)
-    }
-  });
-
   const showCopyrights = () => {
-    return contractCall?.copyrights?.map((cp, index) => (
-      <p key={index} className="text-blue-500">
-        Song ID: {cp.songId.toString()}, Shares: {cp.shares.toString()}
-      </p>
-    ));
+    return "copyrights";
   };
 
   const contractCallInfo = () => {
     return (
       <div >
         <p> Song info: </p>
-        <p> Id is: {contractCall?.id?.toString()} </p>
-        <p> Author: {contractCall?.author} </p>
+        <p> Id is: {String(id)} </p>
         <p>
           {" "}
           Metadata link:{" "}
-          <a href={pinataGateway + contractCall?.metadata} target="_blank" rel="noopener noreferrer">
-            {pinataGateway + contractCall?.metadata}
+          <a href={pinataGateway + metadata} target="_blank" rel="noopener noreferrer">
+            {pinataGateway + metadata}
           </a>{" "}
         </p>
         <p> Transaction Hash: {txHash} </p>
@@ -56,7 +33,7 @@ export const ReviewSong = () => {
   return (
     <div>
       <h1>Review Song</h1>
-      {contractCall ? contractCallInfo() : <p> Transaction Loading </p>}
+      {contractCallInfo()}
     </div>
   );
 };

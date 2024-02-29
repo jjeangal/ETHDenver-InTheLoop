@@ -2,15 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, Input, Select, Text } from "@chakra-ui/react";
 import CoalNFT from "../../../generated/deployedContracts";
 import { SongFormProps } from "../../services/interfaces";
-import { useAccount, useReadContract, useSimulateContract, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { useAccount, useReadContract, useSimulateContract, useWaitForTransactionReceipt, useWatchContractEvent, useWriteContract } from "wagmi";
 
 type Address = `0x${string}` | undefined
 
-export const SongForm: React.FC<SongFormProps> = ({ setState, copyright }) => {
+export const SongForm: React.FC<SongFormProps> = ({ setState, setMetadata, setTxHash, setSongId, metadata, copyrights }) => {
   const { address } = useAccount();
-  const [songId, setSongId] = useState(0);
-  const [metadata, setMetadata] = useState("");
-  const [copyrights, setCopyrigth] = useState<readonly { songId: bigint; shares: bigint; }[]>([]);
   const [name, setName] = useState("");
   const [genre, setGenre] = useState("");
   const [author, setAuthor] = useState("");
@@ -30,15 +27,19 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, copyright }) => {
 
   useEffect(() => {
     if (currentSongId) {
-      setSongId(Number(currentSongId));
+      setSongId(currentSongId);
     }
+    console.log(currentSongId);
   }, [currentSongId]);
 
   const { error: estimateError } = useSimulateContract({
     address: contract.address,
     abi: abi,
     functionName: "addSong",
-    args: [addr!, metadata, copyrights ? copyrights : []],
+    args: [addr!, metadata, copyrights ? (copyrights as readonly {
+      songId: bigint;
+      shares: bigint;
+    }[]) : []],
   })
 
   const { data, writeContract } = useWriteContract()
@@ -47,6 +48,7 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, copyright }) => {
     isLoading,
     error: txError,
     isSuccess: txSuccess,
+
   } = useWaitForTransactionReceipt({
     hash: data,
   })
@@ -58,7 +60,7 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, copyright }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id: songId,
+        id: String(currentSongId),
         name: name,
         genre: genre,
         author: author,
@@ -73,7 +75,7 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, copyright }) => {
 
   useEffect(() => {
     if (txSuccess) {
-      console.log(txSuccess);
+      setTxHash(String(data));
       setState({ state: 2 });
     } else if (txError) {
       console.log(txError);
@@ -86,6 +88,7 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, copyright }) => {
       return;
     }
     const res = await jsonToIpfs();
+    setMetadata(res.data);
     writeContract({
       address: contract.address,
       abi: abi,
@@ -116,8 +119,8 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, copyright }) => {
         <option value="lyrics">Lyrics</option>
         <option value="both">Both</option>
       </Select>
-      <Button onClick={handleSendTransation} mt={4}>
-        {isLoading ? <Text>Loading</Text> : <Text>Upload</Text>}
+      <Button disabled={isLoading} onClick={handleSendTransation} mt={4}>
+        <Text>Upload</Text>
       </Button>
     </Box>
   );

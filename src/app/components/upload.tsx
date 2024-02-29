@@ -11,11 +11,14 @@ import { Copyright } from "../services/interfaces";
 
 export default function Upload() {
     const [regState, setRegState] = useState<RegisterStepsProps>({ state: 1 }); // ["upload", "info", "compare", "deployed"]
+    const [songId, setSongId] = useState<bigint>(BigInt(0));
     const [song, setSong] = useState<ArrayBuffer | undefined>();
     const [songName, setSongName] = useState<string>();
+    const [metadata, setMetadata] = useState("");
+    const [txHash, setTxHash] = useState("");
     const [progress, setProgress] = useState(0);
     const [compared, setCompared] = useState<{ cp: boolean; text: string }>({ cp: false, text: "" });
-    const [copyright, setCopyrigth] = useState<Copyright | null>(null);
+    const [copyrights, setCopyrigths] = useState<Copyright[]>([]);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -43,7 +46,7 @@ export default function Upload() {
             const { follow, id, rate } = await songTrad(song, setProgress, setCompared);
             if (follow) {
                 setRegState({ state: 1 });
-                setCopyrigth({ songId: id, shares: BigInt(Math.round(rate * 100)) });
+                setCopyrigths([{ songId: id, shares: BigInt(Math.round(rate * 100)) }]);
             }
         } else {
             alert("No song selected");
@@ -139,8 +142,16 @@ export default function Upload() {
                     </Box>
                 </VStack>
             )}
-            {regState.state === 1 ? <SongForm setState={setRegState} copyright={copyright} /> : null}
-            {regState.state === 2 ? <ReviewSong /> : null}
+            {regState.state === 1 ?
+                <SongForm
+                    setState={setRegState}
+                    setTxHash={setTxHash}
+                    setMetadata={setMetadata}
+                    setSongId={setSongId}
+                    metadata={metadata}
+                    copyrights={copyrights}
+                /> : null}
+            {regState.state === 2 ? <ReviewSong id={songId} txHash={txHash} metadata={metadata} /> : null}
         </Box>
     );
 };

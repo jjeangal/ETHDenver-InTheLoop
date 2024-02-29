@@ -37,6 +37,12 @@ export interface AddSongEventArgs {
   copyrights?: ReadonlyArray<Copyright>;
 }
 
+export interface ReviewSongProps {
+  id: bigint;
+  txHash: string;
+  metadata: string;
+}
+
 export interface GoResponse {
   Id: bigint;
   Title: string;
@@ -50,5 +56,9 @@ export interface RegisterStepsProps {
 
 export interface SongFormProps {
   setState: React.Dispatch<React.SetStateAction<RegisterStepsProps>>;
-  copyright: Copyright | null;
+  setMetadata: React.Dispatch<React.SetStateAction<string>>;
+  setTxHash: React.Dispatch<React.SetStateAction<string>>;
+  setSongId: React.Dispatch<React.SetStateAction<bigint>>;
+  metadata: string;
+  copyrights: Copyright[] | null;
 }
