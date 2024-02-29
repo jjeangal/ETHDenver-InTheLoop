@@ -17,7 +17,7 @@ const config = createConfig(
             ),
         },
         ssr: true,
-        walletConnectProjectId: process.env.NEXT_PUBLIC_WC_PROJECT_ID!, // Required API Keys
+        walletConnectProjectId: process.env.NEXT_PUBLIC_WC_PROJECT_ID!,
         appName: 'In The Loop',
     })
 );
