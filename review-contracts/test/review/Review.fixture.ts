@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import hre from "hardhat";
 import type { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/dist/src/signer-with-address";
 
-import type { Review } from "../../typechain-types";
+import type { Review } from "../../types";
 import { waitForBlock } from "../../utils/block";
 
 export async function deployReviewFixture(): Promise<{ review: Review; address: string }> {

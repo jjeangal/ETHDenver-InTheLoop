@@ -4,7 +4,7 @@ import hre from "hardhat";
 import { waitForBlock } from "../../utils/block";
 import type { Signers } from "../types";
 import { shouldBehaveLikeReview } from "./Review.behavior";
-import { addAuthors, castVote, deployReviewFixture, setupReviewersAndKeywords, submitData } from "./Review.fixture";
+import { addAuthors, castVote, deployReviewFixture, setupReviewersAndKeywords as setupReviewers, submitData } from "./Review.fixture";
 
 describe("Unit tests", function () {
   before(async function () {
@@ -24,7 +24,7 @@ describe("Unit tests", function () {
     this.signers.reviewers = [signers[3], signers[4], signers[5], signers[6]];
 
     await addAuthors(review, signers);
-    await setupReviewersAndKeywords(review, signers);
+    await setupReviewers(review, signers);
 
     await submitData(review, signers);
 
