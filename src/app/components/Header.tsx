@@ -1,9 +1,12 @@
 'use client';
+
 import Link from 'next/link'
-import { Text, Button, Spacer, VStack } from "@chakra-ui/react";
+import { Text, Button, Spacer, VStack, useColorModeValue } from "@chakra-ui/react";
 import { ConnectKitButton } from "connectkit";
+import { useState } from 'react';
 
 export default function Header() {
+    const borderColor = useColorModeValue("gray.200", "gray.700");
 
     function transformAddress(address: `0x${string}` | undefined): string {
         if (address === undefined) {
@@ -16,7 +19,7 @@ export default function Header() {
     }
 
     return (
-        <VStack as="nav" position="fixed" left={0} top={0} bottom={0} width="200px" p="5" spacing={4}>
+        <VStack as="nav" position="fixed" left={0} top={0} bottom={0} width="10%" m="5" spacing={4} borderRight="1px" borderColor={borderColor}>
             <Text size="xxl">
                 <Link href="/">
                     InTheLoop

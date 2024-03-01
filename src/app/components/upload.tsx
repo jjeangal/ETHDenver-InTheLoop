@@ -1,16 +1,16 @@
 'use client'
 
-import { Box, Text, Button, Progress, Input, VStack, HStack } from "@chakra-ui/react";
+import { Box, Text, Button, Progress, Input, VStack, HStack, Flex } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import { songTrad } from "../basicPitch/songenc";
 import { SongForm } from "./Upload/songForm";
-import { RegisterSteps } from "./Upload/steps";
-import { RegisterStepsProps } from "../services/interfaces";
-import { ReviewSong } from "./Upload/reviewSong";
+import { UploadSteps } from "./Upload/steps";
+import { UploadStepsProps } from "../services/interfaces";
+import { ReviewSong } from "./Upload/registerIp";
 import { Copyright } from "../services/interfaces";
 
 export default function Upload() {
-    const [regState, setRegState] = useState<RegisterStepsProps>({ state: 2 }); // ["upload", "info", "compare", "deployed"]
+    const [regState, setRegState] = useState<UploadStepsProps>({ state: 2 }); // ["upload", "info", "compare", "deployed"]
     const [songId, setSongId] = useState<bigint>(BigInt(0));
     const [song, setSong] = useState<ArrayBuffer | undefined>();
     const [songName, setSongName] = useState<string>();
@@ -88,9 +88,9 @@ export default function Upload() {
     };
 
     return (
-        <Box display="flex" alignItems="center" flexDirection="column" flexGrow={1} pt={10} justifyContent="center">
-            <Box display="flex" alignItems="center" justifyContent="center" position="fixed" top={0} left={0} right={0} pt={10}>
-                <RegisterSteps state={regState.state} />
+        <Flex direction="column" justifyContent="center" alignItems="center" minHeight="100vh">
+            <Box display="flex" alignItems="center" justifyContent="center" position="fixed" top={0} left={0} right={0} mt="3%">
+                <UploadSteps state={regState.state} />
             </Box>
             {regState.state === 0 && (
                 <VStack spacing={5}>
@@ -158,6 +158,6 @@ export default function Upload() {
                     txHash={txHash}
                     metadata={metadata}
                 /> : null}
-        </Box>
+        </Flex>
     );
 };

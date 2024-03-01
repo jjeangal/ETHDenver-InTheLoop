@@ -11,7 +11,7 @@ export const ReviewSong: React.FC<ReviewSongProps> = ({ id, txHash, metadata, co
   const [policyId, setPolicyId] = useState<bigint>();
 
   return (
-    <Flex justifyContent="center" alignItems="center">
+    <Flex flexDirection="column">
       <Box textAlign="center">
         <Heading>Review Song</Heading>
         <Box>

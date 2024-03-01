@@ -38,9 +38,8 @@ const RegisterIPA: React.FC<RegisterIPAProps> = ({ tokenId, policyId }) => {
 
     return (
         <Flex flexDirection="column">
-            <Heading size="md">Register your IP</Heading>
             <Button onClick={handleClick}>
-                Register
+                Register as IP Asset
             </Button>
         </Flex>
     );

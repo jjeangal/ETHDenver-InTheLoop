@@ -16,6 +16,7 @@
     "@pinata/sdk": "^2.1.0",
     "@rainbow-me/rainbowkit": "^2.0.1",
     "@spotify/basic-pitch": "^1.0.1",
+    "@story-protocol/core-sdk": "0.0.1-beta-rc.9",
     "@story-protocol/react": "0.0.1-beta.9",
     "@tanstack/react-query": "^5.24.1",
     "@tensorflow/tfjs": "^4.17.0",
@@ -32,7 +33,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.1",
-    "viem": "^2.7.15",
+    "viem": "^2.7.16",
     "wagmi": "^2.5.7"
   },
   "devDependencies": {

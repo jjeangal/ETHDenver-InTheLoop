@@ -2,81 +2,225 @@
 
 import {
     Flex,
-    useDisclosure,
     Input,
+    Grid,
     Button,
-    Drawer,
-    DrawerOverlay,
-    DrawerContent,
-    DrawerCloseButton,
-    DrawerHeader,
-    DrawerBody,
-    DrawerFooter,
     FormControl,
     FormLabel,
-    Switch
-} from "@chakra-ui/react"
-
-const policyParameters = {
-    attribution: true,
-    commercialUse: false,
-    commercialAttribution: false,
-    commercializerChecker: '0x' as `0x${string}`,
-    commercializerCheckerData: '0x' as `0x${string}`,
-    commercialRevShare: 0,
-    derivativesAllowed: true,
-    derivativesAttribution: true,
-    derivativesApproval: false,
-    derivativesReciprocal: false,
-    territories: ['USA', 'CANADA'],
-    distributionChannels: [],
-    contentRestrictions: [],
-};
+    Accordion,
+    AccordionItem,
+    AccordionIcon,
+    AccordionButton,
+    AccordionPanel,
+    Switch,
+    Box
+} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { licensingModuleAbi, useRegisterPILPolicy } from "@story-protocol/react";
+import { Policy, PolicyParameters, RegistrationParams } from "../services/interfaces";
+import { zeroAddress } from 'viem';
+import { useWatchContractEvent } from "wagmi";
+import Policies from "./Policies";
 
 export default function AddPolicy() {
-    const { isOpen, onOpen, onClose } = useDisclosure()
+
+    const [policies, setPolicies] = useState<Policy[]>([]);
+
+    const [policyParams, setpolicyParams] = useState<PolicyParameters>({
+        attribution: true,
+        commercialUse: false,
+        commercialAttribution: false,
+        commercializerChecker: zeroAddress,
+        commercializerCheckerData: '0x',
+        commercialRevShare: 0,
+        derivativesAllowed: true,
+        derivativesAttribution: true,
+        derivativesApproval: false,
+        derivativesReciprocal: false,
+        territories: ['USA', 'CANADA'],
+        distributionChannels: [],
+        contentRestrictions: [],
+    });
+
+    //NEED TO SET ROYALTY ATTRIBUTION
+
+    const [regParams, setRegParams] = useState<RegistrationParams>({
+        transferable: true, // Whether or not attribution is required when reproducing the work
+        royaltyPolicy: zeroAddress, // Address of a royalty policy contract that will handle royalty payments
+        mintingFee: BigInt(0),
+        mintingFeeToken: zeroAddress,
+        policy: policyParams,
+    });
+
+    async function fetchPolicies() {
+        const response = await fetch("https://api.storyprotocol.net/api/v1/policies", {
+            method: "POST",
+            headers: {
+                accept: 'application/json',
+                'X-API-Key': 'U3RvcnlQcm90b2NvbFRlc3RBUElLRVk=',
+                'content-type': 'application/json'
+            }
+        });
+        const result = await response.json();
+        const data: Policy[] = result.data.map((policy: any) => {
+            return {
+                blockNumber: policy.blockNumber,
+                blockTimestamp: policy.blockTimestamp,
+                frameworkData: policy.frameworkData,
+                id: policy.id,
+                mintingFee: policy.mintingFee,
+                mintingFeeToken: policy.mintingFeeToken,
+                pil: {
+                    attribution: policy.pil.attribution,
+                    commercialAttribution: policy.pil.commercialAttribution,
+                    commercialRevShare: policy.pil.commercialRevShare,
+                    commercialUse: policy.pil.commercialUse,
+                    commercializerChecker: policy.pil.commercializerChecker,
+                    commercializerCheckerData: policy.pil.commercializerCheckerData,
+                    contentRestrictions: policy.pil.contentRestrictions,
+                    derivativesAllowed: policy.pil.derivativesAllowed,
+                    derivativesApproval: policy.pil.derivativesApproval,
+                    derivativesAttribution: policy.pil.derivativesAttribution,
+                    derivativesReciprocal: policy.pil.derivativesReciprocal,
+                    distributionChannels: policy.pil.distributionChannels,
+                    id: policy.pil.id,
+                    territories: policy.pil.territories,
+                },
+                policyFrameworkManager: policy.policyFrameworkManager,
+                royaltyData: policy.royaltyData,
+                royaltyPolicy: policy.royaltyPolicy,
+            }
+        });
+        setPolicies(data);
+        return result;
+    }
+
+    useEffect(() => {
+        fetchPolicies();
+    }, []);
+
+    useWatchContractEvent({
+        address: '0x950d766A1a0afDc33c3e653C861A8765cb42DbdC',
+        abi: licensingModuleAbi,
+        eventName: 'PolicyRegistered',
+        onLogs(logs) {
+            console.log(logs);
+        }
+    });
+
+    const {
+        writeContractAsync,
+        isPending,
+        data: txHash,
+    } = useRegisterPILPolicy();
+
+    async function handleClick() {
+        console.log(policyParams);
+        await writeContractAsync({
+            functionName: 'registerPolicy',
+            args: [regParams],
+        });
+        if (txHash == undefined) {
+            console.log('Transaction failed: Policy already exists or invalid parameters.')
+            return;
+        };
+        console.log(txHash);
+    };
 
     return (
-        <Flex>
-            <Button onClick={onOpen}>New Policy</Button>
-            <Drawer isOpen={isOpen} onClose={onClose} size="md">
-                <DrawerOverlay />
-                <DrawerContent>
-                    <DrawerCloseButton />
-                    <DrawerHeader>Create a Policy</DrawerHeader>
-                    <DrawerBody>
-                        <form
-                            id='my-form'
-                            onSubmit={(e) => {
-                                e.preventDefault()
-                                console.log('submitted')
-                            }}
-                        >
-                            {Object.keys(policyParameters).map((key) => (
-                                typeof policyParameters[key as keyof typeof policyParameters] === 'boolean' ? (
-                                    <FormControl display='flex' alignItems='center' key={key}>
-                                        <FormLabel htmlFor={key} mb='0'>
-                                            {key}
-                                        </FormLabel>
-                                        <Switch id={key} defaultChecked={Boolean(policyParameters[key as keyof typeof policyParameters])} />
-                                    </FormControl>
-                                ) : (
-                                    <FormControl key={key}>
-                                        <FormLabel htmlFor={key}>{key}</FormLabel>
-                                        <Input id={key} defaultValue={policyParameters[key as keyof typeof policyParameters] as string} />
-                                    </FormControl>
-                                )
-                            ))}
-                        </form>
-                    </DrawerBody>
+        <Flex direction="column" alignItems="center">
+            <Policies policies={policies} />
+            <Accordion allowToggle>
+                <AccordionItem>
+                    <h2>
+                        <AccordionButton>
+                            <Box flex="1" textAlign="left">
+                                Policy Form
+                            </Box>
+                            <AccordionIcon />
+                        </AccordionButton>
+                    </h2>
+                    <AccordionPanel pb={4}>
+                        <Box as="form" id='my-form'>
+                            <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+                                <FormControl display='flex' alignItems='center'>
+                                    <FormLabel htmlFor='transferable' mb='0'>Transferable</FormLabel>
+                                    <Switch id='transferable' onChange={(e) => setRegParams(prevState => ({ ...prevState, transferable: e.target.checked }))} defaultChecked={regParams.transferable} />
+                                </FormControl>
 
-                    <DrawerFooter>
-                        <Button type='submit' form='my-form'>
-                            Create
-                        </Button>
-                    </DrawerFooter>
-                </DrawerContent>
-            </Drawer>
+                                <FormControl display='flex' alignItems='center'>
+                                    <FormLabel htmlFor='attribution' mb='0'>Attribution</FormLabel>
+                                    <Switch id='attribution' onChange={(e) => setpolicyParams(prevState => ({ ...prevState, attribution: e.target.checked }))} defaultChecked={policyParams.attribution} />
+                                </FormControl>
+
+                                <FormControl display='flex' alignItems='center'>
+                                    <FormLabel htmlFor='commercialUse' mb='0'>Commercial Use</FormLabel>
+                                    <Switch id='commercialUse' onChange={(e) => setpolicyParams(prevState => ({ ...prevState, commercialUse: e.target.checked }))} defaultChecked={policyParams.commercialUse} />
+                                </FormControl>
+
+                                <FormControl display='flex' alignItems='center'>
+                                    <FormLabel htmlFor='commercialAttribution' mb='0'>Commercial Attribution</FormLabel>
+                                    <Switch id='commercialAttribution' onChange={(e) => setpolicyParams(prevState => ({ ...prevState, commercialAttribution: e.target.checked }))} defaultChecked={policyParams.commercialAttribution} />
+                                </FormControl>
+
+                                <FormControl display='flex' alignItems='center'>
+                                    <FormLabel htmlFor='derivativesAllowed' mb='0'>Derivatives Allowed</FormLabel>
+                                    <Switch id='derivativesAllowed' onChange={(e) => setpolicyParams(prevState => ({ ...prevState, derivativesAllowed: e.target.checked }))} defaultChecked={policyParams.derivativesAllowed} />
+                                </FormControl>
+
+                                <FormControl display='flex' alignItems='center'>
+                                    <FormLabel htmlFor='derivativesAttribution' mb='0'>Derivatives Attribution</FormLabel>
+                                    <Switch id='derivativesAttribution' onChange={(e) => setpolicyParams(prevState => ({ ...prevState, derivativesAttribution: e.target.checked }))} defaultChecked={policyParams.derivativesAttribution} />
+                                </FormControl>
+
+                                <FormControl display='flex' alignItems='center'>
+                                    <FormLabel htmlFor='derivativesApproval' mb='0'>Derivatives Approval</FormLabel>
+                                    <Switch id='derivativesApproval' onChange={(e) => setpolicyParams(prevState => ({ ...prevState, derivativesApproval: e.target.checked }))} defaultChecked={policyParams.derivativesApproval} />
+                                </FormControl>
+
+                                <FormControl display='flex' alignItems='center'>
+                                    <FormLabel htmlFor='derivativesReciprocal' mb='0'>Derivatives Reciprocal</FormLabel>
+                                    <Switch id='derivativesReciprocal' onChange={(e) => setpolicyParams(prevState => ({ ...prevState, derivativesReciprocal: e.target.checked }))} defaultChecked={policyParams.derivativesReciprocal} />
+                                </FormControl>
+
+                                <FormControl>
+                                    <FormLabel htmlFor='commercializerChecker'>Commercializer Checker</FormLabel>
+                                    <Input id='commercializerChecker' onChange={(e) => setpolicyParams(prevState => ({ ...prevState, commercializerChecker: e.target.value }))} defaultValue={policyParams.commercializerChecker} />
+                                </FormControl>
+
+                                <FormControl>
+                                    <FormLabel htmlFor='commercializerCheckerData'>Commercializer Checker Data</FormLabel>
+                                    <Input id='commercializerCheckerData' onChange={(e) => setpolicyParams(prevState => ({ ...prevState, commercializerCheckerData: e.target.value }))} defaultValue={policyParams.commercializerCheckerData} />
+                                </FormControl>
+
+                                <FormControl>
+                                    <FormLabel htmlFor='commercialRevShare'>Commercial Rev Share</FormLabel>
+                                    <Input id='commercialRevShare' onChange={(e) => setpolicyParams(prevState => ({ ...prevState, commercialRevShare: parseInt(e.target.value) }))} defaultValue={policyParams.commercialRevShare} />
+                                </FormControl>
+
+                                <FormControl>
+                                    <FormLabel htmlFor='territories'>Territories</FormLabel>
+                                    <Input id='territories' onChange={(e) => setpolicyParams(prevState => ({ ...prevState, territories: e.target.value.split(',') }))} defaultValue={policyParams.territories.join(',')} />
+                                </FormControl>
+
+                                <FormControl>
+                                    <FormLabel htmlFor='distributionChannels'>Distribution Channels</FormLabel>
+                                    <Input id='distributionChannels' onChange={(e) => setpolicyParams(prevState => ({ ...prevState, distributionChannels: e.target.value.split(',') }))} defaultValue={policyParams.distributionChannels.join(',')} />
+                                </FormControl>
+
+                                <FormControl>
+                                    <FormLabel htmlFor='contentRestrictions'>Content Restrictions</FormLabel>
+                                    <Input id='contentRestrictions' onChange={(e) => setpolicyParams(prevState => ({ ...prevState, contentRestrictions: e.target.value.split(',') }))} defaultValue={policyParams.contentRestrictions.join(',')} />
+                                </FormControl>
+                            </Grid>
+
+                            <Button disabled={isPending} onClick={() => handleClick()} mt={4}>
+                                {isPending ? 'Confirm in wallet' : 'Register PIL Policy'}
+                            </Button>
+                        </Box>
+                    </AccordionPanel>
+                </AccordionItem>
+            </Accordion>
         </Flex>
     )
 }
