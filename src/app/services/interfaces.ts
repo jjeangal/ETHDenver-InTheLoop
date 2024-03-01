@@ -113,6 +113,24 @@ export type Policy = {
   royaltyPolicy: string;
 };
 
+export type RegisterIPLogEntry = {
+  address: string;
+  args: {
+    caller: string;
+    ipId: string;
+    policyId: bigint;
+  };
+  blockHash: string;
+  blockNumber: bigint;
+  data: string;
+  eventName: string;
+  logIndex: number;
+  removed: boolean;
+  topics: string[];
+  transactionHash: string;
+  transactionIndex: number;
+};
+
 export interface SongFormProps {
   setState: React.Dispatch<React.SetStateAction<UploadStepsProps>>;
   setMetadata: React.Dispatch<React.SetStateAction<string>>;

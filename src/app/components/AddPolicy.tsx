@@ -19,8 +19,11 @@ import { useState } from "react";
 import { useRegisterPILPolicy, useWatchPolicyRegistered } from "@story-protocol/react";
 import { PolicyParameters, RegistrationParams } from "../services/interfaces";
 import { zeroAddress } from 'viem';
+import { useAccount } from "wagmi"
 
 export default function AddPolicy() {
+
+    const account = useAccount();
 
     const [policyParams, setpolicyParams] = useState<PolicyParameters>({
         attribution: true,
@@ -69,7 +72,7 @@ export default function AddPolicy() {
 
     return (
         <Flex direction="column" alignItems="center">
-            <Accordion allowToggle>
+            <Accordion allowToggle width="50vw">
                 <AccordionItem>
                     <h2>
                         <AccordionButton>

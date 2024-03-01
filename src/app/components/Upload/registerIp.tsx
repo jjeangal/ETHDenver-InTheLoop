@@ -65,8 +65,8 @@ export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, co
   return (
     <Flex flexDirection="column">
       <Box textAlign="center">
-        <Box>
-          <Text> Song info: </Text>
+        <Text > Song info </Text>
+        <Box textAlign="left" mb={4} border="1px solid #ddd" p={4} backgroundColor="white">
           <Text> Id is: {String(id)} </Text>
           <Text>
             {" "}
@@ -76,13 +76,19 @@ export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, co
             </Link>{" "}
           </Text>
           <Text> Transaction Hash: {txHash} </Text>
-          <Text> Uses copyrights from songs: </Text>
-          {copyrights ? copyrights.map((copyright) => (
-            <Box key={copyright.songId}>
-              <Text> Song id: {String(copyright.songId)} </Text>
-              <Text> Shares: {String(copyright.shares)} </Text>
-            </Box>
-          )) : <Text> No copyrights </Text>}
+          {copyrights && copyrights.length > 0 ? (
+            <>
+              <Text> Uses copyrights from songs: </Text>
+              {copyrights.map((copyright) => (
+                <Box key={copyright.songId}>
+                  <Text> Song id: {String(copyright.songId)} </Text>
+                  <Text> Shares: {String(copyright.shares)} </Text>
+                </Box>
+              ))}
+            </>
+          ) : (
+            <Text> No copyrights </Text>
+          )}
         </Box>
         {/* List all policies component */}
         <Policies policies={policies} setPolicyId={setPolicyId} />
