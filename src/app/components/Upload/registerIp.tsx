@@ -13,15 +13,17 @@ export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, co
   const [policies, setPolicies] = useState<Policy[]>([]);
 
   async function fetchPolicies() {
-    const response = await fetch("https://api.storyprotocol.net/api/v1/policies", {
-      method: "POST",
+    const options = {
+      method: 'POST',
       headers: {
         accept: 'application/json',
         'X-API-Key': 'U3RvcnlQcm90b2NvbFRlc3RBUElLRVk=',
         'content-type': 'application/json'
-      }
-    });
+      },
+      body: JSON.stringify({ options: { orderDirection: 'DESC' } })
+    };
 
+    const response = await fetch("https://api.storyprotocol.net/api/v1/policies", options);
     const result = await response.json();
 
     const data: Policy[] = result.data.map((policy: any) => {
@@ -64,8 +66,8 @@ export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, co
 
   return (
     <Flex flexDirection="column" marginTop="15vh">
-      <Box textAlign="center">
-        <Box textAlign="left" mb={4} border="1px solid #ddd" p={4} backgroundColor="gray.50" borderRadius="md" boxShadow="md">
+      <Box textAlign="center" width="70vw">
+        <Box textAlign="left" mb={4} border="1px solid #ddd" p={4} backgroundColor="gray.800" borderRadius="md" boxShadow="md">
           <Text> Id is: {String(id)} </Text>
           <Text>
             {" "}

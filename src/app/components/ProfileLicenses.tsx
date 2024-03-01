@@ -4,7 +4,7 @@ import { Box, Flex, Accordion, AccordionItem, AccordionButton, AccordionPanel, A
 import { useState, useEffect } from "react";
 import { License } from "../services/interfaces";
 
-export default function Licenses() {
+export default function ProfileLicenses() {
     const [boughtLicenses, setBoughtLicenses] = useState<License[]>([]);
     const [soldLicenses, setSoldLicenses] = useState<License[]>([]);
 
@@ -38,14 +38,13 @@ export default function Licenses() {
                         </h2>
                         <AccordionPanel pb={4}>
                             {boughtLicenses.map((license) => (
-                                <Box key={license.ipId.toString()} padding="4" backgroundColor="gray.100" marginTop="2" borderRadius="md">
+                                <Box key={license.ipId.toString()} padding="4" backgroundColor="gray.800" marginTop="2" borderRadius="md">
                                     <Text fontWeight="bold">License ID: {license.ipId.toString()}</Text>
                                     <Text>Policy ID: {license.policyId.toString()}</Text>
                                 </Box>
                             ))}
                         </AccordionPanel>
                     </AccordionItem>
-
                     <AccordionItem>
                         <h2>
                             <AccordionButton>
@@ -57,7 +56,7 @@ export default function Licenses() {
                         </h2>
                         <AccordionPanel pb={4}>
                             {soldLicenses.map((license) => (
-                                <Box key={license.ipId.toString()} padding="4" backgroundColor="gray.100" marginTop="2" borderRadius="md">
+                                <Box key={license.ipId.toString()} padding="4" backgroundColor="gray.300" marginTop="2" borderRadius="md">
                                     <Text fontWeight="bold">License ID: {license.ipId.toString()}</Text>
                                     <Text>Policy ID: {license.policyId.toString()}</Text>
                                 </Box>

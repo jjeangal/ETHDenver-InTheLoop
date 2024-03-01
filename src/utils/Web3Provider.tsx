@@ -1,6 +1,6 @@
 'use client';
 
-import { ChakraProvider } from '@chakra-ui/react';
+import { Box, ChakraProvider } from '@chakra-ui/react';
 import { WagmiProvider, createConfig, http } from 'wagmi';
 import { sepolia } from 'wagmi/chains';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -29,7 +29,9 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
         <ChakraProvider>
             <WagmiProvider config={config}>
                 <QueryClientProvider client={queryClient}>
-                    <ConnectKitProvider>{children}</ConnectKitProvider>
+                    <ConnectKitProvider>
+                        {children}
+                    </ConnectKitProvider>
                 </QueryClientProvider>
             </WagmiProvider>
         </ChakraProvider>

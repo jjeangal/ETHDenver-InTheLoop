@@ -20,20 +20,20 @@ const Policies: React.FC<PolicyProps> = ({ policies, setPolicyId }) => {
 
     if (policies.length === 0) {
         return (
-            <Flex>
-                <Text>Fetching Policies</Text>
+            <Flex justifyContent="center" alignItems="center">
+                <Text mr='2'>Fetching Policies</Text>
                 <Spinner />
             </Flex>
         );
     }
 
     return (
-        <Box p={5} backgroundColor="gray.50" borderRadius="md" boxShadow="md" border="1px solid #ddd" >
+        <Box p={5} backgroundColor="gray.800" borderRadius="md" boxShadow="md" border="1px solid #ddd" >
             < Text fontSize="xl" mb={4} > Select a Policy</Text >
             <RadioGroup onChange={(value) => setPolicyId(BigInt(value))} defaultValue={policies[0].id.toString()}>
                 <Grid templateColumns="repeat(4, 1fr)" gap={6}>
                     {Array.isArray(policies) && policies.map((policy) => (
-                        <Flex key={policy.id} align="center" p={2} backgroundColor="white" borderRadius="md" boxShadow="sm">
+                        <Flex key={policy.id} align="center" p={2} backgroundColor="grey.100" borderRadius="md" boxShadow="sm">
                             <Radio value={policy.id.toString()} size="lg" mr={2} />
                             <Box flex="1" fontSize="lg" mr={2}>
                                 Policy {policy.id}

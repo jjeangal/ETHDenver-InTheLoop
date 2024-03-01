@@ -63,7 +63,7 @@ export default function MySongs() {
     }, []);
 
     return (
-        <Flex flexDirection="column" alignItems="center">
+        <Flex flexDirection="column" alignItems="center" mt="20vh">
             <Box width="50%" marginBottom="8" marginTop="8">
                 <Accordion allowToggle>
                     <AccordionItem>
@@ -77,7 +77,7 @@ export default function MySongs() {
                         </h2>
                         <AccordionPanel pb={4}>
                             {IPAs && (IPAs as IPA[]).map((ipa) => (
-                                <Box key={ipa.id} bg="gray.50" p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                                <Box key={ipa.id} bg="gray.50" m={5} p={3} shadow="md" borderWidth="1px" borderRadius="md">
                                     {/* <Text>IP Collection Name {ipa.metadata.name}</Text> */}
                                     <Text>Token ID: {ipa.tokenId}</Text>
                                     {/* <Text>Token Contract: {ipa.tokenContract}</Text> */}

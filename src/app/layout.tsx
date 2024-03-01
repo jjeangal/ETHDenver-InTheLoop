@@ -15,9 +15,8 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <head>
-      </head>
-      <body>
+      <head></head>
+      <body style={{ backgroundColor: 'black', color: "white" }}>
         <Web3Provider>
           <Header />
           {children}

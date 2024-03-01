@@ -37,7 +37,7 @@ export default function Derivatives() {
                         </h2>
                         <AccordionPanel pb={4}>
                             {requests.length > 0 ? requests.map((request) => (
-                                <Box key={request.ipId.toString()} padding="4" backgroundColor="gray.100" marginTop="2" borderRadius="md">
+                                <Box key={request.ipId.toString()} padding="4" backgroundColor="gray.300" marginTop="2" borderRadius="md">
                                     <Box fontWeight="bold">License ID: {request.ipId.toString()}</Box>
                                     <Box>Policy ID: {request.policyId.toString()}</Box>
                                 </Box>
@@ -56,7 +56,7 @@ export default function Derivatives() {
                         </h2>
                         <AccordionPanel pb={4}>
                             {demands.length > 0 ? demands.map((demand) => (
-                                <Box key={demand.ipId.toString()} padding="4" backgroundColor="gray.100" marginTop="2" borderRadius="md">
+                                <Box key={demand.ipId.toString()} padding="4" backgroundColor="gray.300" marginTop="2" borderRadius="md">
                                     <Box fontWeight="bold">License ID: {demand.ipId.toString()}</Box>
                                     <Box>Policy ID: {demand.policyId.toString()}</Box>
                                 </Box>

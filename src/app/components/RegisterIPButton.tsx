@@ -41,16 +41,16 @@ const RegisterIPButton: React.FC<RegisterIPAProps> = ({ tokenId, policyId }) => 
     }
 
     return (
-        <Flex m="4" width="50vw">
+        <Flex m="4" width="100%" justifyContent="center" alignItems="center">
             {txHash ? (ip ?
-                <Box textAlign="left" mb="4" border="1px solid #ddd" p="4" backgroundColor="gray.50" borderRadius="md" boxShadow="md">
+                <Box textAlign="left" mb="4" border="1px solid #ddd" backgroundColor="gray.300" borderRadius="md" boxShadow="md">
                     <Text>IP Asset registered with id {ip.args.ipId}</Text>
                 </Box> :
-                <Box textAlign="left" mb="4" border="1px solid #ddd" p="4" backgroundColor="gray.50" borderRadius="md" boxShadow="md">
+                <Box textAlign="left" mb="4" border="1px solid #ddd" backgroundColor="gray.300" borderRadius="md" boxShadow="md">
                     <Text>Fetching Transaction</Text>
                 </Box>
             ) :
-                <Button disabled={isPending} onClick={() => handleClick()} textAlign="left" mb="4" border="1px solid #ddd" p="4" backgroundColor="gray.50" borderRadius="md" boxShadow="md">
+                <Button disabled={isPending} onClick={() => handleClick()} textAlign="left" mb="4" border="1px solid #ddd" backgroundColor="gray.300" borderRadius="md" boxShadow="md">
                     {isPending ? 'Confirm in wallet' : 'Register IP Asset'}
                 </Button>
             }

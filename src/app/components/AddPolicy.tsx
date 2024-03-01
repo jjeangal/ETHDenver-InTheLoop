@@ -71,8 +71,8 @@ export default function AddPolicy() {
     };
 
     return (
-        <Flex direction="column" alignItems="center" textAlign="left" mb={4} border="1px solid #ddd" p={4} backgroundColor="gray.50" borderRadius="md" boxShadow="md">
-            <Accordion allowToggle width="50vw">
+        <Flex direction="column" alignItems="center" textAlign="left" mb={4} border="1px solid #ddd" p={4} backgroundColor="gray.800" borderRadius="md" boxShadow="md">
+            <Accordion allowToggle width="100%">
                 <AccordionItem>
                     <h2>
                         <AccordionButton>

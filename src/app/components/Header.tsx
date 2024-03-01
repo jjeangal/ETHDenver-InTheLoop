@@ -19,27 +19,33 @@ export default function Header() {
     }
 
     return (
-        <VStack as="nav" position="fixed" left={0} top={0} bottom={0} width="10%" m="5" spacing={4} borderRight="1px" borderColor={borderColor}>
+        <VStack as="nav" position="fixed" left={0} top={0} bottom={0} width="12%" spacing={8} borderRight="1px" borderColor={borderColor}>
+            <Spacer />
             <Text size="xxl">
                 <Link href="/">
-                    InTheLoop
+                    HOME
                 </Link>
             </Text>
             <Text>
                 <Link href="/profile">
-                    profile
+                    PROFILE
                 </Link>
             </Text>
             <Text>
                 <Link href="/uploadsong">
-                    upload
+                    UPLOAD
+                </Link>
+            </Text>
+            <Text>
+                <Link href="/licenses">
+                    LICENSES
                 </Link>
             </Text>
             <Spacer />
             <ConnectKitButton.Custom>
                 {({ isConnected, isConnecting, show, hide, address, ensName, chain }) => {
                     return (
-                        <Button onClick={show}>
+                        <Button onClick={show} mb="4">
                             {isConnected ? transformAddress(address) : "Custom Connect"}
                         </Button>
                     );
