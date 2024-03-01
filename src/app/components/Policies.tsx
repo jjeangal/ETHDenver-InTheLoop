@@ -1,9 +1,12 @@
-import { Box, Grid, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, useDisclosure, Checkbox } from "@chakra-ui/react";
+import { Box, Flex, Spinner, Grid, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, useDisclosure, Checkbox } from "@chakra-ui/react";
 import { Policy } from "../services/interfaces";
 import { useState } from "react";
+import { IconButton } from "@chakra-ui/react";
+import { ViewIcon } from "@chakra-ui/icons";
 
 type PolicyProps = {
     policies: Policy[];
+
 };
 
 const Policies: React.FC<PolicyProps> = ({ policies }) => {
@@ -15,14 +18,21 @@ const Policies: React.FC<PolicyProps> = ({ policies }) => {
         onOpen();
     };
 
+    if (policies.length === 0) {
+        return <Spinner />;
+    }
+
     return (
         <Box>
             <Grid templateColumns="repeat(3, 1fr)" gap={6}>
                 {Array.isArray(policies) && policies.map((policy) => (
-                    <Box key={policy.id}>
-                        <Checkbox value={policy.id}>{policy.id}</Checkbox>
-                        <Button onClick={() => handleOpenModal(policy)}>More Info</Button>
-                    </Box>
+                    <Flex key={policy.id} align="center" p={2}>
+                        <Checkbox value={policy.id} size="lg" mr={2} />
+                        <Box flex="1" fontSize="lg" mr={2}>
+                            Policy {policy.id}
+                        </Box>
+                        <IconButton aria-label="More info" icon={<ViewIcon />} onClick={() => handleOpenModal(policy)} size="xs" />
+                    </Flex>
                 ))}
             </Grid>
 

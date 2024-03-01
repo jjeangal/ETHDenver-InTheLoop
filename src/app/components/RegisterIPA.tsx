@@ -1,4 +1,4 @@
-import { Flex, Button, Heading } from '@chakra-ui/react';
+import { Flex, Button } from '@chakra-ui/react';
 import { useRegisterRootIp } from '@story-protocol/react';
 import { RegisterIPAProps } from '../services/interfaces';
 import CoalNFT from "../../generated/deployedContracts";
