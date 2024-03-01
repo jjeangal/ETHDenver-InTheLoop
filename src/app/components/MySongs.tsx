@@ -34,7 +34,7 @@ export default function MySongs() {
             })
         });
         const result = await response.json();
-        const data: IPAList = result.data.map((ipa: any) => {
+        const data: IPA[] = result.data.map((ipa: any) => {
             return {
                 blockNumber: ipa.blockNumber,
                 blockTimestamp: ipa.blockTimestamp,
@@ -70,20 +70,6 @@ export default function MySongs() {
                         <h2>
                             <AccordionButton>
                                 <Box flex="1" textAlign="left">
-                                    Unregistered IP Assets
-                                </Box>
-                                <AccordionIcon />
-                            </AccordionButton>
-                        </h2>
-                        <AccordionPanel pb={4}>
-
-                        </AccordionPanel>
-                    </AccordionItem>
-
-                    <AccordionItem>
-                        <h2>
-                            <AccordionButton>
-                                <Box flex="1" textAlign="left">
                                     Registered IP Assets
                                 </Box>
                                 <AccordionIcon />
@@ -91,13 +77,28 @@ export default function MySongs() {
                         </h2>
                         <AccordionPanel pb={4}>
                             {IPAs && (IPAs as IPA[]).map((ipa) => (
-                                <Box key={ipa.id}>
+                                <Box key={ipa.id} bg="gray.50" p={5} shadow="md" borderWidth="1px" borderRadius="md">
                                     {/* <Text>IP Collection Name {ipa.metadata.name}</Text> */}
                                     <Text>Token ID: {ipa.tokenId}</Text>
                                     {/* <Text>Token Contract: {ipa.tokenContract}</Text> */}
                                     <Text>Registration Date: {ipa.metadata.registrationDate}</Text>
                                     <Text>IP id: {ipa.id}</Text>
                                 </Box>
+                            ))}
+                        </AccordionPanel>
+                    </AccordionItem>
+                    <AccordionItem>
+                        <h2>
+                            <AccordionButton>
+                                <Box flex="1" textAlign="left">
+                                    Unregistered IP Assets
+                                </Box>
+                                <AccordionIcon />
+                            </AccordionButton>
+                        </h2>
+                        <AccordionPanel pb={4}>
+                            {notIPAs && (notIPAs as IPA[]).map((ipa) => (
+                                <Text></Text>
                             ))}
                         </AccordionPanel>
                     </AccordionItem>
