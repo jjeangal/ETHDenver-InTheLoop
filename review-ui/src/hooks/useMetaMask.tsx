@@ -1,3 +1,5 @@
+"use client";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, createContext, PropsWithChildren, useContext, useCallback } from 'react'
 import { EventType, MetaMaskSDK } from '@metamask/sdk'
@@ -15,14 +17,12 @@ interface MetaMaskContextData {
   wallet: WalletState
   error: boolean
   errorMessage: string
-  mints: number
   isConnecting: boolean
   sdkConnected: boolean
   sdk?: MetaMaskSDK
   connectMetaMask: () => void
   clearError: () => void
   setError: (error: string) => void
-  updateMints: () => void
   terminate: () => void
 }
 
@@ -35,11 +35,9 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
   const [sdkConnected, setSdkConnected] = useState(false)
   const [isConnecting, setIsConnecting] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
-  const [mints, setMints] = useState(0)
   const [trigger, setTrigger] = useState(0)
   const clearError = () => setErrorMessage('')
   const setError = (error: string) => setErrorMessage(error)
-  const updateMints = () => setMints(mints+1)
 
   const [wallet, setWallet] = useState(disconnectedState)
 
@@ -121,6 +119,8 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
         name: 'In The Loop',
         url: window.location.host,
       },
+      infuraAPIKey: process.env.NEXT_PUBLIC_INFURA_API_KEY,
+      enableDebug: true,
       logging: {
         developerMode: true,
       },
@@ -169,14 +169,12 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
         wallet,
         error: !!errorMessage,
         errorMessage,
-        mints,
         isConnecting,
         sdkConnected,
         sdk,
         connectMetaMask,
         clearError,
         setError,
-        updateMints,
         terminate,
       }}
     >   
