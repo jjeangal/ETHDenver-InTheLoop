@@ -4,14 +4,12 @@ import { RegisterIPAProps } from '../services/interfaces';
 import CoalNFT from "../../generated/deployedContracts";
 import { stringToHex } from 'viem';
 
-const RegisterIPA: React.FC<RegisterIPAProps> = ({ tokenId, policyId }) => {
-    const contract = CoalNFT[11155111][0].contracts.CoalNFT;
+const RegisterIPButton: React.FC<RegisterIPAProps> = ({ tokenId, policyId }) => {
+    const contract = CoalNFT[11155111][0].contracts.CoalNFT.address;
 
     const {
         writeContractAsync
     } = useRegisterRootIp();
-
-    const nftContract = contract;
 
     const ipName = 'Coal Song IP'; // Name of your IP, if applicable
     const contentHash = stringToHex('0x', { size: 32 }); // Content hash of your NFT, if applicable
@@ -32,17 +30,15 @@ const RegisterIPA: React.FC<RegisterIPAProps> = ({ tokenId, policyId }) => {
 
         await writeContractAsync({
             functionName: 'registerRootIp',
-            args: [policyId, nftContract, tokenId, ipName, contentHash, externalURL],
+            args: [policyId, contract, tokenId, ipName, contentHash, externalURL],
         });
     }
 
     return (
-        <Flex flexDirection="column">
-            <Button onClick={handleClick}>
-                Register as IP Asset
-            </Button>
-        </Flex>
+        <Button onClick={handleClick}>
+            Register as IP Asset
+        </Button>
     );
 };
 
-export default RegisterIPA;
+export default RegisterIPButton;

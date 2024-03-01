@@ -1,6 +1,6 @@
 import { Flex, Box, Text, Link } from "@chakra-ui/react";
 import { RegisterIpProps, Policy } from "../../services/interfaces";
-import RegisterIPA from "../RegisterIPA";
+import RegisterIPButton from "../RegisterIPButton";
 import { useState, useEffect } from "react";
 import AddPolicy from '../AddPolicy';
 import Policies from "../Policies";
@@ -87,7 +87,7 @@ export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, co
         {/* List all policies component */}
         <Policies policies={policies} setPolicyId={setPolicyId} />
         {/* Register song as ip asset component */}
-        {RegisterIPA({ tokenId: id, policyId: policyId })}
+        {RegisterIPButton({ tokenId: id, policyId: policyId })}
         {/* Add a policy component */}
         <AddPolicy />
       </Box>

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Flex, Box, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon } from "@chakra-ui/react";
 import { IPA } from "../services/interfaces";
-import RegisterIPA from "./RegisterIPA";
+import RegisterIPA from "./RegisterIPButton";
 
 export default function MySongs() {
     const [IPAs, setIPAs] = useState<IPA[]>([]);
