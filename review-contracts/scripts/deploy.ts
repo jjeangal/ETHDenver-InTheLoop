@@ -12,12 +12,16 @@ async function main() {
   const admin = signers[0];
 
   const reviewFactory = await hre.ethers.getContractFactory("Review");
-  const arrayOfZeros: Uint8Array = new Uint8Array(32).fill(0);
 
-  const review = await reviewFactory.connect(admin).deploy("Test License", 1000, 0, admin, arrayOfZeros);
-  const tx = await review.waitForDeployment();
+  // const arrayOfZeros: Uint8Array = new Uint8Array(32).fill(0);
+  const subId = Number(process.env.VRF_SUBSCRIPTION_ID);
+  const coordinator = process.env.VRF_COORDINATOR ?? "";
+  const keyHash = process.env.VRF_KEY_HASH ?? "";
 
+  console.log("Trying to deploy a contract with " + subId + ", " + coordinator + ", " + keyHash + " using account " + admin.address);
   
+  const review = await reviewFactory.connect(admin).deploy("MIT License", 1000, subId, coordinator, keyHash, 1);
+  const tx = await review.waitForDeployment();
 
   console.log("Deployed address " + review.target);
 }

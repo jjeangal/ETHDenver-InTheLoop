@@ -13,6 +13,8 @@ import {
   send_eth_signTypedData_v4,
   send_personal_sign,
 } from '@/app/SignHelpers';
+import { usePrepareContractWrite, useContractWrite, useWriteContract, useSimulateContract } from 'wagmi';
+import { reviewContract } from './assets/reviewContract';
 
 declare global {
   interface Window {
@@ -229,26 +231,36 @@ export default function SDKContainer() {
     setResponse(result);
   };
 
+  function handleNewSubmission(subId: number) {
+    // Handle new accounts, or lack thereof.
+    console.log("We have a new submission here: " + subId);
+}
+
+window.ethereum.on("SubmissionCreated", handleNewSubmission);
+
+
+
   const sendTransaction = async () => {
-    const to = '0x0000000000000000000000000000000000000000';
-    const transactionParameters = {
-      to, // Required except during contract publications.
-      from: activeProvider?.selectedAddress, // must match user's active address.
-      value: '0x5AF3107A4000', // Only required to send ether to the recipient from the initiating external account.
-    };
+    // writeContract(config);
+    // const to = "0x0";
+    // const transactionParameters = {
+    //   to, // Required except during contract publications.
+    //   from: activeProvider?.selectedAddress, // must match user's active address.
+    //   data: 'mydata', // Only required to send ether to the recipient from the initiating external account.
+    // };
 
-    try {
-      // txHash is a hex string
-      // As with any RPC call, it may throw an error
-      const txHash = (await activeProvider?.request({
-        method: 'eth_sendTransaction',
-        params: [transactionParameters],
-      })) as string;
+    // try {
+    //   // txHash is a hex string
+    //   // As with any RPC call, it may throw an error
+    //   const txHash = (await activeProvider?.request({
+    //     method: 'submitData',
+    //     params: [transactionParameters],
+    //   })) as string;
 
-      setResponse(txHash);
-    } catch (e) {
-      console.log(e);
-    }
+    //   setResponse(txHash);
+    // } catch (e) {
+    //   console.log(e);
+    // }
   };
 
   const changeNetwork = async (hexChainId: string) => {

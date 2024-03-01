@@ -11,7 +11,7 @@ contract Review is VRFConsumerBaseV2 {
     uint32 constant CALLBACK_GAS_LIMIT = 100000;    
     uint16 constant REQUEST_CONFIRMATIONS = 3;
     uint32 constant NUM_WORDS = 1;
-    uint32 requiredReviews = 1;
+    uint32 public requiredReviews = 1;
     mapping(uint256 => uint256) vrfRequestIdToSubmissionId;
 
     struct Reviewer {

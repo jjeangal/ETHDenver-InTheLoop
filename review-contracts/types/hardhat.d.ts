@@ -22,10 +22,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.VRFConsumerBaseV2__factory>;
     getContractFactory(
-      name: "Lock",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Lock__factory>;
-    getContractFactory(
       name: "Review",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Review__factory>;
@@ -41,11 +37,6 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.VRFConsumerBaseV2>;
     getContractAt(
-      name: "Lock",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.Lock>;
-    getContractAt(
       name: "Review",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -59,10 +50,6 @@ declare module "hardhat/types/runtime" {
       name: "VRFConsumerBaseV2",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.VRFConsumerBaseV2>;
-    deployContract(
-      name: "Lock",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Lock>;
     deployContract(
       name: "Review",
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -78,11 +65,6 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.VRFConsumerBaseV2>;
-    deployContract(
-      name: "Lock",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Lock>;
     deployContract(
       name: "Review",
       args: any[],
