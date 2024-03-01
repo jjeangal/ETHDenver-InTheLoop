@@ -6,7 +6,7 @@ import { songTrad } from "../basicPitch/songenc";
 import { SongForm } from "./Upload/songForm";
 import { UploadSteps } from "./Upload/steps";
 import { UploadStepsProps } from "../services/interfaces";
-import { ReviewSong } from "./Upload/registerIp";
+import { RegisterIp } from "./Upload/registerIp";
 import { Copyright } from "../services/interfaces";
 
 export default function Upload() {
@@ -152,7 +152,7 @@ export default function Upload() {
                     copyrights={copyrights}
                 /> : null}
             {regState.state === 2 ?
-                <ReviewSong
+                <RegisterIp
                     id={songId}
                     copyrights={copyrights}
                     txHash={txHash}

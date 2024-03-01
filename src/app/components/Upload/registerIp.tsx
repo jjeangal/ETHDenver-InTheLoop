@@ -1,11 +1,11 @@
 import { Flex, Box, Text, Link } from "@chakra-ui/react";
-import { ReviewSongProps, Policy } from "../../services/interfaces";
+import { RegisterIpProps, Policy } from "../../services/interfaces";
 import RegisterIPA from "../RegisterIPA";
 import { useState, useEffect } from "react";
 import AddPolicy from '../AddPolicy';
 import Policies from "../Policies";
 
-export const ReviewSong: React.FC<ReviewSongProps> = ({ id, txHash, metadata, copyrights }) => {
+export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, copyrights }) => {
   // Pinata
   const pinataGateway = "https://gateway.pinata.cloud/ipfs/";
 
@@ -21,7 +21,9 @@ export const ReviewSong: React.FC<ReviewSongProps> = ({ id, txHash, metadata, co
         'content-type': 'application/json'
       }
     });
+
     const result = await response.json();
+
     const data: Policy[] = result.data.map((policy: any) => {
       return {
         blockNumber: policy.blockNumber,
@@ -83,7 +85,7 @@ export const ReviewSong: React.FC<ReviewSongProps> = ({ id, txHash, metadata, co
           )) : <Text> No copyrights </Text>}
         </Box>
         {/* List all policies component */}
-        <Policies policies={policies} />
+        <Policies policies={policies} setPolicyId={setPolicyId} />
         {/* Register song as ip asset component */}
         {RegisterIPA({ tokenId: id, policyId: policyId })}
         {/* Add a policy component */}

@@ -1,15 +1,15 @@
-import { Box, Flex, Spinner, Grid, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, useDisclosure, Checkbox } from "@chakra-ui/react";
+import { Box, Flex, Spinner, Grid, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, useDisclosure, Radio, RadioGroup } from "@chakra-ui/react";
 import { Policy } from "../services/interfaces";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { IconButton } from "@chakra-ui/react";
 import { ViewIcon } from "@chakra-ui/icons";
 
 type PolicyProps = {
     policies: Policy[];
-
+    setPolicyId: Dispatch<SetStateAction<bigint | undefined>>;
 };
 
-const Policies: React.FC<PolicyProps> = ({ policies }) => {
+const Policies: React.FC<PolicyProps> = ({ policies, setPolicyId }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [selectedPolicy, setSelectedPolicy] = useState<Policy | null>(null);
 
@@ -25,15 +25,22 @@ const Policies: React.FC<PolicyProps> = ({ policies }) => {
     return (
         <Box>
             <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-                {Array.isArray(policies) && policies.map((policy) => (
-                    <Flex key={policy.id} align="center" p={2}>
-                        <Checkbox value={policy.id} size="lg" mr={2} />
-                        <Box flex="1" fontSize="lg" mr={2}>
-                            Policy {policy.id}
-                        </Box>
-                        <IconButton aria-label="More info" icon={<ViewIcon />} onClick={() => handleOpenModal(policy)} size="xs" />
-                    </Flex>
-                ))}
+                <RadioGroup
+                    onChange={
+                        (value) => setPolicyId(BigInt(value))
+                    }
+                    defaultValue={policies[0].id.toString()}
+                >
+                    {Array.isArray(policies) && policies.map((policy) => (
+                        <Flex key={policy.id} align="center" p={2}>
+                            <Radio value={policy.id} size="lg" mr={2} />
+                            <Box flex="1" fontSize="lg" mr={2}>
+                                Policy {policy.id}
+                            </Box>
+                            <IconButton aria-label="More info" icon={<ViewIcon />} onClick={() => handleOpenModal(policy)} size="xs" />
+                        </Flex>
+                    ))}
+                </RadioGroup>
             </Grid>
 
             {selectedPolicy && (

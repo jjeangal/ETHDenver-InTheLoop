@@ -37,7 +37,7 @@ export interface AddSongEventArgs {
   copyrights?: ReadonlyArray<Copyright>;
 }
 
-export interface ReviewSongProps {
+export interface RegisterIpProps {
   id: bigint;
   txHash: string;
   metadata: string;
