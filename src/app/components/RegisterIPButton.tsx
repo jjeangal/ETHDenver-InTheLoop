@@ -1,4 +1,4 @@
-import { Button, Text } from '@chakra-ui/react';
+import { Button, Flex, Box, Text } from '@chakra-ui/react';
 import { useRegisterRootIp, useWatchRootIpRegistered } from '@story-protocol/react';
 import { RegisterIPLogEntry, RegisterIPAProps } from '../services/interfaces';
 import CoalNFT from "../../generated/deployedContracts";
@@ -41,15 +41,20 @@ const RegisterIPButton: React.FC<RegisterIPAProps> = ({ tokenId, policyId }) => 
     }
 
     return (
-        <>
+        <Flex m="4" width="50vw">
             {txHash ? (ip ?
-                <Text>IP Asset registered with id {ip.args.ipId}</Text> :
-                <Text>Fetching Transaction</Text>) :
-                <Button disabled={isPending} onClick={() => handleClick()}>
+                <Box textAlign="left" mb="4" border="1px solid #ddd" p="4" backgroundColor="gray.50" borderRadius="md" boxShadow="md">
+                    <Text>IP Asset registered with id {ip.args.ipId}</Text>
+                </Box> :
+                <Box textAlign="left" mb="4" border="1px solid #ddd" p="4" backgroundColor="gray.50" borderRadius="md" boxShadow="md">
+                    <Text>Fetching Transaction</Text>
+                </Box>
+            ) :
+                <Button disabled={isPending} onClick={() => handleClick()} textAlign="left" mb="4" border="1px solid #ddd" p="4" backgroundColor="gray.50" borderRadius="md" boxShadow="md">
                     {isPending ? 'Confirm in wallet' : 'Register IP Asset'}
                 </Button>
             }
-        </>
+        </Flex>
     );
 };
 

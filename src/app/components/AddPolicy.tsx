@@ -71,13 +71,13 @@ export default function AddPolicy() {
     };
 
     return (
-        <Flex direction="column" alignItems="center">
+        <Flex direction="column" alignItems="center" textAlign="left" mb={4} border="1px solid #ddd" p={4} backgroundColor="gray.50" borderRadius="md" boxShadow="md">
             <Accordion allowToggle width="50vw">
                 <AccordionItem>
                     <h2>
                         <AccordionButton>
                             <Box flex="1" textAlign="left">
-                                Policy Form
+                                New Policy Form
                             </Box>
                             <AccordionIcon />
                         </AccordionButton>

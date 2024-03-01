@@ -28,8 +28,8 @@ const Policies: React.FC<PolicyProps> = ({ policies, setPolicyId }) => {
     }
 
     return (
-        <Box p={5} backgroundColor="gray.50" borderRadius="md" boxShadow="md">
-            <Text fontSize="xl" mb={4}>Select a Policy</Text>
+        <Box p={5} backgroundColor="gray.50" borderRadius="md" boxShadow="md" border="1px solid #ddd" >
+            < Text fontSize="xl" mb={4} > Select a Policy</Text >
             <RadioGroup onChange={(value) => setPolicyId(BigInt(value))} defaultValue={policies[0].id.toString()}>
                 <Grid templateColumns="repeat(4, 1fr)" gap={6}>
                     {Array.isArray(policies) && policies.map((policy) => (
@@ -44,25 +44,27 @@ const Policies: React.FC<PolicyProps> = ({ policies, setPolicyId }) => {
                 </Grid>
             </RadioGroup>
 
-            {selectedPolicy && (
-                <Modal isOpen={isOpen} onClose={onClose}>
-                    <ModalOverlay />
-                    <ModalContent>
-                        <ModalHeader>Policy {selectedPolicy.id}</ModalHeader>
-                        <ModalCloseButton />
-                        <ModalBody>
-                            <p>Minting Fee: {selectedPolicy.mintingFee}</p>
-                            <p>Commercial Use: {selectedPolicy.pil.commercialUse ? "Yes" : "No"}</p>
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button colorScheme="blue" mr={3} onClick={onClose}>
-                                Close
-                            </Button>
-                        </ModalFooter>
-                    </ModalContent>
-                </Modal>
-            )}
-        </Box>
+            {
+                selectedPolicy && (
+                    <Modal isOpen={isOpen} onClose={onClose}>
+                        <ModalOverlay />
+                        <ModalContent>
+                            <ModalHeader>Policy {selectedPolicy.id}</ModalHeader>
+                            <ModalCloseButton />
+                            <ModalBody>
+                                <p>Minting Fee: {selectedPolicy.mintingFee}</p>
+                                <p>Commercial Use: {selectedPolicy.pil.commercialUse ? "Yes" : "No"}</p>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button colorScheme="blue" mr={3} onClick={onClose}>
+                                    Close
+                                </Button>
+                            </ModalFooter>
+                        </ModalContent>
+                    </Modal>
+                )
+            }
+        </Box >
     );
 };
 

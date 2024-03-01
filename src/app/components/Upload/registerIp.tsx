@@ -63,10 +63,9 @@ export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, co
 
 
   return (
-    <Flex flexDirection="column">
+    <Flex flexDirection="column" marginTop="15vh">
       <Box textAlign="center">
-        <Text > Song info </Text>
-        <Box textAlign="left" mb={4} border="1px solid #ddd" p={4} backgroundColor="white">
+        <Box textAlign="left" mb={4} border="1px solid #ddd" p={4} backgroundColor="gray.50" borderRadius="md" boxShadow="md">
           <Text> Id is: {String(id)} </Text>
           <Text>
             {" "}
