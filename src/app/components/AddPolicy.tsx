@@ -49,7 +49,6 @@ export default function AddPolicy() {
         policy: policyParams,
     });
 
-
     useWatchContractEvent({
         address: '0x950d766A1a0afDc33c3e653C861A8765cb42DbdC',
         abi: licensingModuleAbi,
@@ -66,7 +65,6 @@ export default function AddPolicy() {
     } = useRegisterPILPolicy();
 
     async function handleClick() {
-        console.log(policyParams);
         await writeContractAsync({
             functionName: 'registerPolicy',
             args: [regParams],
