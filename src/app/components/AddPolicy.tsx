@@ -16,10 +16,9 @@ import {
     Box
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { licensingModuleAbi, useRegisterPILPolicy } from "@story-protocol/react";
+import { useRegisterPILPolicy, useWatchPolicyRegistered } from "@story-protocol/react";
 import { PolicyParameters, RegistrationParams } from "../services/interfaces";
 import { zeroAddress } from 'viem';
-import { useWatchContractEvent } from "wagmi";
 
 export default function AddPolicy() {
 
@@ -49,11 +48,8 @@ export default function AddPolicy() {
         policy: policyParams,
     });
 
-    useWatchContractEvent({
-        address: '0x950d766A1a0afDc33c3e653C861A8765cb42DbdC',
-        abi: licensingModuleAbi,
-        eventName: 'PolicyRegistered',
-        onLogs(logs) {
+    useWatchPolicyRegistered({
+        onLogs(logs: any) {
             console.log(logs);
         }
     });
@@ -69,11 +65,6 @@ export default function AddPolicy() {
             functionName: 'registerPolicy',
             args: [regParams],
         });
-        if (txHash == undefined) {
-            console.log('Transaction failed: Policy already exists or invalid parameters.')
-            return;
-        };
-        console.log(txHash);
     };
 
     return (
