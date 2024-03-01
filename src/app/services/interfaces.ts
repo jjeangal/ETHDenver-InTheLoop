@@ -4,9 +4,24 @@ export interface RegisterIPAProps {
 }
 
 export interface IPA {
-  id: bigint;
-  owner: string;
-}
+  blockNumber: string;
+  blockTimestamp: string;
+  chainId: string;
+  childIpIds: string[];
+  id: string;
+  metadata: {
+    hash: string;
+    name: string;
+    registrant: string;
+    registrationDate: string;
+    uri: string;
+  };
+  metadataResolverAddress: string;
+  parentIpIds: string[];
+  rootIpIds: string[];
+  tokenContract: string;
+  tokenId: string;
+};
 
 export interface License {
   ipId: bigint;

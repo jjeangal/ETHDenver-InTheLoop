@@ -1,9 +1,9 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { Flex, Box, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon } from "@chakra-ui/react";
+import { Flex, Text, Box, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon } from "@chakra-ui/react";
 import { IPA } from "../services/interfaces";
-import RegisterIPA from "./RegisterIPButton";
+import CoalNFT from "../../generated/deployedContracts";
 
 export default function MySongs() {
     const [IPAs, setIPAs] = useState<IPA[]>([]);
@@ -12,19 +12,54 @@ export default function MySongs() {
     const [tokenId, setTokenId] = useState<BigInt | undefined>(BigInt(0));
     const [policyId, setPolicyId] = useState<BigInt | undefined>(BigInt(0));
 
+    const chainId = 11155111;
+    const contract = CoalNFT[chainId][0].contracts.CoalNFT;
+
+    async function fetchOwnedIPAs() {
+        const response = await fetch("https://api.storyprotocol.net/api/v1/assets", {
+            method: 'POST',
+            headers: {
+                accept: 'application/json',
+                'X-API-Key': 'U3RvcnlQcm90b2NvbFRlc3RBUElLRVk=',
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                options: {
+                    pagination: { limit: 15 },
+                    where: {
+                        tokenContract: contract.address,
+                        chainId: chainId
+                    }
+                }
+            })
+        });
+        const result = await response.json();
+        const data: IPAList = result.data.map((ipa: any) => {
+            return {
+                blockNumber: ipa.blockNumber,
+                blockTimestamp: ipa.blockTimestamp,
+                chainId: ipa.chainId,
+                childIpIds: ipa.childIpIds,
+                id: ipa.id,
+                metadata: {
+                    hash: ipa.metadata.hash,
+                    name: ipa.metadata.name,
+                    registrant: ipa.metadata.registrant,
+                    registrationDate: ipa.metadata.registrationDate,
+                    uri: ipa.metadata.uri,
+                },
+                metadataResolverAddress: ipa.metadataResolverAddress,
+                parentIpIds: ipa.parentIpIds,
+                rootIpIds: ipa.rootIpIds,
+                tokenContract: ipa.tokenContract,
+                tokenId: ipa.tokenId,
+            }
+        });
+        setIPAs(data);
+    };
+
     useEffect(() => {
-        setNotIPAs([
-            {
-                id: BigInt(0),
-                owner: "0x1234",
-            }
-        ]);
-        setIPAs([
-            {
-                id: BigInt(1),
-                owner: "0x1234",
-            }
-        ]);
+        fetchOwnedIPAs();
     }, []);
 
     return (
@@ -41,13 +76,7 @@ export default function MySongs() {
                             </AccordionButton>
                         </h2>
                         <AccordionPanel pb={4}>
-                            {notIPAs.map((notIPA) => (
-                                <Box key={notIPA.id} padding="4" backgroundColor="gray.100" marginTop="2" borderRadius="md">
-                                    <Box fontWeight="bold">Song ID: {notIPA.id.toString()}</Box>
-                                    <Box>Owner: {notIPA.owner}</Box>
-                                    <RegisterIPA tokenId={tokenId} policyId={policyId} />
-                                </Box>
-                            ))}
+
                         </AccordionPanel>
                     </AccordionItem>
 
@@ -61,10 +90,13 @@ export default function MySongs() {
                             </AccordionButton>
                         </h2>
                         <AccordionPanel pb={4}>
-                            {IPAs.map((ipa) => (
-                                <Box key={ipa.id} padding="4" backgroundColor="gray.100" marginTop="2" borderRadius="md">
-                                    <Box fontWeight="bold">Song ID: {ipa.id.toString()}</Box>
-                                    <Box>Owner: {ipa.owner}</Box>
+                            {IPAs && (IPAs as IPA[]).map((ipa) => (
+                                <Box key={ipa.id}>
+                                    {/* <Text>IP Collection Name {ipa.metadata.name}</Text> */}
+                                    <Text>Token ID: {ipa.tokenId}</Text>
+                                    {/* <Text>Token Contract: {ipa.tokenContract}</Text> */}
+                                    <Text>Registration Date: {ipa.metadata.registrationDate}</Text>
+                                    <Text>IP id: {ipa.id}</Text>
                                 </Box>
                             ))}
                         </AccordionPanel>
