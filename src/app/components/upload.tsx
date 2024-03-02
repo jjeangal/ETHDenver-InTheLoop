@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Text, Button, Progress, Input, VStack, HStack, Flex } from "@chakra-ui/react";
+import { Box, Text, Button, Progress, Input, VStack, HStack, Flex, Spacer } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import { songTrad } from "../basicPitch/songenc";
 import { SongForm } from "./Upload/songForm";
@@ -90,12 +90,13 @@ export default function Upload() {
     };
 
     return (
-        <Flex direction="column" justifyContent="center" alignItems="center" minHeight="100vh">
-            <Box display="flex" alignItems="center" justifyContent="center" position="fixed" top={0} left={0} right={0} mt="3%">
+        <Flex direction="column" minHeight="100vh" width="100%" alignItems="center">
+            <Flex width="100%" mt="3%" alignItems="center" justifyContent="center">
                 <UploadSteps state={regState.state} />
-            </Box>
+            </Flex>
+            <Spacer />
             {regState.state === 0 && (
-                <VStack spacing={5} >
+                <VStack spacing={5} alignItems="center">
                     <Box
                         className="dropzone"
                         mb={4}
@@ -158,6 +159,7 @@ export default function Upload() {
                     txHash={txHash}
                     metadata={metadata}
                 /> : null}
+            <Spacer />
         </Flex>
     );
 };

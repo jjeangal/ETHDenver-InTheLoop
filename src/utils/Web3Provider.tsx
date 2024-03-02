@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { WagmiProvider, createConfig, http } from 'wagmi';
 import { sepolia } from 'wagmi/chains';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -24,9 +24,16 @@ export const config = createConfig(
 
 const queryClient = new QueryClient();
 
+const theme = extendTheme({
+    fonts: {
+        heading: "Montserrat, sans-serif",
+        body: "Montserrat, sans-serif"
+    },
+});
+
 export const Web3Provider = ({ children }: { children: ReactNode }) => {
     return (
-        <ChakraProvider>
+        <ChakraProvider theme={theme}>
             <WagmiProvider config={config}>
                 <QueryClientProvider client={queryClient}>
                     <ConnectKitProvider>

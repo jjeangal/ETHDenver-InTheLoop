@@ -20,7 +20,7 @@ const steps = [
 export const UploadSteps: React.FC<UploadStepsProps> = ({ state }) => {
 
   return (
-    <Stepper size='md' index={state}>
+    <Stepper size='lg' index={state}>
       {steps.map((step, index) => (
         <Step key={index}>
           <StepIndicator mr="2%">

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Web3Provider } from '../utils/Web3Provider';
-import Header from "./components/Header";
+import Side from "./components/Side";
+import { Flex } from "@chakra-ui/react";
 
 export const metadata: Metadata = {
   title: "Coal",
@@ -18,8 +19,10 @@ export default function RootLayout({
       <head></head>
       <body style={{ backgroundColor: 'black', color: "white" }}>
         <Web3Provider>
-          <Header />
-          {children}
+          <Flex direction="row" w="100vw">
+            <Side />
+            <Flex w="88vw">{children}</Flex>
+          </Flex>
         </Web3Provider>
       </body>
     </html>
