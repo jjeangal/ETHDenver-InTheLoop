@@ -122,16 +122,6 @@ export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, co
     <Flex flexDirection="column" marginTop="20vh">
       <Box textAlign="center" width="70vw">
         <Box textAlign="left" mb={4} border="1px solid #ddd" p={4} backgroundColor="gray.800" borderRadius="md" boxShadow="md">
-          <Text fontSize="l">Identified root IP Asset</Text>
-          <Text>
-            Copyrigth detected at
-            {String(copyrights[0]?.shares)}% with CoalNFT id
-            {String(copyrights[0]?.songId)} and policy id {policyIds}
-          </Text>
-          <Button disabled={isPending} onClick={() => handleClick()}>Mint License</Button>
-          <Text>hash: {mintHash}</Text>
-        </Box>
-        <Box textAlign="left" mb={4} border="1px solid #ddd" p={4} backgroundColor="gray.800" borderRadius="md" boxShadow="md">
           <Text> Id is: {String(id)} </Text>
           <Text>
             {" "}
@@ -154,6 +144,16 @@ export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, co
           ) : (
             <Text> No copyrights </Text>
           )}
+        </Box>
+        <Box textAlign="left" mb={4} border="1px solid #ddd" p={4} backgroundColor="gray.800" borderRadius="md" boxShadow="md">
+          <Text fontSize="l">Identified Existing Similar IP Asset</Text>
+          <Text>
+            Copyrigth detected at
+            {String(copyrights[0]?.shares)}% with CoalNFT id
+            {String(copyrights[0]?.songId)} and policy id {policyIds?.toString()}
+          </Text>
+          <Button disabled={isPending} onClick={() => handleClick()}>Mint License</Button>
+          <Text>hash: {mintHash}</Text>
         </Box>
         {/* List all policies component */}
         <Policies policies={policies} setPolicyId={setPolicyId} />
