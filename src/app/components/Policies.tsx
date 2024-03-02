@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { IconButton } from "@chakra-ui/react";
 import { ViewIcon } from "@chakra-ui/icons";
 
+
 type PolicyProps = {
     policies: Policy[];
     setPolicyId: Dispatch<SetStateAction<bigint | undefined>>;
@@ -52,7 +53,7 @@ const Policies: React.FC<PolicyProps> = ({ policies, setPolicyId }) => {
                             <ModalHeader>Policy {selectedPolicy.id}</ModalHeader>
                             <ModalCloseButton />
                             <ModalBody>
-                                <p>Minting Fee: {selectedPolicy.mintingFee}</p>
+                                <Text>Minting Fee: {selectedPolicy.mintingFee}</Text>
                                 <p>Commercial Use: {selectedPolicy.pil.commercialUse ? "Yes" : "No"}</p>
                             </ModalBody>
                             <ModalFooter>

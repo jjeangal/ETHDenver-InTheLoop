@@ -10,7 +10,7 @@ import { RegisterIp } from "./Upload/registerIp";
 import { Copyright } from "../services/interfaces";
 
 export default function Upload() {
-    const [regState, setRegState] = useState<UploadStepsProps>({ state: 0 }); // ["upload", "info", "compare", "deployed"]
+    const [regState, setRegState] = useState<UploadStepsProps>({ state: 2 }); // ["upload", "info", "compare", "deployed"]
     const [songId, setSongId] = useState<bigint>(BigInt(0));
     const [song, setSong] = useState<ArrayBuffer | undefined>();
     const [songName, setSongName] = useState<string>();

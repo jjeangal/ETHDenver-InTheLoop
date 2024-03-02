@@ -4,13 +4,46 @@ import RegisterIPButton from "../RegisterIPButton";
 import { useState, useEffect } from "react";
 import AddPolicy from '../AddPolicy';
 import Policies from "../Policies";
+import { useReadPolicyIdsForIp } from "@story-protocol/react"
+import CoalNFT from "../../../generated/deployedContracts";
 
 export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, copyrights }) => {
   // Pinata
   const pinataGateway = "https://gateway.pinata.cloud/ipfs/";
+  const chainId = 11155111;
+  const contract = CoalNFT[chainId][0].contracts.CoalNFT;
 
+  const [ipaId, setIpaId] = useState<bigint>();
   const [policyId, setPolicyId] = useState<bigint>();
   const [policies, setPolicies] = useState<Policy[]>([]);
+
+  const { data: policyIds } = useReadPolicyIdsForIp({
+    args: [false, ipaId]
+  });
+
+  async function fetchIPA() {
+    const response = await fetch("https://api.storyprotocol.net/api/v1/assets", {
+      method: 'POST',
+      headers: {
+        accept: 'application/json',
+        'X-API-Key': 'U3RvcnlQcm90b2NvbFRlc3RBUElLRVk=',
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        options: {
+          pagination: { limit: 15 },
+          where: {
+            tokenContract: contract.address,
+            tokenId: '4'
+          }
+        }
+      })
+    });
+
+    const result = await response.json();
+    const data = result.data[0].id;
+    setIpaId(data);
+  }
 
   async function fetchPolicies() {
     const options = {
@@ -56,19 +89,30 @@ export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, co
       }
     });
     setPolicies(data);
-    return result;
   }
 
   useEffect(() => {
-    console.log("shares is: " + copyrights[0].shares);
-    console.log("songId is: " + copyrights[0].songId);
+    fetchIPA();
     fetchPolicies();
   }, []);
 
+  useEffect(() => {
+    if (policyIds) {
+      console.log("policyIds is: " + policyIds);
+    }
+  }, [policyIds]);
 
   return (
-    <Flex flexDirection="column" marginTop="15vh">
+    <Flex flexDirection="column" marginTop="20vh">
       <Box textAlign="center" width="70vw">
+        <Box textAlign="left" mb={4} border="1px solid #ddd" p={4} backgroundColor="gray.800" borderRadius="md" boxShadow="md">
+          <Text fontSize="l">Identified root IP Asset</Text>
+          <Text>
+            Copyrigth detected at
+            {String(copyrights[0]?.shares)}% with CoalNFT id
+            {String(copyrights[0]?.songId)} and policy id {policyIds}
+          </Text>
+        </Box>
         <Box textAlign="left" mb={4} border="1px solid #ddd" p={4} backgroundColor="gray.800" borderRadius="md" boxShadow="md">
           <Text> Id is: {String(id)} </Text>
           <Text>

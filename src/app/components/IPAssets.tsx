@@ -4,7 +4,7 @@ import { IPA } from "../services/interfaces";
 import CoalNFT from "../../generated/deployedContracts";
 import { useAccount } from "wagmi";
 import { useState, useEffect } from "react";
-import { Box, Text, Flex, Button } from "@chakra-ui/react";
+import { Box, Text, Flex } from "@chakra-ui/react";
 
 export default function IPAssets() {
 

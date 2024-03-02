@@ -36,7 +36,7 @@ const RegisterIPButton: React.FC<RegisterIPAProps> = ({ tokenId, policyId }) => 
     async function handleClick() {
         await writeContractAsync({
             functionName: 'registerRootIp',
-            args: [policyId, contract, BigInt(11), ipName, contentHash, externalURL],
+            args: [policyId, contract, BigInt(16), ipName, contentHash, externalURL],
         });
     }
 
