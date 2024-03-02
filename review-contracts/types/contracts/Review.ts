@@ -38,6 +38,7 @@ export interface ReviewInterface extends Interface {
       | "getSubmission"
       | "owner"
       | "rawFulfillRandomWords"
+      | "requiredReviews"
       | "revealResult"
       | "reviewers"
       | "selectReviewers"
@@ -48,7 +49,12 @@ export interface ReviewInterface extends Interface {
   ): FunctionFragment;
 
   getEvent(
-    nameOrSignatureOrTopic: "ResultRevealed" | "SubmissionCreated"
+    nameOrSignatureOrTopic:
+      | "RandomWordFulfilled"
+      | "ResultRevealed"
+      | "ReviewersChosen"
+      | "SubmissionCreated"
+      | "VotingCompleted"
   ): EventFragment;
 
   encodeFunctionData(functionFragment: "LICENSE", values?: undefined): string;
@@ -94,6 +100,10 @@ export interface ReviewInterface extends Interface {
     values: [BigNumberish, BigNumberish[]]
   ): string;
   encodeFunctionData(
+    functionFragment: "requiredReviews",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "revealResult",
     values: [BigNumberish]
   ): string;
@@ -117,7 +127,10 @@ export interface ReviewInterface extends Interface {
     functionFragment: "submissions",
     values: [BigNumberish]
   ): string;
-  encodeFunctionData(functionFragment: "submitData", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "submitData",
+    values: [BigNumberish[][]]
+  ): string;
 
   decodeFunctionResult(functionFragment: "LICENSE", data: BytesLike): Result;
   decodeFunctionResult(
@@ -153,6 +166,10 @@ export interface ReviewInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "requiredReviews",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "revealResult",
     data: BytesLike
   ): Result;
@@ -173,6 +190,18 @@ export interface ReviewInterface extends Interface {
   decodeFunctionResult(functionFragment: "submitData", data: BytesLike): Result;
 }
 
+export namespace RandomWordFulfilledEvent {
+  export type InputTuple = [submissionId: BigNumberish];
+  export type OutputTuple = [submissionId: bigint];
+  export interface OutputObject {
+    submissionId: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
 export namespace ResultRevealedEvent {
   export type InputTuple = [submissionId: BigNumberish, result: boolean];
   export type OutputTuple = [submissionId: bigint, result: boolean];
@@ -186,11 +215,39 @@ export namespace ResultRevealedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
+export namespace ReviewersChosenEvent {
+  export type InputTuple = [
+    submissionId: BigNumberish,
+    reviewers: AddressLike[]
+  ];
+  export type OutputTuple = [submissionId: bigint, reviewers: string[]];
+  export interface OutputObject {
+    submissionId: bigint;
+    reviewers: string[];
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
 export namespace SubmissionCreatedEvent {
   export type InputTuple = [submissionId: BigNumberish];
   export type OutputTuple = [submissionId: bigint];
   export interface OutputObject {
     submissionId: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace VotingCompletedEvent {
+  export type InputTuple = [submissionIndex: BigNumberish];
+  export type OutputTuple = [submissionIndex: bigint];
+  export interface OutputObject {
+    submissionIndex: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -277,7 +334,7 @@ export interface Review extends BaseContract {
 
   getSubmission: TypedContractMethod<
     [submissionId: BigNumberish],
-    [[string, string] & { author: string; data: string }],
+    [[string, bigint[][]] & { author: string; data: bigint[][] }],
     "view"
   >;
 
@@ -289,6 +346,8 @@ export interface Review extends BaseContract {
     "nonpayable"
   >;
 
+  requiredReviews: TypedContractMethod<[], [bigint], "view">;
+
   revealResult: TypedContractMethod<
     [submissionIndex: BigNumberish],
     [void],
@@ -299,7 +358,7 @@ export interface Review extends BaseContract {
 
   selectReviewers: TypedContractMethod<
     [submissionId: BigNumberish],
-    [void],
+    [string[]],
     "nonpayable"
   >;
 
@@ -318,18 +377,22 @@ export interface Review extends BaseContract {
   submissions: TypedContractMethod<
     [arg0: BigNumberish],
     [
-      [string, string, bigint, boolean, bigint] & {
+      [string, bigint, boolean, bigint, bigint] & {
         author: string;
-        data: string;
         thresholdToPass: bigint;
         isApproved: boolean;
         seed: bigint;
+        votedAlready: bigint;
       }
     ],
     "view"
   >;
 
-  submitData: TypedContractMethod<[_data: string], [bigint], "nonpayable">;
+  submitData: TypedContractMethod<
+    [_data: BigNumberish[][]],
+    [bigint],
+    "nonpayable"
+  >;
 
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment
@@ -370,7 +433,7 @@ export interface Review extends BaseContract {
     nameOrSignature: "getSubmission"
   ): TypedContractMethod<
     [submissionId: BigNumberish],
-    [[string, string] & { author: string; data: string }],
+    [[string, bigint[][]] & { author: string; data: bigint[][] }],
     "view"
   >;
   getFunction(
@@ -384,6 +447,9 @@ export interface Review extends BaseContract {
     "nonpayable"
   >;
   getFunction(
+    nameOrSignature: "requiredReviews"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
     nameOrSignature: "revealResult"
   ): TypedContractMethod<[submissionIndex: BigNumberish], [void], "nonpayable">;
   getFunction(
@@ -391,7 +457,11 @@ export interface Review extends BaseContract {
   ): TypedContractMethod<[arg0: BigNumberish], [string], "view">;
   getFunction(
     nameOrSignature: "selectReviewers"
-  ): TypedContractMethod<[submissionId: BigNumberish], [void], "nonpayable">;
+  ): TypedContractMethod<
+    [submissionId: BigNumberish],
+    [string[]],
+    "nonpayable"
+  >;
   getFunction(
     nameOrSignature: "setOptions"
   ): TypedContractMethod<
@@ -411,20 +481,27 @@ export interface Review extends BaseContract {
   ): TypedContractMethod<
     [arg0: BigNumberish],
     [
-      [string, string, bigint, boolean, bigint] & {
+      [string, bigint, boolean, bigint, bigint] & {
         author: string;
-        data: string;
         thresholdToPass: bigint;
         isApproved: boolean;
         seed: bigint;
+        votedAlready: bigint;
       }
     ],
     "view"
   >;
   getFunction(
     nameOrSignature: "submitData"
-  ): TypedContractMethod<[_data: string], [bigint], "nonpayable">;
+  ): TypedContractMethod<[_data: BigNumberish[][]], [bigint], "nonpayable">;
 
+  getEvent(
+    key: "RandomWordFulfilled"
+  ): TypedContractEvent<
+    RandomWordFulfilledEvent.InputTuple,
+    RandomWordFulfilledEvent.OutputTuple,
+    RandomWordFulfilledEvent.OutputObject
+  >;
   getEvent(
     key: "ResultRevealed"
   ): TypedContractEvent<
@@ -433,14 +510,39 @@ export interface Review extends BaseContract {
     ResultRevealedEvent.OutputObject
   >;
   getEvent(
+    key: "ReviewersChosen"
+  ): TypedContractEvent<
+    ReviewersChosenEvent.InputTuple,
+    ReviewersChosenEvent.OutputTuple,
+    ReviewersChosenEvent.OutputObject
+  >;
+  getEvent(
     key: "SubmissionCreated"
   ): TypedContractEvent<
     SubmissionCreatedEvent.InputTuple,
     SubmissionCreatedEvent.OutputTuple,
     SubmissionCreatedEvent.OutputObject
   >;
+  getEvent(
+    key: "VotingCompleted"
+  ): TypedContractEvent<
+    VotingCompletedEvent.InputTuple,
+    VotingCompletedEvent.OutputTuple,
+    VotingCompletedEvent.OutputObject
+  >;
 
   filters: {
+    "RandomWordFulfilled(uint256)": TypedContractEvent<
+      RandomWordFulfilledEvent.InputTuple,
+      RandomWordFulfilledEvent.OutputTuple,
+      RandomWordFulfilledEvent.OutputObject
+    >;
+    RandomWordFulfilled: TypedContractEvent<
+      RandomWordFulfilledEvent.InputTuple,
+      RandomWordFulfilledEvent.OutputTuple,
+      RandomWordFulfilledEvent.OutputObject
+    >;
+
     "ResultRevealed(uint256,bool)": TypedContractEvent<
       ResultRevealedEvent.InputTuple,
       ResultRevealedEvent.OutputTuple,
@@ -452,6 +554,17 @@ export interface Review extends BaseContract {
       ResultRevealedEvent.OutputObject
     >;
 
+    "ReviewersChosen(uint256,address[])": TypedContractEvent<
+      ReviewersChosenEvent.InputTuple,
+      ReviewersChosenEvent.OutputTuple,
+      ReviewersChosenEvent.OutputObject
+    >;
+    ReviewersChosen: TypedContractEvent<
+      ReviewersChosenEvent.InputTuple,
+      ReviewersChosenEvent.OutputTuple,
+      ReviewersChosenEvent.OutputObject
+    >;
+
     "SubmissionCreated(uint256)": TypedContractEvent<
       SubmissionCreatedEvent.InputTuple,
       SubmissionCreatedEvent.OutputTuple,
@@ -461,6 +574,17 @@ export interface Review extends BaseContract {
       SubmissionCreatedEvent.InputTuple,
       SubmissionCreatedEvent.OutputTuple,
       SubmissionCreatedEvent.OutputObject
+    >;
+
+    "VotingCompleted(uint256)": TypedContractEvent<
+      VotingCompletedEvent.InputTuple,
+      VotingCompletedEvent.OutputTuple,
+      VotingCompletedEvent.OutputObject
+    >;
+    VotingCompleted: TypedContractEvent<
+      VotingCompletedEvent.InputTuple,
+      VotingCompletedEvent.OutputTuple,
+      VotingCompletedEvent.OutputObject
     >;
   };
 }

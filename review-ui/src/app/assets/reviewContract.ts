@@ -1,423 +1,487 @@
 export const reviewContract = {
-  address: "0xcA951F899540a892236044E6dd3051F001C97A4" as `0x${string}`,
+  address: "0xAE21ea73fE34D68f549761B9c5A5CB3dfCD021CB" as `0x${string}`,
   abi: [
     {
-      inputs: [
+      "inputs": [
         {
-          internalType: "string",
-          name: "_license",
-          type: "string",
+          "internalType": "string",
+          "name": "_license",
+          "type": "string"
         },
         {
-          internalType: "uint256",
-          name: "_roiDenominator",
-          type: "uint256",
+          "internalType": "uint256",
+          "name": "_roiDenominator",
+          "type": "uint256"
         },
         {
-          internalType: "uint64",
-          name: "_vrfSubscriptionId",
-          type: "uint64",
+          "internalType": "uint64",
+          "name": "_vrfSubscriptionId",
+          "type": "uint64"
         },
         {
-          internalType: "address",
-          name: "_vrfCoordinator",
-          type: "address",
+          "internalType": "address",
+          "name": "_vrfCoordinator",
+          "type": "address"
         },
         {
-          internalType: "bytes32",
-          name: "_vrfKeyHash",
-          type: "bytes32",
+          "internalType": "bytes32",
+          "name": "_vrfKeyHash",
+          "type": "bytes32"
         },
         {
-          internalType: "uint32",
-          name: "_requiredReviews",
-          type: "uint32",
-        },
+          "internalType": "uint32",
+          "name": "_requiredReviews",
+          "type": "uint32"
+        }
       ],
-      stateMutability: "nonpayable",
-      type: "constructor",
+      "stateMutability": "nonpayable",
+      "type": "constructor"
     },
     {
-      inputs: [
+      "inputs": [
         {
-          internalType: "address",
-          name: "have",
-          type: "address",
+          "internalType": "address",
+          "name": "have",
+          "type": "address"
         },
         {
-          internalType: "address",
-          name: "want",
-          type: "address",
-        },
+          "internalType": "address",
+          "name": "want",
+          "type": "address"
+        }
       ],
-      name: "OnlyCoordinatorCanFulfill",
-      type: "error",
+      "name": "OnlyCoordinatorCanFulfill",
+      "type": "error"
     },
     {
-      anonymous: false,
-      inputs: [
+      "anonymous": false,
+      "inputs": [
         {
-          indexed: false,
-          internalType: "uint256",
-          name: "submissionId",
-          type: "uint256",
-        },
-        {
-          indexed: false,
-          internalType: "bool",
-          name: "result",
-          type: "bool",
-        },
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "submissionId",
+          "type": "uint256"
+        }
       ],
-      name: "ResultRevealed",
-      type: "event",
+      "name": "RandomWordFulfilled",
+      "type": "event"
     },
     {
-      anonymous: false,
-      inputs: [
+      "anonymous": false,
+      "inputs": [
         {
-          indexed: true,
-          internalType: "uint256",
-          name: "submissionId",
-          type: "uint256",
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "submissionId",
+          "type": "uint256"
         },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "result",
+          "type": "bool"
+        }
       ],
-      name: "SubmissionCreated",
-      type: "event",
+      "name": "ResultRevealed",
+      "type": "event"
     },
     {
-      inputs: [],
-      name: "LICENSE",
-      outputs: [
+      "anonymous": false,
+      "inputs": [
         {
-          internalType: "string",
-          name: "",
-          type: "string",
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "submissionId",
+          "type": "uint256"
         },
+        {
+          "indexed": false,
+          "internalType": "address[]",
+          "name": "reviewers",
+          "type": "address[]"
+        }
       ],
-      stateMutability: "view",
-      type: "function",
+      "name": "ReviewersChosen",
+      "type": "event"
     },
     {
-      inputs: [],
-      name: "ROI_DENOMINATOR",
-      outputs: [
+      "anonymous": false,
+      "inputs": [
         {
-          internalType: "uint256",
-          name: "",
-          type: "uint256",
-        },
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "submissionId",
+          "type": "uint256"
+        }
       ],
-      stateMutability: "view",
-      type: "function",
+      "name": "SubmissionCreated",
+      "type": "event"
     },
     {
-      inputs: [
+      "anonymous": false,
+      "inputs": [
         {
-          internalType: "address",
-          name: "_author",
-          type: "address",
-        },
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "submissionIndex",
+          "type": "uint256"
+        }
       ],
-      name: "addAuthor",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
+      "name": "VotingCompleted",
+      "type": "event"
     },
     {
-      inputs: [
+      "inputs": [],
+      "name": "LICENSE",
+      "outputs": [
         {
-          internalType: "address",
-          name: "_reviewer",
-          type: "address",
-        },
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
       ],
-      name: "addReviewer",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
+      "stateMutability": "view",
+      "type": "function"
     },
     {
-      inputs: [
+      "inputs": [],
+      "name": "ROI_DENOMINATOR",
+      "outputs": [
         {
-          internalType: "uint256",
-          name: "submissionId",
-          type: "uint256",
-        },
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
       ],
-      name: "assignRndSeed",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
+      "stateMutability": "view",
+      "type": "function"
     },
     {
-      inputs: [
+      "inputs": [
         {
-          internalType: "uint256",
-          name: "",
-          type: "uint256",
-        },
+          "internalType": "address",
+          "name": "_author",
+          "type": "address"
+        }
       ],
-      name: "authors",
-      outputs: [
-        {
-          internalType: "address",
-          name: "",
-          type: "address",
-        },
-      ],
-      stateMutability: "view",
-      type: "function",
+      "name": "addAuthor",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
-      inputs: [
+      "inputs": [
         {
-          internalType: "uint256",
-          name: "submissionIndex",
-          type: "uint256",
-        },
-        {
-          internalType: "uint8",
-          name: "option",
-          type: "uint8",
-        },
+          "internalType": "address",
+          "name": "_reviewer",
+          "type": "address"
+        }
       ],
-      name: "castVote",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
+      "name": "addReviewer",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
-      inputs: [
+      "inputs": [
         {
-          internalType: "uint256",
-          name: "index",
-          type: "uint256",
-        },
+          "internalType": "uint256",
+          "name": "submissionId",
+          "type": "uint256"
+        }
       ],
-      name: "getReviewer",
-      outputs: [
-        {
-          internalType: "address",
-          name: "",
-          type: "address",
-        },
-      ],
-      stateMutability: "view",
-      type: "function",
+      "name": "assignRndSeed",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
-      inputs: [
+      "inputs": [
         {
-          internalType: "uint256",
-          name: "submissionId",
-          type: "uint256",
-        },
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
       ],
-      name: "getSelectedReviewers",
-      outputs: [
+      "name": "authors",
+      "outputs": [
         {
-          internalType: "address[]",
-          name: "",
-          type: "address[]",
-        },
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
       ],
-      stateMutability: "view",
-      type: "function",
+      "stateMutability": "view",
+      "type": "function"
     },
     {
-      inputs: [
+      "inputs": [
         {
-          internalType: "uint256",
-          name: "submissionId",
-          type: "uint256",
+          "internalType": "uint256",
+          "name": "submissionIndex",
+          "type": "uint256"
         },
+        {
+          "internalType": "uint8",
+          "name": "option",
+          "type": "uint8"
+        }
       ],
-      name: "getSubmission",
-      outputs: [
-        {
-          internalType: "address",
-          name: "author",
-          type: "address",
-        },
-        {
-          internalType: "string",
-          name: "data",
-          type: "string",
-        },
-      ],
-      stateMutability: "view",
-      type: "function",
+      "name": "castVote",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
-      inputs: [],
-      name: "owner",
-      outputs: [
+      "inputs": [
         {
-          internalType: "address",
-          name: "",
-          type: "address",
-        },
+          "internalType": "uint256",
+          "name": "index",
+          "type": "uint256"
+        }
       ],
-      stateMutability: "view",
-      type: "function",
+      "name": "getReviewer",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
     },
     {
-      inputs: [
+      "inputs": [
         {
-          internalType: "uint256",
-          name: "requestId",
-          type: "uint256",
-        },
-        {
-          internalType: "uint256[]",
-          name: "randomWords",
-          type: "uint256[]",
-        },
+          "internalType": "uint256",
+          "name": "submissionId",
+          "type": "uint256"
+        }
       ],
-      name: "rawFulfillRandomWords",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
+      "name": "getSelectedReviewers",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
     },
     {
-      inputs: [
+      "inputs": [
         {
-          internalType: "uint256",
-          name: "submissionIndex",
-          type: "uint256",
-        },
+          "internalType": "uint256",
+          "name": "submissionId",
+          "type": "uint256"
+        }
       ],
-      name: "revealResult",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
+      "name": "getSubmission",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "author",
+          "type": "address"
+        },
+        {
+          "internalType": "uint8[][]",
+          "name": "data",
+          "type": "uint8[][]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
     },
     {
-      inputs: [
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
         {
-          internalType: "uint256",
-          name: "",
-          type: "uint256",
-        },
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
       ],
-      name: "reviewers",
-      outputs: [
-        {
-          internalType: "address",
-          name: "addr",
-          type: "address",
-        },
-      ],
-      stateMutability: "view",
-      type: "function",
+      "stateMutability": "view",
+      "type": "function"
     },
     {
-      inputs: [
+      "inputs": [
         {
-          internalType: "uint256",
-          name: "submissionId",
-          type: "uint256",
+          "internalType": "uint256",
+          "name": "requestId",
+          "type": "uint256"
         },
+        {
+          "internalType": "uint256[]",
+          "name": "randomWords",
+          "type": "uint256[]"
+        }
       ],
-      name: "selectReviewers",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
+      "name": "rawFulfillRandomWords",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
-      inputs: [
+      "inputs": [],
+      "name": "requiredReviews",
+      "outputs": [
         {
-          internalType: "uint256",
-          name: "submissionIndex",
-          type: "uint256",
-        },
-        {
-          internalType: "string[]",
-          name: "options",
-          type: "string[]",
-        },
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
       ],
-      name: "setOptions",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
+      "stateMutability": "view",
+      "type": "function"
     },
     {
-      inputs: [
+      "inputs": [
         {
-          internalType: "uint256",
-          name: "submissionIndex",
-          type: "uint256",
-        },
-        {
-          internalType: "uint256",
-          name: "threshold",
-          type: "uint256",
-        },
+          "internalType": "uint256",
+          "name": "submissionIndex",
+          "type": "uint256"
+        }
       ],
-      name: "setThresholdToPass",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
+      "name": "revealResult",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
-      inputs: [
+      "inputs": [
         {
-          internalType: "uint256",
-          name: "",
-          type: "uint256",
-        },
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
       ],
-      name: "submissions",
-      outputs: [
+      "name": "reviewers",
+      "outputs": [
         {
-          internalType: "address",
-          name: "author",
-          type: "address",
-        },
-        {
-          internalType: "string",
-          name: "data",
-          type: "string",
-        },
-        {
-          internalType: "uint256",
-          name: "thresholdToPass",
-          type: "uint256",
-        },
-        {
-          internalType: "bool",
-          name: "isApproved",
-          type: "bool",
-        },
-        {
-          internalType: "uint256",
-          name: "seed",
-          type: "uint256",
-        },
+          "internalType": "address",
+          "name": "addr",
+          "type": "address"
+        }
       ],
-      stateMutability: "view",
-      type: "function",
+      "stateMutability": "view",
+      "type": "function"
     },
     {
-      inputs: [
+      "inputs": [
         {
-          internalType: "string",
-          name: "_data",
-          type: "string",
-        },
+          "internalType": "uint256",
+          "name": "submissionId",
+          "type": "uint256"
+        }
       ],
-      name: "submitData",
-      outputs: [
+      "name": "selectReviewers",
+      "outputs": [
         {
-          internalType: "uint256",
-          name: "",
-          type: "uint256",
-        },
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
       ],
-      stateMutability: "nonpayable",
-      type: "function",
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "submissionIndex",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string[]",
+          "name": "options",
+          "type": "string[]"
+        }
+      ],
+      "name": "setOptions",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "submissionIndex",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "threshold",
+          "type": "uint256"
+        }
+      ],
+      "name": "setThresholdToPass",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "submissions",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "author",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "thresholdToPass",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bool",
+          "name": "isApproved",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint256",
+          "name": "seed",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint32",
+          "name": "votedAlready",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint8[][]",
+          "name": "_data",
+          "type": "uint8[][]"
+        }
+      ],
+      "name": "submitData",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
   ],
 };

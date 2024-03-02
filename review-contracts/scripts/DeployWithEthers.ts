@@ -9,12 +9,8 @@ function setupProvider() {
 }
 
 async function main() {
-  const proposals = process.argv.slice(2);
+  
   console.log("Deploying Review Contract");
-  console.log("Proposals: ");
-  proposals.forEach((element, index) => {
-    console.log(`Proposal N. ${index + 1}: ${element}`);
-  });
   const provider = setupProvider();
   const privateKey = process.env.PRIVATE_KEY_0 ?? "";
   const wallet = new ethers.Wallet(privateKey, provider); //ethers.Wallet.fromPhrase() for mnemonic
@@ -36,6 +32,13 @@ async function main() {
   await reviewContract.waitForDeployment();
   const reviewContractAddress = await reviewContract.getAddress();
   console.log(`Review contract deployed to the address ${reviewContractAddress}`)
+
+  const author = process.env.WALLET_ADDRESS_0 ?? "";
+  await reviewContract.addAuthor(author);
+  await reviewContract.addReviewer(author);
+
+  const reviewer = process.env.WALLET_ADDRESS_1 ?? "";
+  await reviewContract.addReviewer(reviewer);
 }
 
 main().catch((error) => {

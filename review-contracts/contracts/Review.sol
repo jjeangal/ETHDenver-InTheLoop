@@ -19,7 +19,7 @@ contract Review is VRFConsumerBaseV2 {
     }
     struct Submission {
         address author;
-        string data;
+        uint8[][] data;
         string[] options;
         uint256 thresholdToPass;
         mapping(address => bytes32) commits;
@@ -31,6 +31,7 @@ contract Review is VRFConsumerBaseV2 {
         address[] shuffledReviewers; // Updated field to store shuffled reviewers
         bool isApproved;
         uint256 seed; // New field to store seed
+        uint32 votedAlready;
     }
 
     address[] public authors;
@@ -85,7 +86,7 @@ contract Review is VRFConsumerBaseV2 {
     }
 
     // Submit a data object
-    function submitData(string memory _data) public returns (uint256) {
+    function submitData(uint8[][] memory _data) public returns (uint256) {
         Submission storage newSubmission = submissions.push();
         newSubmission.author = msg.sender;
         newSubmission.data = _data;
@@ -100,7 +101,7 @@ contract Review is VRFConsumerBaseV2 {
     function getSubmission(uint256 submissionId)
         public
         view
-        returns (address author, string memory data)
+        returns (address author, uint8[][] memory data)
     {
         require(
             submissionId < submissions.length,
@@ -123,13 +124,16 @@ contract Review is VRFConsumerBaseV2 {
         vrfRequestIdToSubmissionId[vrfRequestId] = submissionId;
     }
 
+    event RandomWordFulfilled(uint256 submissionId);
     function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords) internal override {
         uint256 submissionId = vrfRequestIdToSubmissionId[requestId];
         submissions[submissionId].seed = randomWords[0]; 
+        emit RandomWordFulfilled(submissionId);
     }
 
-    // Find top 3 matching reviewers for a submission
-    function selectReviewers(uint256 submissionId) public {
+    event ReviewersChosen(uint256 submissionId, address[] reviewers);
+
+    function selectReviewers(uint256 submissionId) public returns (address[] memory){
         require(requiredReviews <= reviewers.length, "Not enough reviewers to review the song");
         require(submissionId < submissions.length, "Invalid submission ID");
         // The shuffleReviewers call is updated to shuffle and store reviewers in the Submission struct
@@ -140,6 +144,8 @@ contract Review is VRFConsumerBaseV2 {
             submissions[submissionId].canReviewerVote[selectedReviewers[i]] = true;
         }
         submissions[submissionId].selectedReviewers = selectedReviewers;
+        emit ReviewersChosen(submissionId, selectedReviewers);
+        return submissions[submissionId].selectedReviewers;
     }
 
     // Updated function to shuffle a copy of the reviewers and store it in the Submission struct
@@ -171,13 +177,19 @@ contract Review is VRFConsumerBaseV2 {
         return submissions[submissionId].selectedReviewers;
     }
 
+    event VotingCompleted(uint256 submissionIndex);
+
     // https://docs.inco.org/getting-started/example-dapps/private-voting
     function castVote(uint256 submissionIndex, uint8 option) public {
         require(submissions[submissionIndex].canReviewerVote[msg.sender], "Only selected reviewers can cast votes");
         require(option < submissions[submissionIndex].options.length, "Select a valid option");
 
         submissions[submissionIndex].canReviewerVote[msg.sender] = false;
+        submissions[submissionIndex].votedAlready = submissions[submissionIndex].votedAlready + 1;
         addToTally(submissionIndex, option, 1);
+        if (submissions[submissionIndex].votedAlready == requiredReviews) {
+            emit VotingCompleted(submissionIndex);
+        }
     }
 
     function addToTally(uint256 submissionIndex, uint8 option, uint32 amount) internal {

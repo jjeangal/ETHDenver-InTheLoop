@@ -14,15 +14,18 @@ import {
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
+import MidiPlayer from "./MidiPlayer";
 
 // components/QuestionAnswerTile.tsx
 
-interface QuestionAnswerTileProps {
-  question: string;
-  answer: string;
+interface CompileSongsTileProps {
+  song1: number[];
+  song2: number[];
 }
 
-const QuestionAnswerTile: React.FC<QuestionAnswerTileProps> = ({ question, answer }) => {
+const CompileSongsTile: React.FC<CompileSongsTileProps> = ({ song1, song2 }) => {
+
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleTileClick = () => {
@@ -37,18 +40,11 @@ const QuestionAnswerTile: React.FC<QuestionAnswerTileProps> = ({ question, answe
     <>
       <Box p={4} bg="white" rounded="md" shadow="md" w="300px" h="300px" cursor="pointer" onClick={handleTileClick}>
         <Text fontWeight="bold" mb={2}>
-          Question:
+          Song Review:
         </Text>
-        <Text noOfLines={2} overflow="hidden" textOverflow="ellipsis">
-          {question}
-        </Text>
-
-        <Text fontWeight="bold" mt={4} mb={2}>
-          Answer:
-        </Text>
-        <Text noOfLines={2} overflow="hidden" textOverflow="ellipsis">{answer}</Text>
-      </Box>
-
+        <MidiPlayer sequence={song1} index={1} />
+        <MidiPlayer sequence={song2} index={2}/>
+       </Box> 
       {/* Modal */}
       <Modal isOpen={isModalOpen} onClose={handleCloseModal} size="xl">
         <ModalOverlay />
@@ -56,13 +52,8 @@ const QuestionAnswerTile: React.FC<QuestionAnswerTileProps> = ({ question, answe
           <ModalHeader>Question and Answer</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text fontWeight="bold">Question:</Text>
-            <Text>{question}</Text>
-
-            <Text fontWeight="bold" mt={4}>
-              Answer:
-            </Text>
-            <Text>{answer}</Text>
+        <MidiPlayer sequence={song1} index={1} />
+        <MidiPlayer sequence={song2} index={2}/>
           </ModalBody>
           <ModalFooter gap={3}>
             <Button colorScheme="green" flexGrow={1}>
@@ -76,4 +67,4 @@ const QuestionAnswerTile: React.FC<QuestionAnswerTileProps> = ({ question, answe
   );
 };
 
-export default QuestionAnswerTile;
+export default CompileSongsTile;
