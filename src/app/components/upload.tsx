@@ -130,9 +130,9 @@ export default function Upload() {
                             Start
                         </Button>
                         {0 < progress && progress < 1 && (
-                            <Flex direction="column" justifyContent="center" alignItems="center" marginTop="4" width="100%">
-                                <Progress colorScheme="blue" value={progress * 100} width="80%" />
-                                <Text>{(progress * 100).toFixed(3)}%</Text>
+                            <Flex direction="column" justifyContent="center" alignItems="center" marginTop="8">
+                                <Progress colorScheme="blue" value={progress * 100} borderRadius="md" width="65%" height="20px" />
+                                <Text>{(progress * 100).toFixed(1)}%</Text>
                             </Flex>
                         )}
                         {compared.cp && (
