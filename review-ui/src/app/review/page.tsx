@@ -1,6 +1,6 @@
 "use client";
 // pages/index.tsx
-import CompileSongsTile from "@/components/CompareSongsTile";
+import CompileSongsTile from "../../components/CompareSongsTile";
 import { Box, Flex, Grid } from "@chakra-ui/react";
 import {
   useAccount,
