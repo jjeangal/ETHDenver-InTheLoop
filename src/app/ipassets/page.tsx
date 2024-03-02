@@ -1,10 +1,10 @@
 import { Flex } from "@chakra-ui/react";
-import Licenses from "../components/Licenses";
+import IPAssets from "../components/IPAssets";
 
-export default function LicensesPage() {
+export default function IPAPage() {
     return (
         <Flex flexDirection="column">
-            <Licenses />
+            <IPAssets />
         </Flex >
     );
 }

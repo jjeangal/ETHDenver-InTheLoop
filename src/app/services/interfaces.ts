@@ -8,6 +8,7 @@ export interface IPA {
   blockTimestamp: string;
   chainId: string;
   childIpIds: string[];
+  tokenId: string;
   id: string;
   metadata: {
     hash: string;
@@ -20,7 +21,7 @@ export interface IPA {
   parentIpIds: string[];
   rootIpIds: string[];
   tokenContract: string;
-  tokenId: string;
+
 };
 
 export interface License {

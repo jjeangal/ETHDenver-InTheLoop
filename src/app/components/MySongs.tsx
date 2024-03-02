@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Flex, Text, Box, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon } from "@chakra-ui/react";
 import { IPA } from "../services/interfaces";
 import CoalNFT from "../../generated/deployedContracts";
+import { useAccount } from "wagmi";
 
 export default function MySongs() {
     const [IPAs, setIPAs] = useState<IPA[]>([]);
@@ -14,6 +15,7 @@ export default function MySongs() {
 
     const chainId = 11155111;
     const contract = CoalNFT[chainId][0].contracts.CoalNFT;
+    const account = useAccount();
 
     async function fetchOwnedIPAs() {
         const response = await fetch("https://api.storyprotocol.net/api/v1/assets", {
@@ -35,6 +37,7 @@ export default function MySongs() {
         });
         const result = await response.json();
         const data: IPA[] = result.data.map((ipa: any) => {
+            console.log(ipa.metadata.registrant);
             return {
                 blockNumber: ipa.blockNumber,
                 blockTimestamp: ipa.blockTimestamp,
@@ -77,7 +80,7 @@ export default function MySongs() {
                         </h2>
                         <AccordionPanel pb={4}>
                             {IPAs && (IPAs as IPA[]).map((ipa) => (
-                                <Box key={ipa.id} bg="gray.50" m={5} p={3} shadow="md" borderWidth="1px" borderRadius="md">
+                                <Box key={ipa.id} m={5} p={3} border="1px solid #ddd" backgroundColor="gray.800" borderRadius="md" boxShadow="md">
                                     {/* <Text>IP Collection Name {ipa.metadata.name}</Text> */}
                                     <Text>Token ID: {ipa.tokenId}</Text>
                                     {/* <Text>Token Contract: {ipa.tokenContract}</Text> */}

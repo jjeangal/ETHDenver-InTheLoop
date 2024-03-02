@@ -23,8 +23,6 @@ import { useAccount } from "wagmi"
 
 export default function AddPolicy() {
 
-    const account = useAccount();
-
     const [policyParams, setpolicyParams] = useState<PolicyParameters>({
         attribution: true,
         commercialUse: false,

@@ -37,6 +37,11 @@ export default function Header() {
                 </Link>
             </Text>
             <Text>
+                <Link href="/ipassets">
+                    IP ASSETS
+                </Link>
+            </Text>
+            <Text>
                 <Link href="/licenses">
                     LICENSES
                 </Link>
