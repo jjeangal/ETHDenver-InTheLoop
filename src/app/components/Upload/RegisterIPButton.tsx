@@ -1,7 +1,7 @@
 import { Button, Flex, Box, Text } from '@chakra-ui/react';
 import { useRegisterRootIp, useRegisterDerivativeIp, useWatchRootIpRegistered } from '@story-protocol/react';
-import { RegisterIPLogEntry, RegisterIPAProps } from '../services/interfaces';
-import CoalNFT from "../../generated/deployedContracts";
+import { RegisterIPLogEntry, RegisterIPAProps } from '../../services/interfaces';
+import CoalNFT from "../../../generated/deployedContracts";
 import { stringToHex } from 'viem';
 import { useAccount } from 'wagmi';
 import { useEffect, useState } from 'react';
@@ -69,7 +69,6 @@ const RegisterIPButton: React.FC<RegisterIPAProps> = ({ tokenId, policyId, licen
         }
 
         console.log('calling registerDerivativeIp');
-        console.log(tokenId);
 
         await writeDerivative({
             functionName: 'registerDerivativeIp',
@@ -83,16 +82,18 @@ const RegisterIPButton: React.FC<RegisterIPAProps> = ({ tokenId, policyId, licen
                 royaltyContext,
             ],
         });
+
+        console.log("Registered Derivative IP Asset: " + txDerivative);
     }
 
     return (
         <Flex m="4" width="100%" justifyContent="center" alignItems="center">
             {txRoot ? (ip ?
-                <Box textAlign="left" mb="4" border="1px solid #ddd" backgroundColor="gray.300" borderRadius="md" boxShadow="md">
-                    <Text>IP Asset registered with id {ip.args.ipId}</Text>
+                <Box textAlign="left" m="4" border="1px solid #ddd" backgroundColor="gray.800" borderRadius="md" boxShadow="md">
+                    <Text>Success! IP Asset registered with id {ip.args.ipId}</Text>
                 </Box> :
                 <Box textAlign="left" mb="4" border="1px solid #ddd" backgroundColor="gray.300" borderRadius="md" boxShadow="md">
-                    <Text>Fetching Transaction</Text>
+                    <Text>In Process</Text>
                 </Box>
             ) : derivativeOf ? (
                 <Button disabled={pendingDerivative} onClick={() => handleDerivative()} textAlign="left" mb="4" border="1px solid #ddd" backgroundColor="gray.300" borderRadius="md" boxShadow="md">
@@ -103,6 +104,7 @@ const RegisterIPButton: React.FC<RegisterIPAProps> = ({ tokenId, policyId, licen
                     {pendingRoot ? 'Confirm in wallet' : 'Register IPA'}
                 </Button>
             )}
+            {txDerivative ? <></> : null}
         </Flex>
     );
 };

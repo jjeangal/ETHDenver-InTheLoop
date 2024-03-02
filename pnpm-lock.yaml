@@ -77,6 +77,9 @@ dependencies:
   react-dom:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
+  react-router:
+    specifier: ^6.22.2
+    version: 6.22.2(react@18.2.0)
   react-router-dom:
     specifier: ^6.22.1
     version: 6.22.2(react-dom@18.2.0)(react@18.2.0)

@@ -70,7 +70,7 @@ export interface GoResponse {
 }
 
 export interface UploadStepsProps {
-  state: 0 | 1 | 2;
+  state: 0 | 1 | 2 | 3;
 }
 
 export type TxOptions = {
@@ -156,4 +156,9 @@ export interface SongFormProps {
   setSongId: React.Dispatch<React.SetStateAction<bigint>>;
   metadata: string;
   copyrights: Copyright[] | null;
+}
+
+export interface FinalStateProps {
+  txRoot: string;
+  txDerivative: string;
 }

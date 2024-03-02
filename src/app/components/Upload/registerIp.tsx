@@ -1,6 +1,6 @@
 import { Flex, Box, Text, Link, Button } from "@chakra-ui/react";
 import { RegisterIpProps, Policy } from "../../services/interfaces";
-import RegisterIPButton from "../RegisterIPButton";
+import RegisterIPButton from "./RegisterIPButton";
 import { useState, useEffect } from "react";
 import AddPolicy from '../AddPolicy';
 import Policies from "../Policies";

@@ -5,13 +5,13 @@ import { useRef, useState } from "react";
 import { songTrad } from "../basicPitch/songenc";
 import { SongForm } from "./Upload/songForm";
 import { UploadSteps } from "./Upload/steps";
-import { UploadStepsProps } from "../services/interfaces";
 import { RegisterIp } from "./Upload/registerIp";
 import { Copyright } from "../services/interfaces";
+import { UploadStepsProps } from "../services/interfaces";
 
 export default function Upload() {
     // SET INITIAL STATE TO 1 OR 2 FOR TESTING
-    const [regState, setRegState] = useState<UploadStepsProps>({ state: 0 }); // ["upload", "info", "compare", "deployed"]
+    const [regState, setRegState] = useState<UploadStepsProps>({ state: 2 }); // ["compare", "upload", "register", "finalized"]
     const [songId, setSongId] = useState<bigint>(BigInt(0));
     const [song, setSong] = useState<ArrayBuffer | undefined>();
     const [songName, setSongName] = useState<string>();

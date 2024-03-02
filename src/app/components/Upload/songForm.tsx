@@ -142,7 +142,7 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, setMetadata, setTx
       </Select>
       <Flex justifyContent="center">
         <Button disabled={isSubmitting} onClick={handleSendTransation}>
-          {isSubmitting ? "Finalizing..." : "Upload"}
+          {isSubmitting ? "In Process..." : "Upload"}
         </Button>
       </Flex>
     </Box >
