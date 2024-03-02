@@ -1,11 +1,12 @@
-import { Flex, Box, Text, Link } from "@chakra-ui/react";
+import { Flex, Box, Text, Link, Button } from "@chakra-ui/react";
 import { RegisterIpProps, Policy } from "../../services/interfaces";
 import RegisterIPButton from "../RegisterIPButton";
 import { useState, useEffect } from "react";
 import AddPolicy from '../AddPolicy';
 import Policies from "../Policies";
-import { useReadPolicyIdsForIp } from "@story-protocol/react"
+import { useMintLicense, useReadPolicyIdsForIp } from "@story-protocol/react"
 import CoalNFT from "../../../generated/deployedContracts";
+import { useAccount } from "wagmi";
 
 export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, copyrights }) => {
   // Pinata
@@ -16,10 +17,7 @@ export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, co
   const [ipaId, setIpaId] = useState<bigint>();
   const [policyId, setPolicyId] = useState<bigint>();
   const [policies, setPolicies] = useState<Policy[]>([]);
-
-  const { data: policyIds } = useReadPolicyIdsForIp({
-    args: [false, ipaId]
-  });
+  const royaltyContext = '0x'; // Additional calldata for the royalty policy
 
   async function fetchIPA() {
     const response = await fetch("https://api.storyprotocol.net/api/v1/assets", {
@@ -91,6 +89,24 @@ export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, co
     setPolicies(data);
   }
 
+  const { writeContractAsync, isPending, data: mintHash } = useMintLicense();
+  const { address } = useAccount();
+
+  const { data: policyIds } = useReadPolicyIdsForIp({
+    args: [false, ipaId]
+  });
+
+  function handleClick() {
+    if (ipaId === undefined) {
+      alert('Still fetching copyright IP Asset');
+    }
+
+    writeContractAsync({
+      functionName: 'mintLicense',
+      args: [policyIds, ipaId, BigInt(1), address, royaltyContext],
+    });
+  }
+
   useEffect(() => {
     fetchIPA();
     fetchPolicies();
@@ -112,6 +128,8 @@ export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, co
             {String(copyrights[0]?.shares)}% with CoalNFT id
             {String(copyrights[0]?.songId)} and policy id {policyIds}
           </Text>
+          <Button disabled={isPending} onClick={() => handleClick()}>Mint License</Button>
+          <Text>hash: {mintHash}</Text>
         </Box>
         <Box textAlign="left" mb={4} border="1px solid #ddd" p={4} backgroundColor="gray.800" borderRadius="md" boxShadow="md">
           <Text> Id is: {String(id)} </Text>
