@@ -10,7 +10,7 @@ dataSources:
     source:
       address: "0x292639452A975630802C17c9267169D93BD5a793"
       abi: IPAssetRegistry
-      startBlock: 5000000
+      startBlock: 4500000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
