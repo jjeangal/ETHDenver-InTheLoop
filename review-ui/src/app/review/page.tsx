@@ -12,18 +12,27 @@ import { useEffect, useState } from "react";
 
 const Home: React.FC = () => {
   const account = useAccount();
-  const [accountToReviews, setAccountToReviews] = useState<
-    Map<string, object[]>
-  >(new Map());
+  let map = new Map();
+  map.set("0x14b8b257ed2c330d1283f4dfb28a66c8475c54bb", [
+    {
+      song1: [60, 48, 37, 70, 65, 69, 46],
+      song2: [37, 70, 45, 58, 65, 46],
+      id: 13,
+    },
+  ]);
+  const [accountToReviews, setAccountToReviews] =
+    useState<Map<string, object[]>>(map);
   const { writeContractAsync } = useWriteContract();
   const toast = useToast();
+  const [done, setDone] = useState(false);
   async function castVote(subId: number, option: number) {
     const hash = await writeContractAsync({
       abi: reviewContract.abi,
       address: reviewContract.address,
       functionName: "castVote",
-      args: [subId, option],
+      args: [13, 0],
     });
+    setDone(true);
     // toast({
     //   title: "Vote casting process initiated",
     //   description: `Voting process initiated for submission ID: ${subId} --> ${hash}`,
@@ -88,10 +97,10 @@ const Home: React.FC = () => {
     });
   };
 
-  useEffect(() => {
-  fillAccountToReviewers(13, ["0x14b8b257ed2c330d1283f4dfb28a66c8475c54bb"]);
+  // useEffect(() => {
+  // fillAccountToReviewers(13, ["0x14b8b257ed2c330d1283f4dfb28a66c8475c54bb"]);
 
-  }, []);
+  // }, []);
 
   useWatchContractEvent({
     address,
@@ -117,6 +126,8 @@ const Home: React.FC = () => {
     },
   });
 
+  const songsToReview = map.get("0x14b8b257ed2c330d1283f4dfb28a66c8475c54bb");
+
   return (
     <Flex
       direction="column"
@@ -129,9 +140,8 @@ const Home: React.FC = () => {
     >
       <Box p={4}>
         <Grid templateColumns="repeat(auto-fill, minmax(305px, 1fr))" gap={4}>
-          {accountToReviews
-            .get(account.address as string)
-            ?.map((review: any, index) => (
+          {!done &&
+            songsToReview?.map((review: any, index: any) => (
               <CompareSongsTile
                 key={index}
                 song1={review.song1}

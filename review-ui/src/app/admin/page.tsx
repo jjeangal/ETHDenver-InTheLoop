@@ -1,5 +1,5 @@
 "use client";
-import { Box, Flex, Grid, useToast } from "@chakra-ui/react";
+import { Box, Center, Flex, Text, useToast } from "@chakra-ui/react";
 import {
   useAccount,
   useWatchContractEvent,
@@ -14,11 +14,13 @@ const Home: React.FC = () => {
   const account = useAccount();
 
   if (owner !== account.address) {
-    console.error("Only the owner should access this page")
+    console.error("Only the owner should access this page");
   }
 
   const { writeContractAsync } = useWriteContract();
   const toast = useToast();
+
+  const [text, setText] = useState("Welcome!");
 
   async function assignRandomSeed(subId: number) {
     const hash = await writeContractAsync({
@@ -34,7 +36,9 @@ const Home: React.FC = () => {
     //   isClosable: true,
     // });
 
-    console.log(`Assign Random Seed for submission ${subId}--> ${hash}`);
+    const txt = `Assign Random Seed for submission ${subId}--> ${hash}`;
+    console.log(txt);
+    setText(txt);
   }
 
   async function selectReviewers(subId: number) {
@@ -50,7 +54,9 @@ const Home: React.FC = () => {
     //   status: "success",
     //   isClosable: true,
     // });
-    console.log(`Select Reviewers for submission ${subId} --> ${hash}`);
+    const txt = `Select Reviewers for submission ${subId} --> ${hash}`;
+    console.log(txt);
+    setText(txt);
   }
 
   async function revealResult(subId: number) {
@@ -66,7 +72,9 @@ const Home: React.FC = () => {
     //   status: "success",
     //   isClosable: true,
     // });
-    console.log(`Reveal Result for submission ${subId} --> ${hash}`);
+    const txt = `Reveal Result for submission ${subId} --> ${hash}`;
+    console.log(txt);
+    setText(txt);
   }
 
   function getSubmission(subId: number) {
@@ -86,8 +94,9 @@ const Home: React.FC = () => {
     eventName: "SubmissionCreated",
     onLogs(logs) {
       const newSubId = logs[0].args.submissionId;
-      console.log(`Submission created: ${newSubId}`);
-      console.log('Now confirm the assign random seed operation');
+      const txt = `Submission created: ${newSubId}. Now confirm the assign random seed operation`;
+      console.log(txt);
+      setText(txt);
       // toast({
       //   title: "New review process initiated",
       //   description: `ID of the process: ${newSubId}. Confirm the 'assign random seed' transaction.`,
@@ -104,8 +113,9 @@ const Home: React.FC = () => {
     eventName: "RandomWordFulfilled",
     onLogs(logs) {
       const subId = logs[0].args.submissionId;
-      console.log(`RandomWordFulfilled: ${subId}`);
-      console.log("Now confirm the select reviewers operation");
+      const txt = `RandomWordFulfilled: ${subId}. Now confirm the select reviewers operation`;
+      console.log(txt);
+      setText(txt);
       // toast({
       //   title: "Random word fulfilled by Chainlink",
       //   description: `Random word fulfilled for submission: ${subId}. Confirm the 'select reviewers' transaction`,
@@ -122,8 +132,9 @@ const Home: React.FC = () => {
     eventName: "VotingCompleted",
     onLogs(logs) {
       const subId = logs[0].args.submissionId;
-      console.log(`Voting completed ${subId}`);
-      console.log("Now confirm the reveal result operation");
+      const txt = `Voting completed ${subId}. Now confirm the reveal result operation`;
+      setText(txt);
+      console.log(txt);
       // toast({
       //   title: "Voting completed",
       //   description: `Voting completed for submission ID: ${subId}. Confirm the 'reveal result' transaction`,
@@ -141,9 +152,10 @@ const Home: React.FC = () => {
     onLogs(logs) {
       const subId = logs[0].args.submissionId;
       const result = logs[0].args.result;
-      console.log(`Result for ${subId} is ${result}`);
       const resultStr = result ? "passed" : "didn't pass";
-      console.log(`Review process completed for submission ID: ${subId}. The submission ${subId} ${resultStr} our checks.`)
+      const txt = `Result for ${subId} is ${result}. Review process completed for submission ID: ${subId}. The submission ${subId} ${resultStr} our checks.`;
+      console.log(txt);
+      setText(txt);
       // toast({
       //   title: "Review process completed successfully",
       //   description: `Review process completed for submission ID: ${subId}. The submission ${subId} ${resultStr} our checks.`,
@@ -164,12 +176,11 @@ const Home: React.FC = () => {
       w="100vw"
       bg="gray.100"
     >
-      <Box p={4}>
-        <Grid
-          templateColumns="repeat(auto-fill, minmax(305px, 1fr))"
-          gap={4}
-        ></Grid>
-      </Box>
+      <Center p={4}>
+        <Text fontSize="3xl" fontWeight="bold" color="green.700">
+          {text}
+        </Text>
+      </Center>
     </Flex>
   );
 };

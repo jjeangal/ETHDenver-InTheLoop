@@ -5,6 +5,7 @@ import { useState } from "react";
 import {
   Box,
   Button,
+  Center,
   Flex,
   Modal,
   ModalBody,
@@ -22,12 +23,16 @@ import MidiPlayer from "./MidiPlayer";
 interface CompareSongsTileProps {
   song1: number[];
   song2: number[];
-  castVote: any,
-  subId: number,
+  castVote: any;
+  subId: number;
 }
 
-const CompareSongsTile: React.FC<CompareSongsTileProps> = ({ song1, song2, castVote, subId }) => {
-
+const CompareSongsTile: React.FC<CompareSongsTileProps> = ({
+  song1,
+  song2,
+  castVote,
+  subId,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleTileClick = () => {
@@ -40,30 +45,66 @@ const CompareSongsTile: React.FC<CompareSongsTileProps> = ({ song1, song2, castV
 
   return (
     <>
-      <Box p={4} bg="white" rounded="md" shadow="md" w="300px" h="300px" cursor="pointer" onClick={handleTileClick}>
+      <Box
+        p={4}
+        bg="white"
+        rounded="md"
+        shadow="md"
+        w="300px"
+        h="300px"
+        cursor="pointer"
+        onClick={handleTileClick}
+        display="flex"
+        flexDirection="column"
+        justifyContent="space-evenly"
+        alignItems="center"
+      >
         <Text fontWeight="bold" mb={2}>
-          Song Review:
+          Song Review Panel #13
         </Text>
-        <Flex flexDirection="column" justifyContent="stretch" alignItems="center" gap={2}>
-        <MidiPlayer sequence={song1} index={1} />
-        <MidiPlayer sequence={song2} index={2}/>
+        <Flex
+          flexDirection="column"
+          justifyContent="stretch"
+          alignItems="center"
+          gap={2}
+        >
+          <MidiPlayer sequence={song1} index={1} />
+          <MidiPlayer sequence={song2} index={2} />
         </Flex>
-       </Box> 
+      </Box>
       {/* Modal */}
       <Modal isOpen={isModalOpen} onClose={handleCloseModal} size="xl">
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Question and Answer</ModalHeader>
+          <ModalHeader>Do these two songs constitute different IP?</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-        <MidiPlayer sequence={song1} index={1} />
-        <MidiPlayer sequence={song2} index={2}/>
+            <Flex width="100%">
+              <Center flexGrow={1} alignContent="stretch">
+                <MidiPlayer sequence={song1} index={1} />
+              </Center>
+              <Center flexGrow={1}>
+                <MidiPlayer sequence={song2} index={2} />
+              </Center>
+            </Flex>
           </ModalBody>
           <ModalFooter gap={3}>
-            <Button colorScheme="green" onClick={() => castVote(subId, 1)} flexGrow={1}>
-              Accept
+            <Button
+              colorScheme="green"
+              onClick={() => {handleCloseModal()  
+                castVote(subId, 1)}}
+              flexGrow={1}
+            >
+              Yes
             </Button>
-            <Button colorScheme="red" onClick={() => castVote(subId, 0)} flexGrow={1}>Reject</Button>
+            <Button
+              colorScheme="red"
+              onClick={() => {handleCloseModal()
+                castVote(subId, 0)}}
+              flexGrow={1}
+            >
+              No
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
