@@ -11,7 +11,7 @@ contract Review is VRFConsumerBaseV2 {
     uint32 constant CALLBACK_GAS_LIMIT = 100000;    
     uint16 constant REQUEST_CONFIRMATIONS = 3;
     uint32 constant NUM_WORDS = 1;
-    uint32 constant REQUIRED_REVIEWS = 1;
+    uint32 requiredReviews = 1;
     mapping(uint256 => uint256) vrfRequestIdToSubmissionId;
 
     struct Reviewer {
@@ -42,13 +42,14 @@ contract Review is VRFConsumerBaseV2 {
     address public owner;
 
     //constructor that sets license and ROI_DENOMINATOR
-    constructor(string memory _license, uint256 _roiDenominator, uint64 _vrfSubscriptionId, address _vrfCoordinator, bytes32 _vrfKeyHash) VRFConsumerBaseV2(_vrfCoordinator) {
+    constructor(string memory _license, uint256 _roiDenominator, uint64 _vrfSubscriptionId, address _vrfCoordinator, bytes32 _vrfKeyHash, uint32 _requiredReviews) VRFConsumerBaseV2(_vrfCoordinator) {
         LICENSE = _license;
         ROI_DENOMINATOR = _roiDenominator;
         owner = msg.sender;
         VRF_COORDINATOR = VRFCoordinatorV2Interface(_vrfCoordinator);
         vrfKeyHash = _vrfKeyHash;
         vrfSubscriptionId = _vrfSubscriptionId;
+        requiredReviews = _requiredReviews;
     }
 
     // Function to add an author, only callable by the owner
@@ -93,7 +94,7 @@ contract Review is VRFConsumerBaseV2 {
         return submissionId;
     }
 
-    event SubmissionCreated(uint256 submissionId);
+    event SubmissionCreated(uint256 indexed submissionId);
 
     // Function to get a submission's data by its ID
     function getSubmission(uint256 submissionId)
@@ -129,12 +130,12 @@ contract Review is VRFConsumerBaseV2 {
 
     // Find top 3 matching reviewers for a submission
     function selectReviewers(uint256 submissionId) public {
-        require(REQUIRED_REVIEWS <= reviewers.length, "Not enough reviewers to review the song");
+        require(requiredReviews <= reviewers.length, "Not enough reviewers to review the song");
         require(submissionId < submissions.length, "Invalid submission ID");
         // The shuffleReviewers call is updated to shuffle and store reviewers in the Submission struct
         shuffleReviewers(submissionId); // This call now populates the shuffledReviewers field in the Submission struct
-        address[] memory selectedReviewers = new address[](REQUIRED_REVIEWS);
-        for(uint32 i = 0; i < REQUIRED_REVIEWS; i++) {
+        address[] memory selectedReviewers = new address[](requiredReviews);
+        for(uint32 i = 0; i < requiredReviews; i++) {
             selectedReviewers[i] = submissions[submissionId].shuffledReviewers[i];
             submissions[submissionId].canReviewerVote[selectedReviewers[i]] = true;
         }

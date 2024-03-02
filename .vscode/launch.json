@@ -1,0 +1,28 @@
+{
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Hardhat Deploy",
+      "program": "${workspaceFolder}/review-contracts/node_modules/.bin/hardhat",
+      "args": ["run", "scripts/deploy.ts"],
+      "runtimeArgs": ["--nolazy"],
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/review-contracts",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Hardhat Test",
+      "program": "${workspaceFolder}/review-contracts/node_modules/.bin/hardhat",
+      "args": ["test"],
+      "runtimeArgs": ["--nolazy"],
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/review-contracts",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    }
+  ]
+}

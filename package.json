@@ -13,6 +13,7 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
+    "@metamask/sdk-react": "^0.15.0",
     "@openzeppelin/contracts": "^5.0.1",
     "@pinata/sdk": "^2.1.0",
     "@rainbow-me/rainbowkit": "^2.0.1",
