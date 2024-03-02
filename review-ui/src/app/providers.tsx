@@ -1,12 +1,13 @@
 // app/providers.tsx
 "use client";
-import * as React from "react";
-import { extendTheme, ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { MetaMaskUIProvider } from "@metamask/sdk-react-ui";
 import "@rainbow-me/rainbowkit/styles.css";
-import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { WagmiProvider } from "wagmi";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import * as React from "react";
+import { WagmiProvider, cookieStorage, createConfig, createStorage, http } from "wagmi";
 import { sepolia } from "wagmi/chains";
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { metaMask } from "wagmi/connectors";
 
 const theme = extendTheme({
   components: {
@@ -22,46 +23,47 @@ const theme = extendTheme({
   },
 });
 
-// const config = createConfig(
-//   getDefaultConfig({
-//     // Required API Keys
-//     alchemyId: process.env.ALCHEMY_API_KEY, // or infuraId
-//     walletConnectProjectId: "demo",
-
-//     // Required
-//     appName: "You Create Web3 Dapp",
-
-//     // Optional
-//     appDescription: "Your App Description",
-//     appUrl: "https://family.co", // your app's url
-//     appIcon: "https://family.co/logo.png", // your app's logo,no bigger than 1024x1024px (max. 1MB)
-//   })
-// );
-
-const newSepolia = {
+const sepoliaFromPrivateEndpoint = {
   ...sepolia,
   rpcUrls: {
-    default: { http: ['https://sepolia.gateway.pokt.network/v1/lb/e25b945d'] },
+    default: { http: ["https://sepolia.gateway.pokt.network/v1/lb/e25b945d"] },
   },
 };
 
-const config = getDefaultConfig({
-  appName: "In The Loop",
-  projectId: "b4ea7572dbfd1001a2436a052c2364c0",
-  chains: [newSepolia],
-  ssr: true, // If your dApp uses server side rendering (SSR)
+const config = createConfig({
+  chains: [sepoliaFromPrivateEndpoint],
+  connectors: [
+    metaMask(),
+  ],
+  transports: {
+    [sepoliaFromPrivateEndpoint.id]: http(),
+  },
+  ssr: true,
+  storage: createStorage({
+    storage: cookieStorage,
+  }),
 });
 
-
 const queryClient = new QueryClient();
+
+const sdkOptions = {
+  logging: { developerMode: false },
+  checkInstallationImmediately: false, 
+  dappMetadata: {
+    name: "In The Loop",
+    url: typeof window !== "undefined" ? window.location.host : undefined,
+  },
+};
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ChakraProvider theme={theme}>
       <WagmiProvider config={config}>
-        <QueryClientProvider client={queryClient}>
-          <RainbowKitProvider initialChain={sepolia}>{children}</RainbowKitProvider>
-        </QueryClientProvider>
+        <MetaMaskUIProvider sdkOptions={sdkOptions} networks={[sepoliaFromPrivateEndpoint]}>
+          <QueryClientProvider client={queryClient}>
+            {children}
+          </QueryClientProvider>
+        </MetaMaskUIProvider>
       </WagmiProvider>
     </ChakraProvider>
   );

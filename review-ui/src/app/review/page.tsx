@@ -1,5 +1,4 @@
 "use client";
-// pages/index.tsx
 import CompileSongsTile from "../../components/CompareSongsTile";
 import { Box, Flex, Grid } from "@chakra-ui/react";
 import {
@@ -11,15 +10,7 @@ import {
 import { reviewContract } from "../assets/reviewContract";
 import { useState } from "react";
 
-const tiles = [
-  // Replace with your actual data (question and answer pairs)
-  { question: "What is the capital of France?", answer: "Paris" },
-  { question: 'Who wrote "Romeo and Juliet"?', answer: "William Shakespeare" },
-  // Add more tiles as needed
-];
-
 const Home: React.FC = () => {
-  // submissionIds, setSubmissionIds = useState([]);
 
   const account = useAccount();
   const [ accountToReviews, setAccountToReviews ] =

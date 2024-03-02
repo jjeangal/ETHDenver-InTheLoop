@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import { Box, Button, Flex, IconButton, Text, Image } from "@chakra-ui/react";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { MetaMaskButton } from "@metamask/sdk-react-ui";
+// import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export default function Header({ account }: { account: string }) {
   return (
@@ -15,7 +16,8 @@ export default function Header({ account }: { account: string }) {
           </Text>
         </Flex>
         <Flex justify="flex-end" align="center">
-          <ConnectButton />
+          <MetaMaskButton theme={"light"} color="white"></MetaMaskButton>
+          {/* <ConnectButton /> */}
         </Flex>
       </Flex>
     </Box>
