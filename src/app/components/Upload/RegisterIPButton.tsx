@@ -104,7 +104,7 @@ const RegisterIPButton: React.FC<RegisterIPAProps> = ({ tokenId, policyId, licen
                     {pendingRoot ? 'Confirm in wallet' : 'Register IPA'}
                 </Button>
             )}
-            {txDerivative ? <></> : null}
+            {txDerivative ? <Text>{txDerivative}</Text> : null}
         </Flex>
     );
 };

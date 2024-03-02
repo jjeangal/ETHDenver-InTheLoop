@@ -111,7 +111,7 @@ export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, co
 
     writeContractAsync({
       functionName: 'mintLicense',
-      args: [policyIds, ipaId, copyrights[0]?.songId, address, royaltyContext],
+      args: [policyIds, ipaId, BigInt(1), address, royaltyContext],
     });
 
     console.log(ipaId);
@@ -163,6 +163,9 @@ export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, co
             <Button disabled={isPending} onClick={() => handleMint()}>Mint License</Button>
             {mintTxHash &&
               <Text>hash: {mintTxHash}</Text>
+            }
+            {licenseID &&
+              <Text>License ID: {String(licenseID)}</Text>
             }
           </Box>
         )}

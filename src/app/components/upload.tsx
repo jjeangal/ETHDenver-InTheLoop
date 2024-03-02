@@ -11,7 +11,7 @@ import { UploadStepsProps } from "../services/interfaces";
 
 export default function Upload() {
     // SET INITIAL STATE TO 1 OR 2 FOR TESTING
-    const [regState, setRegState] = useState<UploadStepsProps>({ state: 2 }); // ["compare", "upload", "register", "finalized"]
+    const [regState, setRegState] = useState<UploadStepsProps>({ state: 0 }); // ["compare", "upload", "register", "finalized"]
     const [songId, setSongId] = useState<bigint>(BigInt(0));
     const [song, setSong] = useState<ArrayBuffer | undefined>();
     const [songName, setSongName] = useState<string>();
@@ -48,7 +48,7 @@ export default function Upload() {
             console.log("rate is: " + rate);
             if (follow) {
                 setRegState({ state: 1 });
-                setCopyrigths([{ songId: BigInt(15), shares: BigInt(Math.round(rate * 100)) }]);
+                setCopyrigths([{ songId: BigInt(26), shares: BigInt(Math.round(rate * 100)) }]);
             }
         } else {
             alert("No song selected");
