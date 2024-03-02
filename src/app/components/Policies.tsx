@@ -49,12 +49,14 @@ const Policies: React.FC<PolicyProps> = ({ policies, setPolicyId }) => {
                 selectedPolicy && (
                     <Modal isOpen={isOpen} onClose={onClose}>
                         <ModalOverlay />
-                        <ModalContent>
+                        <ModalContent bg="gray.800" borderColor="white">
                             <ModalHeader>Policy {selectedPolicy.id}</ModalHeader>
                             <ModalCloseButton />
                             <ModalBody>
+                                <Text>Commercial Use: {selectedPolicy.pil.commercialUse ? "Yes" : "No"}</Text>
+                                <Text>Derivative Allowed: {selectedPolicy.pil.derivativesAllowed ? "Yes" : "No"}</Text>
+                                <Text>Derivatives Approval Required: {selectedPolicy.pil.derivativesApproval ? "Yes" : "No"}</Text>
                                 <Text>Minting Fee: {selectedPolicy.mintingFee}</Text>
-                                <p>Commercial Use: {selectedPolicy.pil.commercialUse ? "Yes" : "No"}</p>
                             </ModalBody>
                             <ModalFooter>
                                 <Button colorScheme="blue" mr={3} onClick={onClose}>

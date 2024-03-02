@@ -51,7 +51,8 @@ export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, co
         'X-API-Key': 'U3RvcnlQcm90b2NvbFRlc3RBUElLRVk=',
         'content-type': 'application/json'
       },
-      body: JSON.stringify({ options: { orderDirection: 'DESC' } })
+      orderDirection: 'ASC',
+      body: JSON.stringify({ options: { orderDirection: 'ASC' } })
     };
 
     const response = await fetch("https://api.storyprotocol.net/api/v1/policies", options);
