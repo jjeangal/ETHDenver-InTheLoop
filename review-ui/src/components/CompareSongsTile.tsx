@@ -5,6 +5,7 @@ import { useState } from "react";
 import {
   Box,
   Button,
+  Flex,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -18,14 +19,15 @@ import MidiPlayer from "./MidiPlayer";
 
 // components/QuestionAnswerTile.tsx
 
-interface CompileSongsTileProps {
+interface CompareSongsTileProps {
   song1: number[];
   song2: number[];
+  castVote: any,
+  subId: number,
 }
 
-const CompileSongsTile: React.FC<CompileSongsTileProps> = ({ song1, song2 }) => {
+const CompareSongsTile: React.FC<CompareSongsTileProps> = ({ song1, song2, castVote, subId }) => {
 
-  
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleTileClick = () => {
@@ -42,8 +44,10 @@ const CompileSongsTile: React.FC<CompileSongsTileProps> = ({ song1, song2 }) => 
         <Text fontWeight="bold" mb={2}>
           Song Review:
         </Text>
+        <Flex flexDirection="column" justifyContent="stretch" alignItems="center" gap={2}>
         <MidiPlayer sequence={song1} index={1} />
         <MidiPlayer sequence={song2} index={2}/>
+        </Flex>
        </Box> 
       {/* Modal */}
       <Modal isOpen={isModalOpen} onClose={handleCloseModal} size="xl">
@@ -56,10 +60,10 @@ const CompileSongsTile: React.FC<CompileSongsTileProps> = ({ song1, song2 }) => 
         <MidiPlayer sequence={song2} index={2}/>
           </ModalBody>
           <ModalFooter gap={3}>
-            <Button colorScheme="green" flexGrow={1}>
+            <Button colorScheme="green" onClick={() => castVote(subId, 1)} flexGrow={1}>
               Accept
             </Button>
-            <Button colorScheme="red" flexGrow={1}>Reject</Button>
+            <Button colorScheme="red" onClick={() => castVote(subId, 0)} flexGrow={1}>Reject</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -67,4 +71,4 @@ const CompileSongsTile: React.FC<CompileSongsTileProps> = ({ song1, song2 }) => 
   );
 };
 
-export default CompileSongsTile;
+export default CompareSongsTile;
