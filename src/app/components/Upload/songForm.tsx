@@ -132,7 +132,7 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, setMetadata, setTx
         <option value="both">Both</option>
       </Select>
       <Button disabled={isLoading} onClick={handleSendTransation}>
-        <Text>Upload</Text>
+        {isLoading ? "Uploading..." : "Upload"}
       </Button>
     </Box >
   );

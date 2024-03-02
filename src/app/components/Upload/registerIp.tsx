@@ -5,19 +5,22 @@ import { useState, useEffect } from "react";
 import AddPolicy from '../AddPolicy';
 import Policies from "../Policies";
 import { useMintLicense, useReadPolicyIdsForIp } from "@story-protocol/react"
+import erc1155abi from "../../../generated/erc1155.abi";
 import CoalNFT from "../../../generated/deployedContracts";
-import { useAccount } from "wagmi";
+import { useAccount, useWaitForTransactionReceipt } from "wagmi";
+import { decodeEventLog } from "viem";
 
 export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, copyrights }) => {
   // Pinata
   const pinataGateway = "https://gateway.pinata.cloud/ipfs/";
-  const chainId = 11155111;
-  const contract = CoalNFT[chainId][0].contracts.CoalNFT;
+  const contract = CoalNFT[11155111][0].contracts.CoalNFT;
 
   const [ipaId, setIpaId] = useState<bigint>();
   const [policyId, setPolicyId] = useState<bigint>();
   const [policies, setPolicies] = useState<Policy[]>([]);
-  const royaltyContext = '0x'; // Additional calldata for the royalty policy
+  const [licenseID, setLicenseID] = useState<bigint>();
+  // Additional calldata for the royalty policy
+  const royaltyContext = '0x';
 
   async function fetchIPA() {
     const response = await fetch("https://api.storyprotocol.net/api/v1/assets", {
@@ -90,34 +93,52 @@ export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, co
     setPolicies(data);
   }
 
-  const { writeContractAsync, isPending, data: mintHash } = useMintLicense();
+  const { writeContractAsync, isPending, data: mintTxHash } = useMintLicense();
   const { address } = useAccount();
+
+  const mintTxReceipt = useWaitForTransactionReceipt({
+    hash: mintTxHash,
+  });
 
   const { data: policyIds } = useReadPolicyIdsForIp({
     args: [false, ipaId]
   });
 
-  function handleClick() {
+  function handleMint() {
     if (ipaId === undefined) {
       alert('Still fetching copyright IP Asset');
     }
 
     writeContractAsync({
       functionName: 'mintLicense',
-      args: [policyIds, ipaId, BigInt(1), address, royaltyContext],
+      args: [policyIds, ipaId, copyrights[0]?.songId, address, royaltyContext],
     });
+
+    console.log(ipaId);
   }
+
+  useEffect(() => {
+    if (!mintTxReceipt.isFetchedAfterMount) return; // skip any previous fetches (cached)
+    if (!mintTxReceipt.data) return;
+
+    for (const log of mintTxReceipt.data.logs) {
+      const topics = decodeEventLog({
+        abi: erc1155abi,
+        ...log,
+      });
+
+      if (topics.eventName === "TransferSingle") {
+        const licenseTokenId = String((topics.args as any as { id: bigint }).id);
+        console.log("Minted license tokenId: " + licenseTokenId);
+        setLicenseID(BigInt(licenseTokenId));
+      }
+    }
+  }, [mintTxReceipt]);
 
   useEffect(() => {
     fetchIPA();
     fetchPolicies();
   }, []);
-
-  useEffect(() => {
-    if (policyIds) {
-      console.log("policyIds is: " + policyIds);
-    }
-  }, [policyIds]);
 
   return (
     <Flex flexDirection="column" marginTop="20vh">
@@ -132,34 +153,23 @@ export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, co
             </Link>{" "}
           </Text>
           <Text> Transaction Hash: {txHash} </Text>
-          {copyrights && copyrights.length > 0 ? (
-            <>
-              <Text> Uses copyrights from songs: </Text>
-              {copyrights.map((copyright) => (
-                <Box key={copyright.songId}>
-                  <Text> Song id: {String(copyright.songId)} </Text>
-                  <Text> Shares: {String(copyright.shares)} </Text>
-                </Box>
-              ))}
-            </>
-          ) : (
-            <Text> No copyrights </Text>
-          )}
         </Box>
-        <Box textAlign="left" mb={4} border="1px solid #ddd" p={4} backgroundColor="gray.800" borderRadius="md" boxShadow="md">
-          <Text fontSize="l">Identified Existing Similar IP Asset</Text>
-          <Text>
-            Copyrigth detected at
-            {String(copyrights[0]?.shares)}% with CoalNFT id
-            {String(copyrights[0]?.songId)} and policy id {policyIds?.toString()}
-          </Text>
-          <Button disabled={isPending} onClick={() => handleClick()}>Mint License</Button>
-          <Text>hash: {mintHash}</Text>
-        </Box>
+        {copyrights[0] && (
+          <Box textAlign="left" mb={4} border="1px solid #ddd" p={4} backgroundColor="gray.800" borderRadius="md" boxShadow="md">
+            <Text fontSize="l">Identified Existing Similar IP Asset</Text>
+            <Text>
+              Copyrigth detected at {String(copyrights[0]?.shares)}% with CoalNFT {String(copyrights[0]?.songId)} and policy id {policyIds?.toString()}
+            </Text>
+            <Button disabled={isPending} onClick={() => handleMint()}>Mint License</Button>
+            {mintTxHash &&
+              <Text>hash: {mintTxHash}</Text>
+            }
+          </Box>
+        )}
         {/* List all policies component */}
         <Policies policies={policies} setPolicyId={setPolicyId} />
         {/* Register song as ip asset component */}
-        {RegisterIPButton({ tokenId: id, policyId: policyId })}
+        {RegisterIPButton({ tokenId: id, policyId: policyId, licenses: licenseID, derivativeOf: copyrights[0] })}
         {/* Add a policy component */}
         <AddPolicy />
       </Box>

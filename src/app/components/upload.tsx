@@ -10,7 +10,8 @@ import { RegisterIp } from "./Upload/registerIp";
 import { Copyright } from "../services/interfaces";
 
 export default function Upload() {
-    const [regState, setRegState] = useState<UploadStepsProps>({ state: 2 }); // ["upload", "info", "compare", "deployed"]
+    // SET INITIAL STATE TO 1 OR 2 FOR TESTING
+    const [regState, setRegState] = useState<UploadStepsProps>({ state: 0 }); // ["upload", "info", "compare", "deployed"]
     const [songId, setSongId] = useState<bigint>(BigInt(0));
     const [song, setSong] = useState<ArrayBuffer | undefined>();
     const [songName, setSongName] = useState<string>();
@@ -47,7 +48,7 @@ export default function Upload() {
             console.log("rate is: " + rate);
             if (follow) {
                 setRegState({ state: 1 });
-                setCopyrigths([{ songId: id, shares: BigInt(Math.round(rate * 100)) }]);
+                setCopyrigths([{ songId: BigInt(15), shares: BigInt(Math.round(rate * 100)) }]);
             }
         } else {
             alert("No song selected");
@@ -94,7 +95,7 @@ export default function Upload() {
                 <UploadSteps state={regState.state} />
             </Box>
             {regState.state === 0 && (
-                <VStack spacing={5}>
+                <VStack spacing={5} width="35vw">
                     <Box
                         className="dropzone"
                         mb={4}
@@ -123,12 +124,12 @@ export default function Upload() {
                             </HStack>
                         )}
                     </Box>
-                    <Box textAlign="center">
-                        <Button colorScheme="blue" onClick={handleStart}>
+                    <Box textAlign="center" width="15%">
+                        <Button colorScheme="blue" onClick={handleStart} isDisabled={0 < progress && progress < 1}>
                             Start
                         </Button>
                         {0 < progress && progress < 1 && (
-                            <Box>
+                            <Box marginTop="4" width="100%">
                                 <Progress colorScheme="blue" value={progress * 100} />
                                 <Text>{(progress * 100).toFixed(3)}%</Text>
                             </Box>

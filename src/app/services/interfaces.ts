@@ -1,6 +1,8 @@
 export interface RegisterIPAProps {
   tokenId: BigInt | undefined;
   policyId: BigInt | undefined;
+  licenses: bigint | undefined;
+  derivativeOf: Copyright | undefined;
 }
 
 export interface IPA {
