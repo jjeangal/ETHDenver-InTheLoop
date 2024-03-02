@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Input, Select, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Input, Select, Text } from "@chakra-ui/react";
 import CoalNFT from "../../../generated/deployedContracts";
 import { SongFormProps } from "../../services/interfaces";
 import { useAccount, useReadContract, useSimulateContract, useWaitForTransactionReceipt, useWatchContractEvent, useWriteContract } from "wagmi";
@@ -14,6 +14,7 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, setMetadata, setTx
   const [contactInfo, setContactInfo] = useState("");
   const [artists, setArtists] = useState<string[]>([]);
   const [nature, setNature] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const contract = CoalNFT[11155111][0].contracts.CoalNFT;
   const addr = address as Address | undefined;
@@ -87,6 +88,7 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, setMetadata, setTx
       console.log(estimateError);
       return;
     }
+    setIsSubmitting(true);
     const res = await jsonToIpfs();
     setMetadata(res.data);
     writeContract({
@@ -96,6 +98,13 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, setMetadata, setTx
       args: [addr!, res.data, copyrights ? copyrights : []],
     })
   }
+
+  // Update your useEffect that handles txSuccess and txError
+  useEffect(() => {
+    if (txSuccess || txError) {
+      setIsSubmitting(false); // Set isSubmitting to false when the transaction is mined or if there's an error
+    }
+  }, [txSuccess, txError])
 
   return (
     <Box>
@@ -131,9 +140,11 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, setMetadata, setTx
         <option value="lyrics">Lyrics</option>
         <option value="both">Both</option>
       </Select>
-      <Button disabled={isLoading} onClick={handleSendTransation}>
-        {isLoading ? "Uploading..." : "Upload"}
-      </Button>
+      <Flex justifyContent="center">
+        <Button disabled={isSubmitting} onClick={handleSendTransation}>
+          {isSubmitting ? "Finalizing..." : "Upload"}
+        </Button>
+      </Flex>
     </Box >
   );
 };
