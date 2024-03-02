@@ -99,8 +99,19 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, setMetadata, setTx
 
   return (
     <Box>
-      <Input placeholder="Name" onChange={(e) => setName(e.target.value)} />
-      <Select placeholder="Select genre" onChange={(e) => setGenre(e.target.value)}>
+      {copyrights ? (
+        copyrights[0].shares > 0.05 ? (
+          <Text>
+            There is a 0.{String(copyrights[0].shares)} similarity rate with song {String(copyrights[0].songId)}
+          </Text>
+        ) : (
+          <Text>Copyright infringement below 5%</Text>
+        )
+      ) : (
+        <Text>No cop</Text>
+      )}
+      <Input placeholder="Name" onChange={(e) => setName(e.target.value)} mb="4" mt="4" />
+      <Select placeholder="Select genre" onChange={(e) => setGenre(e.target.value)} mb="4">
         <option value="pop">Pop</option>
         <option value="rap">Rap</option>
         <option value="rock">Rock</option>
@@ -108,21 +119,22 @@ export const SongForm: React.FC<SongFormProps> = ({ setState, setMetadata, setTx
         <option value="blues">Blues</option>
         <option value="country">Country</option>
       </Select>
-      <Input placeholder="Author" onChange={(e) => setAuthor(e.target.value)} />
+      <Input placeholder="Author" onChange={(e) => setAuthor(e.target.value)} mb="4" />
       <Input
         placeholder="Artists (comma separated)"
         onChange={(e) => setArtists(e.target.value.split(","))}
+        mb="4"
       />
-      <Input placeholder="Contact Info" onChange={(e) => setContactInfo(e.target.value)} />
-      <Select placeholder="Select nature" onChange={(e) => setNature(e.target.value)}>
+      <Input placeholder="Contact Info" onChange={(e) => setContactInfo(e.target.value)} mb="4" />
+      <Select placeholder="Select nature" onChange={(e) => setNature(e.target.value)} mb="8">
         <option value="song">Song</option>
         <option value="lyrics">Lyrics</option>
         <option value="both">Both</option>
       </Select>
-      <Button disabled={isLoading} onClick={handleSendTransation} mt={4}>
+      <Button disabled={isLoading} onClick={handleSendTransation}>
         <Text>Upload</Text>
       </Button>
-    </Box>
+    </Box >
   );
 };
 

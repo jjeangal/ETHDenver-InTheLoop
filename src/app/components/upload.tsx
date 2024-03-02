@@ -10,7 +10,7 @@ import { RegisterIp } from "./Upload/registerIp";
 import { Copyright } from "../services/interfaces";
 
 export default function Upload() {
-    const [regState, setRegState] = useState<UploadStepsProps>({ state: 2 }); // ["upload", "info", "compare", "deployed"]
+    const [regState, setRegState] = useState<UploadStepsProps>({ state: 0 }); // ["upload", "info", "compare", "deployed"]
     const [songId, setSongId] = useState<bigint>(BigInt(0));
     const [song, setSong] = useState<ArrayBuffer | undefined>();
     const [songName, setSongName] = useState<string>();
@@ -44,6 +44,7 @@ export default function Upload() {
     const handleStart = async () => {
         if (song) {
             const { follow, id, rate } = await songTrad(song, setProgress, setCompared);
+            console.log("rate is: " + rate);
             if (follow) {
                 setRegState({ state: 1 });
                 setCopyrigths([{ songId: id, shares: BigInt(Math.round(rate * 100)) }]);
@@ -94,15 +95,13 @@ export default function Upload() {
             </Box>
             {regState.state === 0 && (
                 <VStack spacing={5}>
-                    <Text textAlign="center" mb={8} fontSize="4xl" fontWeight="bold">
-                        Check for Copyright
-                    </Text>
                     <Box
                         className="dropzone"
                         mb={4}
-                        borderColor="black"
-                        borderWidth={2}
                         p={4}
+                        border="1px solid #ddd"
+                        backgroundColor="gray.800"
+                        boxShadow="md"
                         borderRadius="md"
                         onDragOver={handleDragOver}
                         onDragEnter={handleDragEnter}

@@ -60,6 +60,8 @@ export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, co
   }
 
   useEffect(() => {
+    console.log("shares is: " + copyrights[0].shares);
+    console.log("songId is: " + copyrights[0].songId);
     fetchPolicies();
   }, []);
 

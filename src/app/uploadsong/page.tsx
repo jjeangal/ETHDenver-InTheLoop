@@ -1,4 +1,4 @@
-import Upload from "../components/Upload";
+import Upload from "../components/upload";
 
 export default function UploadSong() {
     return (
