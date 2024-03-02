@@ -160,9 +160,11 @@ export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, co
             <Text>
               Copyrigth detected at {String(copyrights[0]?.shares)}% with CoalNFT {String(copyrights[0]?.songId)} and policy id {policyIds?.toString()}
             </Text>
-            <Button disabled={isPending} onClick={() => handleMint()}>Mint License</Button>
+            <Button disabled={isPending} onClick={() => handleMint()}>
+              {isPending ? <Text>Await for Tx...</Text> : <Text>Mint License</Text>}
+            </Button>
             {mintTxHash &&
-              <Text>hash: {mintTxHash}</Text>
+              <Text></Text>
             }
             {licenseID &&
               <Text>License ID: {String(licenseID)}</Text>

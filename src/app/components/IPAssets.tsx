@@ -12,7 +12,6 @@ export default function IPAssets() {
 
     const chainId = 11155111;
     const contract = CoalNFT[chainId][0].contracts.CoalNFT;
-    const account = useAccount();
 
     async function fetchIPAs() {
         const response = await fetch("https://api.storyprotocol.net/api/v1/assets", {

@@ -48,7 +48,8 @@ export default function Upload() {
             console.log("rate is: " + rate);
             if (follow) {
                 setRegState({ state: 1 });
-                setCopyrigths([{ songId: BigInt(26), shares: BigInt(Math.round(rate * 100)) }]);
+                // Hardcoding ID to make sure I don't come accross a Already Registered Error
+                setCopyrigths([{ songId: BigInt(27), shares: BigInt(Math.round(rate * 100)) }]);
             }
         } else {
             alert("No song selected");

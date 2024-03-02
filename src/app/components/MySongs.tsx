@@ -66,7 +66,7 @@ export default function MySongs() {
     }, []);
 
     return (
-        <Flex flexDirection="column" alignItems="center" mt="20vh">
+        <Flex flexDirection="column" alignItems="center" mt="20vh" width="88vw">
             <Box width="50%" marginBottom="8" marginTop="8">
                 <Accordion allowToggle>
                     <AccordionItem>
