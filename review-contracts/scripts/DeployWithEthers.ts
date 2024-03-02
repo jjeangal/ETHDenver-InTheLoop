@@ -37,8 +37,8 @@ async function main() {
   await reviewContract.addAuthor(author);
   await reviewContract.addReviewer(author);
 
-  const reviewer = process.env.WALLET_ADDRESS_1 ?? "";
-  await reviewContract.addReviewer(reviewer);
+  // const reviewer = process.env.WALLET_ADDRESS_1 ?? "";
+  // await reviewContract.addReviewer(reviewer);
 }
 
 main().catch((error) => {

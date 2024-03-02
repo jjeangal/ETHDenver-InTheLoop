@@ -8,50 +8,15 @@ import {
   useReadContract,
 } from "wagmi";
 import { reviewContract } from "../assets/reviewContract";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Home: React.FC = () => {
-  const owner = "0x14b8B257Ed2C330d1283F4dFb28a66c8475C54Bb";
   const account = useAccount();
   const [accountToReviews, setAccountToReviews] = useState<
     Map<string, object[]>
   >(new Map());
   const { writeContractAsync } = useWriteContract();
   const toast = useToast();
-
-  async function assignRandomSeed(subId: number) {
-    const hash = await writeContractAsync({
-      abi: reviewContract.abi,
-      address: reviewContract.address,
-      functionName: "assignRndSeed",
-      args: [subId],
-    });
-    toast({
-      title: "Random seed requested",
-      description: `Random seed for submission of ID: ${subId} requested --> ${hash}`,
-      status: "success",
-      isClosable: true,
-    });
-
-    console.log(`Assign Random Seed --> ${hash}`);
-  }
-
-  async function selectReviewers(subId: number) {
-    const hash = await writeContractAsync({
-      abi: reviewContract.abi,
-      address: reviewContract.address,
-      functionName: "selectReviewers",
-      args: [subId],
-    });
-    toast({
-      title: "Reviewers selection process requested",
-      description: `Reviewers selection process requested for submission ID: ${subId} --> ${hash}`,
-      status: "success",
-      isClosable: true,
-    });
-    console.log(`Select Reviewers --> ${hash}`);
-  }
-
   async function castVote(subId: number, option: number) {
     const hash = await writeContractAsync({
       abi: reviewContract.abi,
@@ -59,30 +24,14 @@ const Home: React.FC = () => {
       functionName: "castVote",
       args: [subId, option],
     });
-    toast({
-      title: "Vote casting process initiated",
-      description: `Voting process initiated for submission ID: ${subId} --> ${hash}`,
-      status: "success",
-      isClosable: true,
-    });
+    // toast({
+    //   title: "Vote casting process initiated",
+    //   description: `Voting process initiated for submission ID: ${subId} --> ${hash}`,
+    //   status: "success",
+    //   isClosable: true,
+    // });
 
     console.log(`Cast Vote --> ${hash}`);
-  }
-
-  async function revealResult(subId: number) {
-    const hash = await writeContractAsync({
-      abi: reviewContract.abi,
-      address: reviewContract.address,
-      functionName: "revealResult",
-      args: [subId],
-    });
-    toast({
-      title: "Reveal result process initiated",
-      description: `Reveal result process initiated for submission ID: ${subId} --> ${hash}`,
-      status: "success",
-      isClosable: true,
-    });
-    console.log(`Reveal Result --> ${hash}`);
   }
 
   function getSubmission(subId: number) {
@@ -96,77 +45,53 @@ const Home: React.FC = () => {
 
   const { address, abi } = reviewContract;
 
-  if (account.address === owner) {
-    useWatchContractEvent({
-      address,
-      abi,
-      eventName: "SubmissionCreated",
-      onLogs(logs) {
-        const newSubId = logs[0].args.submissionId;
-        console.log(`Submission created: ${newSubId}`);
-        toast({
-          title: "New review process initiated",
-          description: `ID of the process: ${newSubId}. Confirm the 'assign random seed' transaction.`,
-          status: "success",
-          isClosable: true,
-        });
-        assignRandomSeed(newSubId);
-      },
-    });
+  useWatchContractEvent({
+    address,
+    abi,
+    eventName: "ResultRevealed",
+    onLogs(logs) {
+      const subId = logs[0].args.submissionId;
+      const result = logs[0].args.result;
+      console.log(`Result for ${subId} is ${result}`);
+      const resultStr = result ? "passed" : "didn't pass";
+      // toast({
+      //   title: "Review process completed successfully",
+      //   description: `Review process completed for submission ID: ${subId}. The submission ${subId} ${resultStr} our checks.`,
+      //   status: "success",
+      //   isClosable: true,
+      // });
+      //close the review process
+    },
+  });
 
-    useWatchContractEvent({
-      address,
-      abi,
-      eventName: "RandomWordFulfilled",
-      onLogs(logs) {
-        const subId = logs[0].args.submissionId;
-        console.log(`RandomWordFulfilled: ${subId}`);
-        toast({
-          title: "Random word fulfilled by Chainlink",
-          description: `Random word fulfilled for submission: ${subId}. Confirm the 'select reviewers' transaction`,
-          status: "success",
-          isClosable: true,
-        });
-        selectReviewers(subId);
-      },
-    });
+  const fillAccountToReviewers = (subId: any, reviewers: any) => {
+    let data = getSubmission(subId);
+    data = {
+      song1: [60, 48, 37, 70, 65, 69, 46],
+      song2: [37, 70, 45, 58, 65, 46],
+      id: subId,
+    };
 
-    useWatchContractEvent({
-      address,
-      abi,
-      eventName: "VotingCompleted",
-      onLogs(logs) {
-        const subId = logs[0].args.submissionId;
-        console.log(`Voting completed ${subId}`);
-        toast({
-          title: "Voting completed",
-          description: `Voting completed for submission ID: ${subId}. Confirm the 'reveal result' transaction`,
-          status: "success",
-          isClosable: true,
-        });
-        revealResult(subId);
-      },
+    console.log(
+      `Submission data for ${subId} is ${JSON.stringify(data, null, 2)}`
+    );
+    setAccountToReviews((state: Map<string, object[]>) => {
+      for (const reviewer of reviewers) {
+        if (!state.has(reviewer)) {
+          state.set(reviewer, [data]);
+        } else {
+          state.get(reviewer)?.push(data);
+        }
+      }
+      console.log(`Account to reviews ${JSON.stringify(state, null, 2)}`);
+      return state;
     });
+  };
 
-    useWatchContractEvent({
-      address,
-      abi,
-      eventName: "ResultRevealed",
-      onLogs(logs) {
-        const subId = logs[0].args.submissionId;
-        const result = logs[0].args.result;
-        console.log(`Result for ${subId} is ${result}`);
-        const resultStr = result ? "passed" : "didn't pass";
-        toast({
-          title: "Review process completed successfully",
-          description: `Review process completed for submission ID: ${subId}. The submission ${subId} ${resultStr} our checks.`,
-          status: "success",
-          isClosable: true,
-        });
-        //close the review process
-      },
-    });
-  }
+  useEffect(() => {
+  fillAccountToReviewers(13, ["0x14b8b257ed2c330d1283f4dfb28a66c8475c54bb"]);
+
+  }, []);
 
   useWatchContractEvent({
     address,
@@ -175,36 +100,20 @@ const Home: React.FC = () => {
     onLogs(logs) {
       const subId = logs[0].args.submissionId;
       const reviewers = logs[0].args.reviewers;
-      toast({
-        title: `Reviewer's chosen for submission ID ${subId}`,
-        description: `The chosen reviewers are ${JSON.stringify(reviewers, null, 2)}`,
-        status: "success",
-        isClosable: true,
-      });
+      // toast({
+      //   title: `Reviewer's chosen for submission ID ${subId}`,
+      //   description: `The chosen reviewers are ${JSON.stringify(
+      //     reviewers,
+      //     null,
+      //     2
+      //   )}`,
+      //   status: "success",
+      //   isClosable: true,
+      // });
       console.log(
         `Reviewers chosen: ${subId}, ${JSON.stringify(reviewers, null, 2)}`
       );
-      let data = getSubmission(subId);
-      data = {
-        song1: data[1][0],
-        song2: data[1][1],
-        id: subId
-      };
-
-      console.log(
-        `Submission data for ${subId} is ${JSON.stringify(data, null, 2)}`
-      );
-      setAccountToReviews((state: Map<string, object[]>) => {
-        for (const reviewer of reviewers) {
-          if (!state.has(reviewer)) {
-            state.set(reviewer, [data]);
-          } else {
-            state.get(reviewer)?.push(data);
-          }
-        }
-        console.log(`Account to reviews ${JSON.stringify(state, null, 2)}`);
-        return state;
-      });
+      fillAccountToReviewers(subId, reviewers);
     },
   });
 
@@ -214,7 +123,7 @@ const Home: React.FC = () => {
       align="stretch"
       justify="start"
       pt={10}
-      h="100vh"
+      h="60vh"
       w="100vw"
       bg="gray.100"
     >
@@ -229,7 +138,6 @@ const Home: React.FC = () => {
                 song2={review.song2}
                 castVote={castVote}
                 subId={review.subId}
-
               />
             ))}
         </Grid>

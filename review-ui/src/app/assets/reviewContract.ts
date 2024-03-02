@@ -1,5 +1,6 @@
 export const reviewContract = {
-  address: "0xAE21ea73fE34D68f549761B9c5A5CB3dfCD021CB" as `0x${string}`,
+  // address: "0xAE21ea73fE34D68f549761B9c5A5CB3dfCD021CB" as `0x${string}`,
+  address: '0x27681c6781E98C7670e158F540Aa9e34e102C84B' as `0x${string}`,
   abi: [
     {
       "inputs": [

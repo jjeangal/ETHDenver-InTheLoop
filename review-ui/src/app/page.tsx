@@ -11,9 +11,7 @@ import { ethers } from 'ethers';
 export default function Home() {  
   return (
     <main className={styles.main}>
-      {/* <Button onClick={submitData}>Submit button</Button> */}
       <SubmitData />
-      {/* <SDKContainer></SDKContainer> */}
     </main>
   )
 }
