@@ -65,20 +65,20 @@ export async function songTrad(
   let cont = false;
   let text = "";
 
-  if (matchingRate === 1) {
+  if (matchingRate >= 0.7) {
     console.log("Coal is on fire");
-    text = "Song already exists!";
-  } else if (matchingRate < 1 && matchingRate > 0.5) {
+    text = "Song is too similar to what already exists!";
+  } else if (matchingRate < 0.7 && matchingRate > 0.4) {
     console.log("Coal is hot");
-    text = "Song is not unique enough to be uploaded";
-  } else if (matchingRate < 0.3) {
-    console.log("Coal is cold");
-    text = "Song is unique enough to be uploaded";
+    text = "Song needs to be reviewed";
+  } else if (matchingRate <= 0.4 && matchingRate > 0.2) {
+    console.log("Coal is warm");
+    text = "Enfrigment detected but song can be uploaded";
     cont = true;
   } else {
-    console.log("Coal is warm");
-    text = "Light copyright detected";
-    // cont = true;
+    console.log("Coal is cold");
+    text = "Light or no copyright detected";
+    cont = true;
   }
   setCompared({ cp: true, text: text });
   // @ts-ignore

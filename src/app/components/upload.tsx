@@ -95,7 +95,7 @@ export default function Upload() {
                 <UploadSteps state={regState.state} />
             </Box>
             {regState.state === 0 && (
-                <VStack spacing={5} width="35vw">
+                <VStack spacing={5} >
                     <Box
                         className="dropzone"
                         mb={4}
@@ -124,15 +124,15 @@ export default function Upload() {
                             </HStack>
                         )}
                     </Box>
-                    <Box textAlign="center" width="15%">
+                    <Box textAlign="center" width="40vw">
                         <Button colorScheme="blue" onClick={handleStart} isDisabled={0 < progress && progress < 1}>
                             Start
                         </Button>
                         {0 < progress && progress < 1 && (
-                            <Box marginTop="4" width="100%">
-                                <Progress colorScheme="blue" value={progress * 100} />
+                            <Flex direction="column" justifyContent="center" alignItems="center" marginTop="4" width="100%">
+                                <Progress colorScheme="blue" value={progress * 100} width="80%" />
                                 <Text>{(progress * 100).toFixed(3)}%</Text>
-                            </Box>
+                            </Flex>
                         )}
                         {compared.cp && (
                             <Box>

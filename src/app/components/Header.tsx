@@ -19,7 +19,7 @@ export default function Header() {
     }
 
     return (
-        <VStack as="nav" position="fixed" left={0} top={0} bottom={0} width="12%" spacing={8} borderRight="1px" borderColor={borderColor}>
+        <VStack as="nav" position="fixed" left={0} top={0} bottom={0} minWidth="12%" spacing={8} borderRight="1px" borderColor={borderColor}>
             <Spacer />
             <Text size="xxl">
                 <Link href="/">
