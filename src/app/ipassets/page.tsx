@@ -1,5 +1,5 @@
 import { Flex } from "@chakra-ui/react";
-import IPAssets from "../components/IPAssets";
+import IPAssets from "./IPAssets";
 
 export default function IPAPage() {
     return (

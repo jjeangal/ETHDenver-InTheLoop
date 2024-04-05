@@ -2,7 +2,6 @@
 
 import { Box, Flex, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, Text } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import { useAccount } from "wagmi";
 
 interface CreateTx {
     id: string;
@@ -17,7 +16,6 @@ interface CreateTx {
 export default function ProfileLicenses() {
     const [boughtLicenses, setBoughtLicenses] = useState<CreateTx[]>([]);
     const [soldLicenses, setSoldLicenses] = useState<CreateTx[]>([]);
-    const account = useAccount();
 
     async function fetchLicenses() {
         const response = await fetch("https://api.storyprotocol.net/api/v1/transactions", {

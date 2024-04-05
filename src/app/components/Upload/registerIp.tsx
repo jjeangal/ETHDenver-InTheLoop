@@ -2,7 +2,7 @@ import { Flex, Box, Text, Link, Button } from "@chakra-ui/react";
 import { RegisterIpProps, Policy } from "../../services/interfaces";
 import RegisterIPButton from "./RegisterIPButton";
 import { useState, useEffect } from "react";
-import AddPolicy from '../AddPolicy';
+import AddPolicyForm from "../AddPolicyForm";
 import Policies from "../Policies";
 import { useMintLicense, useReadPolicyIdsForIp } from "@story-protocol/react"
 import erc1155abi from "../../../generated/erc1155.abi";
@@ -176,7 +176,7 @@ export const RegisterIp: React.FC<RegisterIpProps> = ({ id, txHash, metadata, co
         {/* Register song as ip asset component */}
         {RegisterIPButton({ tokenId: id, policyId: policyId, licenses: licenseID, derivativeOf: copyrights[0] })}
         {/* Add a policy component */}
-        <AddPolicy />
+        <AddPolicyForm />
       </Box>
     </Flex>
   );

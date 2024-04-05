@@ -1,5 +1,5 @@
 import { UploadStepsProps } from "../../services/interfaces";
-import { compareSvg, songInfoSvg, uploadSvg, validSvg } from "../Svgs";
+import { compareSvg, songInfoSvg, uploadSvg, validSvg } from "../../../utils/Svgs";
 import {
   Box,
   Step,

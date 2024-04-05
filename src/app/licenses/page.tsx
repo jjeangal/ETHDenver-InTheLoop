@@ -1,5 +1,5 @@
 import { Flex } from "@chakra-ui/react";
-import Licenses from "../components/Licenses";
+import Licenses from "./Licenses";
 
 export default function LicensesPage() {
     return (

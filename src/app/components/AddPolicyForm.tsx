@@ -19,9 +19,8 @@ import { useState } from "react";
 import { useRegisterPILPolicy, useWatchPolicyRegistered } from "@story-protocol/react";
 import { PolicyParameters, RegistrationParams } from "../services/interfaces";
 import { zeroAddress } from 'viem';
-import { useAccount } from "wagmi"
 
-export default function AddPolicy() {
+export default function AddPolicyForm() {
 
     const [policyParams, setpolicyParams] = useState<PolicyParameters>({
         attribution: true,
